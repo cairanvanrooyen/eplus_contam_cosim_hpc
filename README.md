@@ -27,7 +27,7 @@ The bundled `ContamFMU-3400.fmu` from NIST only contains **win32** binaries. To 
 2. Package them into a new FMU with `linux64` binaries
 3. Extract EnergyPlus 9.1.0 in user space (no `sudo` on HPC)
 
-All required tarballs are included in this repo — no external downloads needed on Myriad.
+Most required tarballs are included in this repo. However, the EnergyPlus 9.1.0 Linux tarball (`EnergyPlus-9.1.0-08d2e308bb-Linux-x86_64.tar.gz`) exceeds GitHub's file size limit and must be downloaded separately. Download it from the [EnergyPlus 9.1.0 release page](https://github.com/NREL/EnergyPlus/releases/tag/v9.1.0) and place it in the `energyplus/` directory before proceeding with setup.
 
 ## Setup on Myriad
 
