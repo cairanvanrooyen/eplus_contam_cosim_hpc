@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<fmiModelDescription fmiVersion="1.0" modelName="ContamFMU" modelIdentifier="ContamFMU" guid="{818642F1-D7D4-4DC7-8549-554862454199}" variableNamingConvention="structured" numberOfContinuousStates="0" numberOfEventIndicators="0">
+  <ModelVariables>
+    <ScalarVariable name="WTH_AmbientTemp" valueReference="1" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="WTH_BarometricPressure" valueReference="2" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="WTH_WindSpeed" valueReference="3" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="WTH_WindDirection" valueReference="4" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="WTH_HumidityRatio" valueReference="5" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="TAIR_3_attic" valueReference="6" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="HRAIR_3_attic" valueReference="7" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="TAIR_2_second" valueReference="8" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="HRAIR_2_second" valueReference="9" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="TAIR_1_first" valueReference="10" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="HRAIR_1_first" valueReference="11" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="AHS_Supply_2_second" valueReference="12" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="AHS_Return_2_second" valueReference="13" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="AHS_Supply_1_first" valueReference="14" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="AHS_Return_1_first" valueReference="15" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="PCTOA_ahs" valueReference="16" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="TAIR_1_ahs(Ret)" valueReference="17" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="TAIR_1_ahs(Sup)" valueReference="18" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="AHS_Exhaust_exh_2_second" valueReference="19" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="AHS_Exhaust_exh_1_first" valueReference="20" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="TAIR_1_exh(Ret)" valueReference="21" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="TAIR_1_exh(Sup)" valueReference="22" causality="input">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="MIX_2_second_to_3_attic" valueReference="23" causality="output">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="INFIL_3_attic" valueReference="24" causality="output">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="MIX_3_attic_to_2_second" valueReference="25" causality="output">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="MIX_1_first_to_2_second" valueReference="26" causality="output">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="INFIL_2_second" valueReference="27" causality="output">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="MIX_2_second_to_1_first" valueReference="28" causality="output">
+      <Real />
+    </ScalarVariable>
+    <ScalarVariable name="INFIL_1_first" valueReference="29" causality="output">
+      <Real />
+    </ScalarVariable>
+  </ModelVariables>
+  <Implementation>
+    <CoSimulation_StandAlone>
+      <Capabilities canBeInstantiatedOnlyOncePerProcess="true" canNotUseMemoryManagementFunctions="true" />
+    </CoSimulation_StandAlone>
+  </Implementation>
+</fmiModelDescription>

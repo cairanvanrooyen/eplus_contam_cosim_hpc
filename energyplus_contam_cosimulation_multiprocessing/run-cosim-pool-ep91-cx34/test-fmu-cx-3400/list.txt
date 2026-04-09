@@ -1,0 +1,14 @@
+# This list file is for inputs files relative to the python script.
+#
+# For each co-simulation, include a line of input files:
+# filePathIDF, filePathEPW, filePathPRJ, filePathVEF, filePathXML
+# NOTES: 
+# - Comment lines only for entire line.
+# - File paths can be absolute OR relative to the Python script from which it is to be read.
+#
+# Input set 1 - sf-slab-gas
+.\sf-slab-gas.idf , ..\epw-files\boston-logan.epw,     .\sf-slab.prj, .\sf-slab-contam.vef, .\sf-slab-modelDescription.xml
+# Input set 2 - sf-slab-elecres
+.\sf-slab-elecres.idf , ..\epw-files\boston-logan.epw, .\sf-slab.prj, .\sf-slab-contam.vef, .\sf-slab-modelDescription.xml
+# Input set 3 - sf-slab-hp
+.\sf-slab-hp.idf ,  ..\epw-files\boston-logan.epw,     .\sf-slab.prj, .\sf-slab-contam.vef, .\sf-slab-modelDescription.xml

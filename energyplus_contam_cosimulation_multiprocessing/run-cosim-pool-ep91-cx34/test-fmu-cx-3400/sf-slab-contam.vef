@@ -1,0 +1,31 @@
+VariableExchangeFile 1.0 fmi 0
+29
+I WTH_AmbientTemp wat
+I WTH_BarometricPressure wbp
+I WTH_WindSpeed wws
+I WTH_WindDirection wwd
+I WTH_HumidityRatio whr
+I TAIR_3_attic zti  3 attic
+I HRAIR_3_attic zhr  3 attic
+I TAIR_2_second zti  2 second
+I HRAIR_2_second zhr  2 second
+I TAIR_1_first zti  1 first
+I HRAIR_1_first zhr  1 first
+I AHS_Supply_2_second ahs 2 second 1
+I AHS_Return_2_second ahr 2 second 1
+I AHS_Supply_1_first ahs 1 first 1
+I AHS_Return_1_first ahr 1 first 1
+I PCTOA_ahs poa ahs
+I TAIR_1_ahs(Ret) zti 1 ahs(Ret)
+I TAIR_1_ahs(Sup) zti 1 ahs(Sup)
+I AHS_Exhaust_2_second exh 2 second 2
+I AHS_Exhaust_1_first exh 1 first 2
+I TAIR_1_exh(Ret) zti 1 exh(Ret)
+I TAIR_1_exh(Sup) zti 1 exh(Sup)
+O MIX_2_second_3_attic mix 2 second 3 attic
+O INFIL_3_attic inf 3 attic
+O MIX_3_attic_2_second mix 3 attic 2 second
+O MIX_1_first_2_second mix 1 first 2 second
+O INFIL_2_second inf 2 second
+O MIX_2_second_1_first mix 2 second 1 first
+O INFIL_1_first inf 1 first

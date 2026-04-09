@@ -1,0 +1,11 @@
+# Configuration file for run-cosim-pool.py python script.
+# NOTES: 
+# - Comment lines only for entire line.
+# - File paths can be absolute OR relative to the Python script from which it is to be read.
+#
+# Path and filename of EnergyPlus executable "energyplus.exe"
+ePlus, C:\EnergyPlusV9-1-0\energyplus
+# Path and filename of ReadVarsESO bat file "ReadVarsESO.bat"
+readVarsESO, C:\EnergyPlusV9-1-0\PostProcess\ReadVarsESO
+# Path to blank FMU file containing only ContamFMU.dll and contamx3.exe in binaries\win32\
+fileFmu, ..\blank-fmus\ContamFMU-3400.fmu

@@ -1,0 +1,4087 @@
+!-Generator IDFEditor 1.50
+!-Option SortedOrder UseSpecialFormat
+
+!-NOTE: All comments with '!-' are ignored by the IDFEditor and are generated automatically.
+!-      Use '!' comments if they need to be retained when using the IDFEditor.
+
+
+!-   ===========  ALL OBJECTS IN CLASS: VERSION ===========
+
+Version,9.1;
+
+!-   ===========  ALL OBJECTS IN CLASS: SIMULATIONCONTROL ===========
+
+
+SimulationControl,
+    Yes,                     !- Do Zone Sizing Calculation
+    Yes,                     !- Do System Sizing Calculation
+    No,                      !- Do Plant Sizing Calculation
+    No,                      !- Run Simulation for Sizing Periods
+    Yes,                     !- Run Simulation for Weather File Run Periods
+    No,                      !- Do HVAC Sizing Simulation for Sizing Periods
+    1;                       !- Maximum Number of HVAC Sizing Simulation Passes
+
+
+!-   ===========  ALL OBJECTS IN CLASS: BUILDING ===========
+
+Building,
+    sf-slab-elecres,         !- Name
+    0.0,                     !- North Axis {deg}
+    Suburbs,                 !- Terrain
+    0.04,                    !- Loads Convergence Tolerance Value
+    0.4,                     !- Temperature Convergence Tolerance Value {deltaC}
+    FullExterior,            !- Solar Distribution
+    25,                      !- Maximum Number of Warmup Days
+    6;                       !- Minimum Number of Warmup Days
+
+
+!-   ===========  ALL OBJECTS IN CLASS: HEATBALANCEALGORITHM ===========
+
+HeatBalanceAlgorithm,ConductionTransferFunction,200.0,0.1,1000.0;
+
+!-   ===========  ALL OBJECTS IN CLASS: ZONEAIRHEATBALANCEALGORITHM ===========
+
+ZoneAirHeatBalanceAlgorithm,ThirdOrderBackwardDifference;
+
+!-   ===========  ALL OBJECTS IN CLASS: TIMESTEP ===========
+
+Timestep,12;
+
+!-   ===========  ALL OBJECTS IN CLASS: SIZINGPERIOD:DESIGNDAY ===========
+
+
+SizingPeriod:DesignDay,
+    Boston Logan IntL Arpt Ann Htg 99.6% Condns DB,  !- Name
+    1,                       !- Month
+    21,                      !- Day of Month
+    WinterDesignDay,         !- Day Type
+    -13.6,                   !- Maximum Dry-Bulb Temperature {C}
+    0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
+    ,                        !- Dry-Bulb Temperature Range Modifier Type
+    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+    Wetbulb,                 !- Humidity Condition Type
+    -13.6,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    ,                        !- Humidity Condition Day Schedule Name
+    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+    101253.0,                !- Barometric Pressure {Pa}
+    7.2,                     !- Wind Speed {m/s}
+    320.0,                   !- Wind Direction {deg}
+    No,                      !- Rain Indicator
+    No,                      !- Snow Indicator
+    No,                      !- Daylight Saving Time Indicator
+    ASHRAEClearSky,          !- Solar Model Indicator
+    ,                        !- Beam Solar Day Schedule Name
+    ,                        !- Diffuse Solar Day Schedule Name
+    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+    0.0;                     !- Sky Clearness
+
+SizingPeriod:DesignDay,
+    Boston Logan IntL Arpt Ann Clg .4% Condns DB=>MWB,  !- Name
+    7,                       !- Month
+    21,                      !- Day of Month
+    SummerDesignDay,         !- Day Type
+    32.7,                    !- Maximum Dry-Bulb Temperature {C}
+    8.4,                     !- Daily Dry-Bulb Temperature Range {deltaC}
+    ,                        !- Dry-Bulb Temperature Range Modifier Type
+    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+    Wetbulb,                 !- Humidity Condition Type
+    22.9,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    ,                        !- Humidity Condition Day Schedule Name
+    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+    101253.0,                !- Barometric Pressure {Pa}
+    6.3,                     !- Wind Speed {m/s}
+    270.0,                   !- Wind Direction {deg}
+    No,                      !- Rain Indicator
+    No,                      !- Snow Indicator
+    No,                      !- Daylight Saving Time Indicator
+    ASHRAEClearSky,          !- Solar Model Indicator
+    ,                        !- Beam Solar Day Schedule Name
+    ,                        !- Diffuse Solar Day Schedule Name
+    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+    1.0;                     !- Sky Clearness
+
+
+!-   ===========  ALL OBJECTS IN CLASS: RUNPERIOD ===========
+
+RunPeriod,
+    Annual,                  !- Name
+    1,                       !- Begin Month
+    1,                       !- Begin Day of Month
+    ,                        !- Begin Year
+    1,                       !- End Month
+    31,                      !- End Day of Month
+    ,                        !- End Year
+    ,                        !- Day of Week for Start Day
+    Yes,                     !- Use Weather File Holidays and Special Days
+    Yes,                     !- Use Weather File Daylight Saving Period
+    No,                      !- Apply Weekend Holiday Rule
+    Yes,                     !- Use Weather File Rain Indicators
+    Yes;                     !- Use Weather File Snow Indicators
+
+
+!-   ===========  ALL OBJECTS IN CLASS: SITE:WATERMAINSTEMPERATURE ===========
+
+Site:WaterMainsTemperature,
+    CorrelationFromWeatherFile;  !- Calculation Method
+
+
+!-   ===========  ALL OBJECTS IN CLASS: SCHEDULETYPELIMITS ===========
+
+ScheduleTypeLimits,
+    Any Number;              !- Name
+
+ScheduleTypeLimits,
+    On/Off,                  !- Name
+    0,                       !- Lower Limit Value
+    1,                       !- Upper Limit Value
+    Discrete;                !- Numeric Type
+
+ScheduleTypeLimits,
+    control_type,            !- Name
+    0,                       !- Lower Limit Value
+    4,                       !- Upper Limit Value
+    Discrete;                !- Numeric Type
+
+ScheduleTypeLimits,
+    fraction,                !- Name
+    0,                       !- Lower Limit Value
+    1,                       !- Upper Limit Value
+    Continuous;              !- Numeric Type
+
+ScheduleTypeLimits,
+    Temperature,             !- Name
+    -60,                     !- Lower Limit Value
+    200,                     !- Upper Limit Value
+    Continuous;              !- Numeric Type
+
+
+!-   ===========  ALL OBJECTS IN CLASS: SCHEDULE:DAY:HOURLY ===========
+
+Schedule:Day:Hourly,
+    OccupancyDay,            !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.5,                     !- Hour 1
+    0.5,                     !- Hour 2
+    0.5,                     !- Hour 3
+    0.5,                     !- Hour 4
+    0.5,                     !- Hour 5
+    0.5,                     !- Hour 6
+    0.5,                     !- Hour 7
+    0.44155,                 !- Hour 8
+    0.204305,                !- Hour 9
+    0.120945,                !- Hour 10
+    0.120945,                !- Hour 11
+    0.120945,                !- Hour 12
+    0.120945,                !- Hour 13
+    0.120945,                !- Hour 14
+    0.120945,                !- Hour 15
+    0.120945,                !- Hour 16
+    0.14749,                 !- Hour 17
+    0.27655,                 !- Hour 18
+    0.448465,                !- Hour 19
+    0.448465,                !- Hour 20
+    0.448465,                !- Hour 21
+    0.5,                     !- Hour 22
+    0.5,                     !- Hour 23
+    0.5;                     !- Hour 24
+
+Schedule:Day:Hourly,
+    LightingProfileDay,      !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.0625,                  !- Hour 1
+    0.0625,                  !- Hour 2
+    0.0625,                  !- Hour 3
+    0.0625,                  !- Hour 4
+    0.1875,                  !- Hour 5
+    0.390625,                !- Hour 6
+    0.4375,                  !- Hour 7
+    0.390625,                !- Hour 8
+    0.171875,                !- Hour 9
+    0.1171875,               !- Hour 10
+    0.1171875,               !- Hour 11
+    0.1171875,               !- Hour 12
+    0.1171875,               !- Hour 13
+    0.1171875,               !- Hour 14
+    0.1171875,               !- Hour 15
+    0.203125,                !- Hour 16
+    0.4375,                  !- Hour 17
+    0.609375,                !- Hour 18
+    0.8203125,               !- Hour 19
+    0.984375,                !- Hour 20
+    1.0,                     !- Hour 21
+    0.6875,                  !- Hour 22
+    0.3828125,               !- Hour 23
+    0.15625;                 !- Hour 24
+
+Schedule:Day:Hourly,
+    ExteriorLightingProfileDay,  !- Name
+    Fraction,                !- Schedule Type Limits Name
+    1.0,                     !- Hour 1
+    1.0,                     !- Hour 2
+    1.0,                     !- Hour 3
+    1.0,                     !- Hour 4
+    1.0,                     !- Hour 5
+    1.0,                     !- Hour 6
+    0.0,                     !- Hour 7
+    0.0,                     !- Hour 8
+    0.0,                     !- Hour 9
+    0.0,                     !- Hour 10
+    0.0,                     !- Hour 11
+    0.0,                     !- Hour 12
+    0.0,                     !- Hour 13
+    0.0,                     !- Hour 14
+    0.0,                     !- Hour 15
+    0.0,                     !- Hour 16
+    0.0,                     !- Hour 17
+    0.0,                     !- Hour 18
+    1.0,                     !- Hour 19
+    1.0,                     !- Hour 20
+    1.0,                     !- Hour 21
+    1.0,                     !- Hour 22
+    1.0,                     !- Hour 23
+    1.0;                     !- Hour 24
+
+Schedule:Day:Hourly,
+    RefrigeratorDay,         !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.8,                     !- Hour 1
+    0.782696177062374,       !- Hour 2
+    0.765593561368209,       !- Hour 3
+    0.742857142857143,       !- Hour 4
+    0.731388329979879,       !- Hour 5
+    0.731388329979879,       !- Hour 6
+    0.759959758551308,       !- Hour 7
+    0.8,                     !- Hour 8
+    0.817102615694165,       !- Hour 9
+    0.828571428571429,       !- Hour 10
+    0.8,                     !- Hour 11
+    0.8,                     !- Hour 12
+    0.839839034205231,       !- Hour 13
+    0.839839034205231,       !- Hour 14
+    0.828571428571429,       !- Hour 15
+    0.839839034205231,       !- Hour 16
+    0.885714285714286,       !- Hour 17
+    0.971428571428572,       !- Hour 18
+    1.0,                     !- Hour 19
+    0.971428571428572,       !- Hour 20
+    0.942857142857143,       !- Hour 21
+    0.925553319919517,       !- Hour 22
+    0.885714285714286,       !- Hour 23
+    0.828571428571429;       !- Hour 24
+
+Schedule:Day:Hourly,
+    MiscPlugLoadDay,         !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.607490272373541,       !- Hour 1
+    0.559338521400778,       !- Hour 2
+    0.552853437094682,       !- Hour 3
+    0.545071335927367,       !- Hour 4
+    0.524481193255512,       !- Hour 5
+    0.585278858625162,       !- Hour 6
+    0.676232166018158,       !- Hour 7
+    0.718547341115435,       !- Hour 8
+    0.607490272373541,       !- Hour 9
+    0.517023346303502,       !- Hour 10
+    0.529182879377432,       !- Hour 11
+    0.529345006485084,       !- Hour 12
+    0.520428015564202,       !- Hour 13
+    0.538424124513619,       !- Hour 14
+    0.568741893644617,       !- Hour 15
+    0.600356679636835,       !- Hour 16
+    0.71011673151751,        !- Hour 17
+    0.862678339818418,       !- Hour 18
+    0.936608300907912,       !- Hour 19
+    0.966763942931258,       !- Hour 20
+    1.0,                     !- Hour 21
+    0.976653696498055,       !- Hour 22
+    0.845168612191959,       !- Hour 23
+    0.73443579766537;        !- Hour 24
+
+Schedule:Day:Hourly,
+    CookingRangeDay,         !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.04715848452508,        !- Hour 1
+    0.04715848452508,        !- Hour 2
+    0.0235458911419424,      !- Hour 3
+    0.0235458911419424,      !- Hour 4
+    0.04715848452508,        !- Hour 5
+    0.0707043756670224,      !- Hour 6
+    0.165088046958378,       !- Hour 7
+    0.283017609391676,       !- Hour 8
+    0.306563500533618,       !- Hour 9
+    0.320771077908218,       !- Hour 10
+    0.283017609391676,       !- Hour 11
+    0.330176093916756,       !- Hour 12
+    0.377334578441836,       !- Hour 13
+    0.306563500533618,       !- Hour 14
+    0.292422625400213,       !- Hour 15
+    0.377334578441836,       !- Hour 16
+    0.613193703308431,       !- Hour 17
+    1.0,                     !- Hour 18
+    0.778348452508004,       !- Hour 19
+    0.400947171824973,       !- Hour 20
+    0.235859124866596,       !- Hour 21
+    0.165088046958378,       !- Hour 22
+    0.103721985058698,       !- Hour 23
+    0.0707043756670224;      !- Hour 24
+
+Schedule:Day:Hourly,
+    DishwasherWeekday,       !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.129162158913331,       !- Hour 1
+    0.0573867051328282,      !- Hour 2
+    0.0429979564851542,      !- Hour 3
+    0.0286933525664145,      !- Hour 4
+    0.0286933525664145,      !- Hour 5
+    0.0860800576992427,      !- Hour 6
+    0.172244260127419,       !- Hour 7
+    0.258408462555596,       !- Hour 8
+    0.488207717273711,       !- Hour 9
+    0.545594422406539,       !- Hour 10
+    0.473818968626037,       !- Hour 11
+    0.402043514845535,       !- Hour 12
+    0.344572664983772,       !- Hour 13
+    0.387654766197861,       !- Hour 14
+    0.315879312417358,       !- Hour 15
+    0.301490563769684,       !- Hour 16
+    0.315879312417358,       !- Hour 17
+    0.416348118764274,       !- Hour 18
+    0.732311575910566,       !- Hour 19
+    0.93333333333333,        !- Hour 20
+    0.761004928476981,       !- Hour 21
+    0.559983171054213,       !- Hour 22
+    0.373266017550187,       !- Hour 23
+    0.258408462555596;       !- Hour 24
+
+Schedule:Day:Hourly,
+    DishwasherWeekend,       !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.13838802740714,        !- Hour 1
+    0.0614857554994591,      !- Hour 2
+    0.0460692390912369,      !- Hour 3
+    0.0307428777497295,      !- Hour 4
+    0.0307428777497295,      !- Hour 5
+    0.0922286332491886,      !- Hour 6
+    0.184547421565092,       !- Hour 7
+    0.276866209880995,       !- Hour 8
+    0.523079697078976,       !- Hour 9
+    0.584565452578435,       !- Hour 10
+    0.507663180670754,       !- Hour 11
+    0.430760908763072,       !- Hour 12
+    0.369184998196899,       !- Hour 13
+    0.41534439235485,        !- Hour 14
+    0.338442120447169,       !- Hour 15
+    0.323025604038947,       !- Hour 16
+    0.338442120447169,       !- Hour 17
+    0.44608727010458,        !- Hour 18
+    0.784619545618464,       !- Hour 19
+    1.0,                     !- Hour 20
+    0.815362423368193,       !- Hour 21
+    0.599981968986657,       !- Hour 22
+    0.399927875946628,       !- Hour 23
+    0.276866209880995;       !- Hour 24
+
+Schedule:Day:Hourly,
+    DishwasherVacation,      !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.0,                     !- Hour 1
+    0.0,                     !- Hour 2
+    0.0,                     !- Hour 3
+    0.0,                     !- Hour 4
+    0.0,                     !- Hour 5
+    0.0,                     !- Hour 6
+    0.0,                     !- Hour 7
+    0.0,                     !- Hour 8
+    0.0,                     !- Hour 9
+    0.0,                     !- Hour 10
+    0.0,                     !- Hour 11
+    0.0,                     !- Hour 12
+    0.0,                     !- Hour 13
+    0.0,                     !- Hour 14
+    0.0,                     !- Hour 15
+    0.0,                     !- Hour 16
+    0.0,                     !- Hour 17
+    0.0,                     !- Hour 18
+    0.0,                     !- Hour 19
+    0.0,                     !- Hour 20
+    0.0,                     !- Hour 21
+    0.0,                     !- Hour 22
+    0.0,                     !- Hour 23
+    0.0;                     !- Hour 24
+
+Schedule:Day:Hourly,
+    ClothesWasherWeekday,    !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.0887931470412736,      !- Hour 1
+    0.0710155041111689,      !- Hour 2
+    0.0354602182509584,      !- Hour 3
+    0.0354602182509584,      !- Hour 4
+    0.0710155041111689,      !- Hour 5
+    0.106570789971378,       !- Hour 6
+    0.213141579942758,       !- Hour 7
+    0.461933513354977,       !- Hour 8
+    0.69294780383709,        !- Hour 9
+    0.817391304347826,       !- Hour 10
+    0.799613661417722,       !- Hour 11
+    0.710725446767196,       !- Hour 12
+    0.639614875046775,       !- Hour 13
+    0.568599370935607,       !- Hour 14
+    0.497488799215186,       !- Hour 15
+    0.461933513354977,       !- Hour 16
+    0.479711156285081,       !- Hour 17
+    0.461933513354977,       !- Hour 18
+    0.461933513354977,       !- Hour 19
+    0.461933513354977,       !- Hour 20
+    0.461933513354977,       !- Hour 21
+    0.444155870424871,       !- Hour 22
+    0.302029794593282,       !- Hour 23
+    0.159903718761693;       !- Hour 24
+
+Schedule:Day:Hourly,
+    ClothesWasherWeekend,    !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.108629913933473,       !- Hour 1
+    0.086880669923238,       !- Hour 2
+    0.0433821819027681,      !- Hour 3
+    0.0433821819027681,      !- Hour 4
+    0.086880669923238,       !- Hour 5
+    0.130379157943708,       !- Hour 6
+    0.260758315887416,       !- Hour 7
+    0.565131425913003,       !- Hour 8
+    0.847755291928355,       !- Hour 9
+    1.0,                     !- Hour 10
+    0.978250755989765,       !- Hour 11
+    0.86950453593859,        !- Hour 12
+    0.782507559897651,       !- Hour 13
+    0.695626889974413,       !- Hour 14
+    0.608629913933473,       !- Hour 15
+    0.565131425913003,       !- Hour 16
+    0.586880669923238,       !- Hour 17
+    0.565131425913003,       !- Hour 18
+    0.565131425913003,       !- Hour 19
+    0.565131425913003,       !- Hour 20
+    0.565131425913003,       !- Hour 21
+    0.543382181902768,       !- Hour 22
+    0.36950453593859,        !- Hour 23
+    0.195626889974413;       !- Hour 24
+
+Schedule:Day:Hourly,
+    ClothesWasherVacation,   !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.0,                     !- Hour 1
+    0.0,                     !- Hour 2
+    0.0,                     !- Hour 3
+    0.0,                     !- Hour 4
+    0.0,                     !- Hour 5
+    0.0,                     !- Hour 6
+    0.0,                     !- Hour 7
+    0.0,                     !- Hour 8
+    0.0,                     !- Hour 9
+    0.0,                     !- Hour 10
+    0.0,                     !- Hour 11
+    0.0,                     !- Hour 12
+    0.0,                     !- Hour 13
+    0.0,                     !- Hour 14
+    0.0,                     !- Hour 15
+    0.0,                     !- Hour 16
+    0.0,                     !- Hour 17
+    0.0,                     !- Hour 18
+    0.0,                     !- Hour 19
+    0.0,                     !- Hour 20
+    0.0,                     !- Hour 21
+    0.0,                     !- Hour 22
+    0.0,                     !- Hour 23
+    0.0;                     !- Hour 24
+
+Schedule:Day:Hourly,
+    ClothesDryerWeekday,     !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.0996818663838815,      !- Hour 1
+    0.0598091198303289,      !- Hour 2
+    0.0398727465535526,      !- Hour 3
+    0.0199363732767763,      !- Hour 4
+    0.0398727465535526,      !- Hour 5
+    0.0598091198303289,      !- Hour 6
+    0.15949098621421,        !- Hour 7
+    0.31898197242842,        !- Hour 8
+    0.486427370202556,       !- Hour 9
+    0.685791102970318,       !- Hour 10
+    0.785472969354199,       !- Hour 11
+    0.817391304347826,       !- Hour 12
+    0.745600222800647,       !- Hour 13
+    0.677836691410393,       !- Hour 14
+    0.610073160020138,       !- Hour 15
+    0.578154825026511,       !- Hour 16
+    0.558218451749735,       !- Hour 17
+    0.546236490032885,       !- Hour 18
+    0.518345705196183,       !- Hour 19
+    0.510391293636256,       !- Hour 20
+    0.526300116756109,       !- Hour 21
+    0.546236490032885,       !- Hour 22
+    0.438600212089077,       !- Hour 23
+    0.239236479321316;       !- Hour 24
+
+Schedule:Day:Hourly,
+    ClothesDryerWeekend,     !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.121951219512195,       !- Hour 1
+    0.0731707317073171,      !- Hour 2
+    0.0487804878048781,      !- Hour 3
+    0.024390243902439,       !- Hour 4
+    0.0487804878048781,      !- Hour 5
+    0.0731707317073171,      !- Hour 6
+    0.195121951219512,       !- Hour 7
+    0.390243902439024,       !- Hour 8
+    0.59509731460951,        !- Hour 9
+    0.8389997536339,         !- Hour 10
+    0.960950973146095,       !- Hour 11
+    1.0,                     !- Hour 12
+    0.912170485341217,       !- Hour 13
+    0.829268292682927,       !- Hour 14
+    0.746366100024637,       !- Hour 15
+    0.707317073170732,       !- Hour 16
+    0.682926829268293,       !- Hour 17
+    0.668268046316827,       !- Hour 18
+    0.634146341463415,       !- Hour 19
+    0.624414880512441,       !- Hour 20
+    0.643877802414388,       !- Hour 21
+    0.668268046316827,       !- Hour 22
+    0.536585365853659,       !- Hour 23
+    0.292682926829268;       !- Hour 24
+
+Schedule:Day:Hourly,
+    ClothesDryerVacation,    !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.0,                     !- Hour 1
+    0.0,                     !- Hour 2
+    0.0,                     !- Hour 3
+    0.0,                     !- Hour 4
+    0.0,                     !- Hour 5
+    0.0,                     !- Hour 6
+    0.0,                     !- Hour 7
+    0.0,                     !- Hour 8
+    0.0,                     !- Hour 9
+    0.0,                     !- Hour 10
+    0.0,                     !- Hour 11
+    0.0,                     !- Hour 12
+    0.0,                     !- Hour 13
+    0.0,                     !- Hour 14
+    0.0,                     !- Hour 15
+    0.0,                     !- Hour 16
+    0.0,                     !- Hour 17
+    0.0,                     !- Hour 18
+    0.0,                     !- Hour 19
+    0.0,                     !- Hour 20
+    0.0,                     !- Hour 21
+    0.0,                     !- Hour 22
+    0.0,                     !- Hour 23
+    0.0;                     !- Hour 24
+
+Schedule:Day:Hourly,
+    SinksWeekday,            !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.178431090172197,       !- Hour 1
+    0.0855612360359615,      !- Hour 2
+    0.0641394243627467,      !- Hour 3
+    0.0641394243627467,      !- Hour 4
+    0.0855612360359615,      !- Hour 5
+    0.228457320962002,       !- Hour 6
+    0.535419281173493,       !- Hour 7
+    0.785298413808711,       !- Hour 8
+    0.828142037155143,       !- Hour 9
+    0.778115806365338,       !- Hour 10
+    0.685371962886004,       !- Hour 11
+    0.628163124652828,       !- Hour 12
+    0.613923920422985,       !- Hour 13
+    0.571080297076553,       !- Hour 14
+    0.521054066286749,       !- Hour 15
+    0.542475877959965,       !- Hour 16
+    0.606741312979612,       !- Hour 17
+    0.82095942971177,        !- Hour 18
+    0.942307692307692,       !- Hour 19
+    0.870985660501574,       !- Hour 20
+    0.713850371345691,       !- Hour 21
+    0.606741312979612,       !- Hour 22
+    0.499758265270435,       !- Hour 23
+    0.342622976114552;       !- Hour 24
+
+Schedule:Day:Hourly,
+    SinksWeekend,            !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.18935544263172,        !- Hour 1
+    0.0907996790585718,      !- Hour 2
+    0.0680663278951591,      !- Hour 3
+    0.0680663278951591,      !- Hour 4
+    0.0907996790585718,      !- Hour 5
+    0.242444503878042,       !- Hour 6
+    0.568200053490238,       !- Hour 7
+    0.833377908531693,       !- Hour 8
+    0.878844610858518,       !- Hour 9
+    0.825755549612196,       !- Hour 10
+    0.727333511634127,       !- Hour 11
+    0.666622091468307,       !- Hour 12
+    0.651511099224392,       !- Hour 13
+    0.606044396897566,       !- Hour 14
+    0.552955335651244,       !- Hour 15
+    0.575688686814656,       !- Hour 16
+    0.643888740304894,       !- Hour 17
+    0.871222251939021,       !- Hour 18
+    1.0,                     !- Hour 19
+    0.924311313185344,       !- Hour 20
+    0.757555496121958,       !- Hour 21
+    0.643888740304894,       !- Hour 22
+    0.53035571008291,        !- Hour 23
+    0.363599893019524;       !- Hour 24
+
+Schedule:Day:Hourly,
+    SinksVacation,           !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.0,                     !- Hour 1
+    0.0,                     !- Hour 2
+    0.0,                     !- Hour 3
+    0.0,                     !- Hour 4
+    0.0,                     !- Hour 5
+    0.0,                     !- Hour 6
+    0.0,                     !- Hour 7
+    0.0,                     !- Hour 8
+    0.0,                     !- Hour 9
+    0.0,                     !- Hour 10
+    0.0,                     !- Hour 11
+    0.0,                     !- Hour 12
+    0.0,                     !- Hour 13
+    0.0,                     !- Hour 14
+    0.0,                     !- Hour 15
+    0.0,                     !- Hour 16
+    0.0,                     !- Hour 17
+    0.0,                     !- Hour 18
+    0.0,                     !- Hour 19
+    0.0,                     !- Hour 20
+    0.0,                     !- Hour 21
+    0.0,                     !- Hour 22
+    0.0,                     !- Hour 23
+    0.0;                     !- Hour 24
+
+Schedule:Day:Hourly,
+    ShowersWeekday,          !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.0847763225038272,      !- Hour 1
+    0.0384986108748656,      !- Hour 2
+    0.0269887169019672,      !- Hour 3
+    0.0384986108748656,      !- Hour 4
+    0.10795486760787,        !- Hour 5
+    0.408799682485684,       !- Hour 6
+    0.93333333333333,        !- Hour 7
+    0.92563361115836,        !- Hour 8
+    0.752112037194534,       !- Hour 9
+    0.590100357203606,       !- Hour 10
+    0.47436638884164,        !- Hour 11
+    0.374111243408743,       !- Hour 12
+    0.269966547598798,       !- Hour 13
+    0.231388558144809,       !- Hour 14
+    0.200510290865794,       !- Hour 15
+    0.208210013040766,       !- Hour 16
+    0.239088280319782,       !- Hour 17
+    0.308544537052787,       !- Hour 18
+    0.335533253954754,       !- Hour 19
+    0.335533253954754,       !- Hour 20
+    0.331643703577706,       !- Hour 21
+    0.323943981402733,       !- Hour 22
+    0.231388558144809,       !- Hour 23
+    0.165821851788853;       !- Hour 24
+
+Schedule:Day:Hourly,
+    ShowersWeekend,          !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.0908317741112434,      !- Hour 1
+    0.0412485116516414,      !- Hour 2
+    0.0289164823949651,      !- Hour 3
+    0.0412485116516414,      !- Hour 4
+    0.115665929579861,       !- Hour 5
+    0.437999659806089,       !- Hour 6
+    1.0,                     !- Hour 7
+    0.991750297669672,       !- Hour 8
+    0.805834325565572,       !- Hour 9
+    0.632250382718149,       !- Hour 10
+    0.508249702330328,       !- Hour 11
+    0.400833475080796,       !- Hour 12
+    0.289249872427284,       !- Hour 13
+    0.24791631229801,        !- Hour 14
+    0.214832454499064,       !- Hour 15
+    0.223082156829393,       !- Hour 16
+    0.256166014628338,       !- Hour 17
+    0.330583432556557,       !- Hour 18
+    0.359499914951522,       !- Hour 19
+    0.359499914951522,       !- Hour 20
+    0.355332539547542,       !- Hour 21
+    0.347082837217214,       !- Hour 22
+    0.24791631229801,        !- Hour 23
+    0.177666269773771;       !- Hour 24
+
+Schedule:Day:Hourly,
+    ShowersVacation,         !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.0,                     !- Hour 1
+    0.0,                     !- Hour 2
+    0.0,                     !- Hour 3
+    0.0,                     !- Hour 4
+    0.0,                     !- Hour 5
+    0.0,                     !- Hour 6
+    0.0,                     !- Hour 7
+    0.0,                     !- Hour 8
+    0.0,                     !- Hour 9
+    0.0,                     !- Hour 10
+    0.0,                     !- Hour 11
+    0.0,                     !- Hour 12
+    0.0,                     !- Hour 13
+    0.0,                     !- Hour 14
+    0.0,                     !- Hour 15
+    0.0,                     !- Hour 16
+    0.0,                     !- Hour 17
+    0.0,                     !- Hour 18
+    0.0,                     !- Hour 19
+    0.0,                     !- Hour 20
+    0.0,                     !- Hour 21
+    0.0,                     !- Hour 22
+    0.0,                     !- Hour 23
+    0.0;                     !- Hour 24
+
+Schedule:Day:Hourly,
+    BathsWeekday,            !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.0549341075342269,      !- Hour 1
+    0.027467053767114,       !- Hour 2
+    0.027467053767114,       !- Hour 3
+    0.027467053767114,       !- Hour 4
+    0.0549341075342269,      !- Hour 5
+    0.137335268835568,       !- Hour 6
+    0.329675803375743,       !- Hour 7
+    0.412076964677084,       !- Hour 8
+    0.467011072211311,       !- Hour 9
+    0.412076964677084,       !- Hour 10
+    0.329675803375743,       !- Hour 11
+    0.247203483904022,       !- Hour 12
+    0.219736430136909,       !- Hour 13
+    0.164802322602681,       !- Hour 14
+    0.164802322602681,       !- Hour 15
+    0.164802322602681,       !- Hour 16
+    0.274741695841516,       !- Hour 17
+    0.329675803375743,       !- Hour 18
+    0.549483391683034,       !- Hour 19
+    0.714285714285714,       !- Hour 20
+    0.714285714285714,       !- Hour 21
+    0.549483391683034,       !- Hour 22
+    0.467011072211311,       !- Hour 23
+    0.274741695841516;       !- Hour 24
+
+Schedule:Day:Hourly,
+    BathsWeekend,            !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.0769077505479179,      !- Hour 1
+    0.038453875273959,       !- Hour 2
+    0.038453875273959,       !- Hour 3
+    0.038453875273959,       !- Hour 4
+    0.0769077505479179,      !- Hour 5
+    0.192269376369795,       !- Hour 6
+    0.461546124726041,       !- Hour 7
+    0.576907750547918,       !- Hour 8
+    0.653815501095836,       !- Hour 9
+    0.576907750547918,       !- Hour 10
+    0.461546124726041,       !- Hour 11
+    0.346084877465631,       !- Hour 12
+    0.307631002191672,       !- Hour 13
+    0.230723251643754,       !- Hour 14
+    0.230723251643754,       !- Hour 15
+    0.230723251643754,       !- Hour 16
+    0.384638374178123,       !- Hour 17
+    0.461546124726041,       !- Hour 18
+    0.769276748356246,       !- Hour 19
+    1.0,                     !- Hour 20
+    1.0,                     !- Hour 21
+    0.769276748356246,       !- Hour 22
+    0.653815501095836,       !- Hour 23
+    0.384638374178123;       !- Hour 24
+
+Schedule:Day:Hourly,
+    BathsVacation,           !- Name
+    Fraction,                !- Schedule Type Limits Name
+    0.0,                     !- Hour 1
+    0.0,                     !- Hour 2
+    0.0,                     !- Hour 3
+    0.0,                     !- Hour 4
+    0.0,                     !- Hour 5
+    0.0,                     !- Hour 6
+    0.0,                     !- Hour 7
+    0.0,                     !- Hour 8
+    0.0,                     !- Hour 9
+    0.0,                     !- Hour 10
+    0.0,                     !- Hour 11
+    0.0,                     !- Hour 12
+    0.0,                     !- Hour 13
+    0.0,                     !- Hour 14
+    0.0,                     !- Hour 15
+    0.0,                     !- Hour 16
+    0.0,                     !- Hour 17
+    0.0,                     !- Hour 18
+    0.0,                     !- Hour 19
+    0.0,                     !- Hour 20
+    0.0,                     !- Hour 21
+    0.0,                     !- Hour 22
+    0.0,                     !- Hour 23
+    0.0;                     !- Hour 24
+
+
+!-   ===========  ALL OBJECTS IN CLASS: SCHEDULE:DAY:INTERVAL ===========
+
+Schedule:Day:Interval,
+    schedDayInterval_On,     !- Name
+    On/Off,                  !- Schedule Type Limits Name
+    No,                      !- Interpolate to Timestep
+    Until: 24:00,            !- Time 1 {hh:mm}
+    1;                       !- Value Until Time 1
+
+Schedule:Day:Interval,
+    schedDayInterval_Off,    !- Name
+    On/Off,                  !- Schedule Type Limits Name
+    No,                      !- Interpolate to Timestep
+    Until: 24:00,            !- Time 1 {hh:mm}
+    0;                       !- Value Until Time 1
+
+
+!-   ===========  ALL OBJECTS IN CLASS: SCHEDULE:WEEK:COMPACT ===========
+
+Schedule:Week:Compact,
+    RefrigeratorWeek,        !- Name
+    AllDays,                 !- DayType List 1
+    RefrigeratorDay;         !- Schedule:Day Name 1
+
+Schedule:Week:Compact,
+    MiscPlugLoadWeek,        !- Name
+    AllDays,                 !- DayType List 1
+    MiscPlugLoadDay;         !- Schedule:Day Name 1
+
+Schedule:Week:Compact,
+    CookingRangeWeek,        !- Name
+    AllDays,                 !- DayType List 1
+    CookingRangeDay;         !- Schedule:Day Name 1
+
+Schedule:Week:Compact,
+    DishwasherWeek,          !- Name
+    Weekdays,                !- DayType List 1
+    DishwasherWeekday,       !- Schedule:Day Name 1
+    CustomDay1,              !- DayType List 2
+    DishwasherVacation,      !- Schedule:Day Name 2
+    AllOtherDays,            !- DayType List 3
+    DishwasherWeekend;       !- Schedule:Day Name 3
+
+Schedule:Week:Compact,
+    ClothesWasherWeek,       !- Name
+    Weekdays,                !- DayType List 1
+    ClothesWasherWeekday,    !- Schedule:Day Name 1
+    CustomDay1,              !- DayType List 2
+    ClothesWasherVacation,   !- Schedule:Day Name 2
+    AllOtherDays,            !- DayType List 3
+    ClothesWasherWeekend;    !- Schedule:Day Name 3
+
+Schedule:Week:Compact,
+    ClothesDryerWeek,        !- Name
+    Weekdays,                !- DayType List 1
+    ClothesDryerWeekday,     !- Schedule:Day Name 1
+    CustomDay1,              !- DayType List 2
+    ClothesDryerVacation,    !- Schedule:Day Name 2
+    AllOtherDays,            !- DayType List 3
+    ClothesDryerWeekend;     !- Schedule:Day Name 3
+
+Schedule:Week:Compact,
+    SinksWeek,               !- Name
+    Weekdays,                !- DayType List 1
+    SinksWeekday,            !- Schedule:Day Name 1
+    CustomDay1,              !- DayType List 2
+    SinksVacation,           !- Schedule:Day Name 2
+    AllOtherDays,            !- DayType List 3
+    SinksWeekend;            !- Schedule:Day Name 3
+
+Schedule:Week:Compact,
+    ShowersWeek,             !- Name
+    Weekdays,                !- DayType List 1
+    ShowersWeekday,          !- Schedule:Day Name 1
+    CustomDay1,              !- DayType List 2
+    ShowersVacation,         !- Schedule:Day Name 2
+    AllOtherDays,            !- DayType List 3
+    ShowersWeekend;          !- Schedule:Day Name 3
+
+Schedule:Week:Compact,
+    BathsWeek,               !- Name
+    Weekdays,                !- DayType List 1
+    BathsWeekday,            !- Schedule:Day Name 1
+    CustomDay1,              !- DayType List 2
+    BathsVacation,           !- Schedule:Day Name 2
+    AllOtherDays,            !- DayType List 3
+    BathsWeekend;            !- Schedule:Day Name 3
+
+Schedule:Week:Compact,
+    OccupancyWeek,           !- Name
+    AllDays,                 !- DayType List 1
+    OccupancyDay;            !- Schedule:Day Name 1
+
+Schedule:Week:Compact,
+    LightingProfileWeek,     !- Name
+    AllDays,                 !- DayType List 1
+    LightingProfileDay;      !- Schedule:Day Name 1
+
+Schedule:Week:Compact,
+    ExteriorLightingProfileWeek,  !- Name
+    AllDays,                 !- DayType List 1
+    ExteriorLightingProfileDay;  !- Schedule:Day Name 1
+
+Schedule:Week:Compact,
+    schedWeek_OnlyDesignDays,!- Name
+    SummerDesignDay,         !- DayType List 1
+    schedDayInterval_On,     !- Schedule:Day Name 1
+    WinterDesignDay,         !- DayType List 2
+    schedDayInterval_On,     !- Schedule:Day Name 2
+    AllOtherDays,            !- DayType List 3
+    schedDayInterval_Off;    !- Schedule:Day Name 3
+
+
+!-   ===========  ALL OBJECTS IN CLASS: SCHEDULE:YEAR ===========
+
+Schedule:Year,
+    LightingProfile,         !- Name
+    Fraction,                !- Schedule Type Limits Name
+    LightingProfileWeek,     !- Schedule:Week Name 1
+    1,                       !- Start Month 1
+    1,                       !- Start Day 1
+    12,                      !- End Month 1
+    31;                      !- End Day 1
+
+Schedule:Year,
+    ExteriorLightingProfile, !- Name
+    Fraction,                !- Schedule Type Limits Name
+    ExteriorLightingProfileWeek,  !- Schedule:Week Name 1
+    1,                       !- Start Month 1
+    1,                       !- Start Day 1
+    12,                      !- End Month 1
+    31;                      !- End Day 1
+
+Schedule:Year,
+    Refrigerator,            !- Name
+    Fraction,                !- Schedule Type Limits Name
+    RefrigeratorWeek,        !- Schedule:Week Name 1
+    1,                       !- Start Month 1
+    1,                       !- Start Day 1
+    12,                      !- End Month 1
+    31;                      !- End Day 1
+
+Schedule:Year,
+    MiscPlugLoad,            !- Name
+    Fraction,                !- Schedule Type Limits Name
+    MiscPlugLoadWeek,        !- Schedule:Week Name 1
+    1,                       !- Start Month 1
+    1,                       !- Start Day 1
+    12,                      !- End Month 1
+    31;                      !- End Day 1
+
+Schedule:Year,
+    CookingRange,            !- Name
+    Fraction,                !- Schedule Type Limits Name
+    CookingRangeWeek,        !- Schedule:Week Name 1
+    1,                       !- Start Month 1
+    1,                       !- Start Day 1
+    12,                      !- End Month 1
+    31;                      !- End Day 1
+
+Schedule:Year,
+    Dishwasher,              !- Name
+    Fraction,                !- Schedule Type Limits Name
+    DishwasherWeek,          !- Schedule:Week Name 1
+    1,                       !- Start Month 1
+    1,                       !- Start Day 1
+    12,                      !- End Month 1
+    31;                      !- End Day 1
+
+Schedule:Year,
+    ClothesWasher,           !- Name
+    Fraction,                !- Schedule Type Limits Name
+    ClothesWasherWeek,       !- Schedule:Week Name 1
+    1,                       !- Start Month 1
+    1,                       !- Start Day 1
+    12,                      !- End Month 1
+    31;                      !- End Day 1
+
+Schedule:Year,
+    ClothesDryer,            !- Name
+    Fraction,                !- Schedule Type Limits Name
+    ClothesDryerWeek,        !- Schedule:Week Name 1
+    1,                       !- Start Month 1
+    1,                       !- Start Day 1
+    12,                      !- End Month 1
+    31;                      !- End Day 1
+
+Schedule:Year,
+    Sinks,                   !- Name
+    Fraction,                !- Schedule Type Limits Name
+    SinksWeek,               !- Schedule:Week Name 1
+    1,                       !- Start Month 1
+    1,                       !- Start Day 1
+    12,                      !- End Month 1
+    31;                      !- End Day 1
+
+Schedule:Year,
+    Showers,                 !- Name
+    Fraction,                !- Schedule Type Limits Name
+    ShowersWeek,             !- Schedule:Week Name 1
+    1,                       !- Start Month 1
+    1,                       !- Start Day 1
+    12,                      !- End Month 1
+    31;                      !- End Day 1
+
+Schedule:Year,
+    Baths,                   !- Name
+    Fraction,                !- Schedule Type Limits Name
+    BathsWeek,               !- Schedule:Week Name 1
+    1,                       !- Start Month 1
+    1,                       !- Start Day 1
+    12,                      !- End Month 1
+    31;                      !- End Day 1
+
+Schedule:Year,
+    Occupancy_sch,           !- Name
+    Fraction,                !- Schedule Type Limits Name
+    OccupancyWeek,           !- Schedule:Week Name 1
+    1,                       !- Start Month 1
+    1,                       !- Start Day 1
+    12,                      !- End Month 1
+    31;                      !- End Day 1
+
+Schedule:Year,
+    schedYear_OnlyDesignDays,!- Name
+    On/Off,                  !- Schedule Type Limits Name
+    schedWeek_OnlyDesignDays,!- Schedule:Week Name 1
+    1,                       !- Start Month 1
+    1,                       !- Start Day 1
+    12,                      !- End Month 1
+    31;                      !- End Day 1
+
+
+!-   ===========  ALL OBJECTS IN CLASS: SCHEDULE:COMPACT ===========
+
+Schedule:Compact,
+    Compact_Always_1,        !- Name
+    Any Number,              !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 24:00, 1;         !- Field 4
+
+Schedule:Compact,
+    activity_sch,            !- Name
+    any number,              !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 24:00, 117.28;    !- Field 4
+
+Schedule:Compact,
+    always_avail,            !- Name
+    On/Off,                  !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 24:00, 1;         !- Field 4
+
+Schedule:Compact,
+    always_off,              !- Name
+    On/Off,                  !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 24:00, 0;         !- Field 4
+
+Schedule:Compact,
+    cooling_sch,             !- Name
+    Temperature,             !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 24:00, 23.88;     !- Field 4
+
+Schedule:Compact,
+    dhw_setpt,               !- Name
+    Temperature,             !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: AllDays,            !- Field 2
+    Until 24:00,             !- Field 3
+    48;                      !- Field 4
+
+Schedule:Compact,
+    fan_cycle,               !- Name
+    any number,              !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 24:00, 0;         !- Field 4
+
+Schedule:Compact,
+    heating_sch,             !- Name
+    Temperature,             !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 24:00, 22.22;     !- Field 4
+
+Schedule:Compact,
+    shade_drapes,            !- Name
+    any number,              !- Schedule Type Limits Name
+    Through: 5/30,           !- Field 1
+    For:AllDays,             !- Field 2
+    Until 24:00,             !- Field 3
+    0.85,                    !- Field 4
+    Through: 8/31,           !- Field 5
+    For:AllDays,             !- Field 6
+    Until 24:00,             !- Field 7
+    0.7,                     !- Field 8
+    Through: 12/31,          !- Field 9
+    For:AllDays,             !- Field 10
+    Until: 24:00, 0.85;      !- Field 12
+
+Schedule:Compact,
+    window_shades,           !- Name
+    fraction,                !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For:AllDays,             !- Field 2
+    Until 24:00,             !- Field 3
+    0.836;                   !- Field 4
+
+Schedule:Compact,
+    zone_control_type,       !- Name
+    control_type,            !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For:AllDays,             !- Field 2
+    Until 24:00,             !- Field 3
+    4;                       !- Field 4
+
+
+!-   ===========  ALL OBJECTS IN CLASS: SCHEDULE:CONSTANT ===========
+
+Schedule:Constant,DWWaterTempSchedule,Temperature,48.8888888888889;
+Schedule:Constant,CWWaterTempSchedule,Temperature,48.8888888888889;
+Schedule:Constant,SSBWaterTempSchedule,Temperature,40.5555555555556;
+Schedule:Constant,DHWSupplySetpoint,Temperature,48.8888888888889;
+
+!-   ===========  ALL OBJECTS IN CLASS: MATERIAL ===========
+
+
+Material,
+    Carpet_with_Padding,     !- Name
+    MediumSmooth,            !- Roughness
+    0.0254,                  !- Thickness {m}
+    0.060131,                !- Conductivity {W/m-K}
+    32.037,                  !- Density {kg/m3}
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.7,                     !- Solar Absorptance
+    0.7;                     !- Visible Absorptance
+
+Material,
+    Concrete_4in,            !- Name
+    Rough,                   !- Roughness
+    0.1016,                  !- Thickness {m}
+    1.312,                   !- Conductivity {W/m-K}
+    2243.0,                  !- Density {kg/m3}
+    465.0;                   !- Specific Heat {J/kg-K}
+
+Material,
+    Concrete_8in,            !- Name
+    MediumRough,             !- Roughness
+    0.2032,                  !- Thickness {m}
+    1.4,                     !- Conductivity {W/m-K}
+    2243.0,                  !- Density {kg/m3}
+    880.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
+
+Material,
+    Concrete_9.6in,          !- Name
+    MediumRough,             !- Roughness
+    0.24383,                 !- Thickness {m}
+    1.805,                   !- Conductivity {W/m-K}
+    2300.0,                  !- Density {kg/m3}
+    650.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
+
+Material,
+    ConsolLayer_BsmtWall,    !- Name
+    Rough,                   !- Roughness
+    0.0889,                  !- Thickness {m}
+    0.0597,                  !- Conductivity {W/m-K}
+    120.801,                 !- Density {kg/m3}
+    1036.25775;              !- Specific Heat {J/kg-K}
+
+Material,
+    ConsolLayer_Ceiling,     !- Name
+    Rough,                   !- Roughness
+    0.3175,                  !- Thickness {m}
+    0.06172,                 !- Conductivity {W/m-K}
+    42.0,                    !- Density {kg/m3}
+    776.0;                   !- Specific Heat {J/kg-K}
+
+Material,
+    ConsolLayer_CrawlWall,   !- Name
+    Rough,                   !- Roughness
+    0.0889,                  !- Thickness {m}
+    0.0597,                  !- Conductivity {W/m-K}
+    121.0,                   !- Density {kg/m3}
+    1036.0;                  !- Specific Heat {J/kg-K}
+
+Material,
+    ConsolLayer_Floor,       !- Name
+    Rough,                   !- Roughness
+    0.23495,                 !- Thickness {m}
+    0.04852,                 !- Conductivity {W/m-K}
+    55.0,                    !- Density {kg/m3}
+    917.0;                   !- Specific Heat {J/kg-K}
+
+Material,
+    ConsolLayer_Sheathing,   !- Name
+    Rough,                   !- Roughness
+    0.0127,                  !- Thickness {m}
+    0.09402,                 !- Conductivity {W/m-K}
+    685.0,                   !- Density {kg/m3}
+    1172.0;                  !- Specific Heat {J/kg-K}
+
+Material,
+    ConsolLayer_Wall,        !- Name
+    Rough,                   !- Roughness
+    0.1397,                  !- Thickness {m}
+    0.06129,                 !- Conductivity {W/m-K}
+    121.0,                   !- Density {kg/m3}
+    1036.0;                  !- Specific Heat {J/kg-K}
+
+Material,
+    Drywall_1/2in,           !- Name
+    MediumSmooth,            !- Roughness
+    0.0127,                  !- Thickness {m}
+    0.16,                    !- Conductivity {W/m-K}
+    800.0,                   !- Density {kg/m3}
+    1090.0;                  !- Specific Heat {J/kg-K}
+
+Material,
+    Generic_VeryHighReflectivity,  !- Name
+    Smooth,                  !- Roughness
+    0.0005,                  !- Thickness {m}
+    237.0,                   !- Conductivity {W/m-K}
+    2702.0,                  !- Density {kg/m3}
+    903.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.05,                    !- Solar Absorptance
+    0.05;                    !- Visible Absorptance
+
+Material,
+    Insulation_Batt_R13,     !- Name
+    MediumRough,             !- Roughness
+    0.0889,                  !- Thickness {m}
+    0.03876,                 !- Conductivity {W/m-K}
+    9.6,                     !- Density {kg/m3}
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.7,                     !- Solar Absorptance
+    0.7;                     !- Visible Absorptance
+
+Material,
+    Insulation_Batt_R19,     !- Name
+    MediumRough,             !- Roughness
+    0.0254,                  !- Thickness {m}
+    0.003475,                !- Conductivity {W/m-K}
+    9.6,                     !- Density {kg/m3}
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.7,                     !- Solar Absorptance
+    0.7;                     !- Visible Absorptance
+
+Material,
+    Insulation_Blown_R30,    !- Name
+    MediumRough,             !- Roughness
+    0.21256,                 !- Thickness {m}
+    0.04119,                 !- Conductivity {W/m-K}
+    9.6,                     !- Density {kg/m3}
+    836.8;                   !- Specific Heat {J/kg-K}
+
+Material,
+    Insulation_Blown_R30_top,!- Name
+    MediumRough,             !- Roughness
+    0.11735,                 !- Thickness {m}
+    0.04119,                 !- Conductivity {W/m-K}
+    9.6,                     !- Density {kg/m3}
+    836.8,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.7,                     !- Solar Absorptance
+    0.7;                     !- Visible Absorptance
+
+Material,
+    Insulation_FoundationExterior,  !- Name
+    Smooth,                  !- Roughness
+    0.0889,                  !- Thickness {m}
+    0.0388,                  !- Conductivity {W/m-K}
+    120.0,                   !- Density {kg/m3}
+    1036.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.7,                     !- Solar Absorptance
+    0.7;                     !- Visible Absorptance
+
+Material,
+    Insulation_SlabUnder,    !- Name
+    Smooth,                  !- Roughness
+    0.0254,                  !- Thickness {m}
+    0.035,                   !- Conductivity {W/m-K}
+    265.0,                   !- Density {kg/m3}
+    1300.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
+
+Material,
+    Metal_F08,               !- Name
+    Smooth,                  !- Roughness
+    0.0008,                  !- Thickness {m}
+    45.28,                   !- Conductivity {W/m-K}
+    7824.0,                  !- Density {kg/m3}
+    500.0;                   !- Specific Heat {J/kg-K}
+
+Material,
+    OSB_1/2in,               !- Name
+    MediumSmooth,            !- Roughness
+    0.0127,                  !- Thickness {m}
+    0.1163,                  !- Conductivity {W/m-K}
+    545.0,                   !- Density {kg/m3}
+    1213.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.7,                     !- Solar Absorptance
+    0.7;                     !- Visible Absorptance
+
+Material,
+    OSB_5/16in,              !- Name
+    MediumSmooth,            !- Roughness
+    0.00795,                 !- Thickness {m}
+    0.1163,                  !- Conductivity {W/m-K}
+    545.0,                   !- Density {kg/m3}
+    1213.0;                  !- Specific Heat {J/kg-K}
+
+Material,
+    OSB_5/8in,               !- Name
+    MediumSmooth,            !- Roughness
+    0.015875,                !- Thickness {m}
+    0.1163,                  !- Conductivity {W/m-K}
+    545.0,                   !- Density {kg/m3}
+    1213.0;                  !- Specific Heat {J/kg-K}
+
+Material,
+    Pipe Insulation,         !- Name
+    VeryRough,               !- Roughness
+    0.0127,                  !- Thickness {m}
+    0.03317,                 !- Conductivity {W/m-K}
+    91.0,                    !- Density {kg/m3}
+    836.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.5,                     !- Solar Absorptance
+    0.5;                     !- Visible Absorptance
+
+Material,
+    Pipe_Copper_3/4in,       !- Name
+    MediumRough,             !- Roughness
+    0.01905,                 !- Thickness {m}
+    401.0,                   !- Conductivity {W/m-K}
+    2243.0,                  !- Density {kg/m3}
+    837.0,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.65,                    !- Solar Absorptance
+    0.65;                    !- Visible Absorptance
+
+Material,
+    Plywood_3/4in,           !- Name
+    Rough,                   !- Roughness
+    0.01905,                 !- Thickness {m}
+    0.11546,                 !- Conductivity {W/m-K}
+    544.7,                   !- Density {kg/m3}
+    674.5,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.7,                     !- Solar Absorptance
+    0.7;                     !- Visible Absorptance
+
+Material,
+    Shingle_Asphalt,         !- Name
+    MediumRough,             !- Roughness
+    0.00635,                 !- Thickness {m}
+    0.08186,                 !- Conductivity {W/m-K}
+    1121.0,                  !- Density {kg/m3}
+    1255.0,                  !- Specific Heat {J/kg-K}
+    ,                        !- Thermal Absorptance
+    0.75;                    !- Solar Absorptance
+
+Material,
+    Shingle_Slate,           !- Name
+    MediumSmooth,            !- Roughness
+    0.0127,                  !- Thickness {m}
+    1.4422,                  !- Conductivity {W/m-K}
+    1602.0,                  !- Density {kg/m3}
+    1255.0;                  !- Specific Heat {J/kg-K}
+
+Material,
+    Shingle_Wood,            !- Name
+    MediumSmooth,            !- Roughness
+    0.0127,                  !- Thickness {m}
+    0.11388,                 !- Conductivity {W/m-K}
+    426.0,                   !- Density {kg/m3}
+    1632.0;                  !- Specific Heat {J/kg-K}
+
+Material,
+    Soil_12in,               !- Name
+    Rough,                   !- Roughness
+    0.3048,                  !- Thickness {m}
+    1.731,                   !- Conductivity {W/m-K}
+    1842.3,                  !- Density {kg/m3}
+    232.6,                   !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.7,                     !- Solar Absorptance
+    0.7;                     !- Visible Absorptance
+
+Material,
+    Stucco_1in,              !- Name
+    MediumSmooth,            !- Roughness
+    0.0254,                  !- Thickness {m}
+    1.3989,                  !- Conductivity {W/m-K}
+    1922.0,                  !- Density {kg/m3}
+    878.6;                   !- Specific Heat {J/kg-K}
+
+Material,
+    Wood_6in,                !- Name
+    MediumSmooth,            !- Roughness
+    0.15,                    !- Thickness {m}
+    0.12,                    !- Conductivity {W/m-K}
+    540.0,                   !- Density {kg/m3}
+    1210.0,                  !- Specific Heat {J/kg-K}
+    0.9,                     !- Thermal Absorptance
+    0.7,                     !- Solar Absorptance
+    0.7;                     !- Visible Absorptance
+
+
+!-   ===========  ALL OBJECTS IN CLASS: MATERIAL:NOMASS ===========
+
+Material:NoMass,
+    FeltPaper,               !- Name
+    Smooth,                  !- Roughness
+    0.01057;                 !- Thermal Resistance {m2-K/W}
+
+Material:NoMass,
+    Insulation_R13_FoundationExterior,  !- Name
+    Smooth,                  !- Roughness
+    2.2894,                  !- Thermal Resistance {m2-K/W}
+    0.9,                     !- Thermal Absorptance
+    0.7,                     !- Solar Absorptance
+    0.7;                     !- Visible Absorptance
+
+Material:NoMass,
+    Insulation_SlabVertical, !- Name
+    Smooth,                  !- Roughness
+    1.7611,                  !- Thermal Resistance {m2-K/W}
+    0.9,                     !- Thermal Absorptance
+    0.7,                     !- Solar Absorptance
+    0.7;                     !- Visible Absorptance
+
+
+!-   ===========  ALL OBJECTS IN CLASS: MATERIAL:AIRGAP ===========
+
+Material:AirGap,
+    Air_Vert4in,             !- Name
+    0.1585;                  !- Thermal Resistance {m2-K/W}
+
+
+!-   ===========  ALL OBJECTS IN CLASS: WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM ===========
+
+WindowMaterial:SimpleGlazingSystem,
+    Glass,                   !- Name
+    1.98751,                 !- U-Factor {W/m2-K}
+    0.4,                     !- Solar Heat Gain Coefficient
+    0.88;                    !- Visible Transmittance
+
+
+!-   ===========  ALL OBJECTS IN CLASS: WINDOWMATERIAL:BLIND ===========
+
+WindowMaterial:Blind,
+    Blind_Interior,          !- Name
+    Horizontal,              !- Slat Orientation
+    0.025,                   !- Slat Width {m}
+    0.01875,                 !- Slat Separation {m}
+    0.001,                   !- Slat Thickness {m}
+    45.0,                    !- Slat Angle {deg}
+    221.0,                   !- Slat Conductivity {W/m-K}
+    0.0,                     !- Slat Beam Solar Transmittance
+    0.5,                     !- Front Side Slat Beam Solar Reflectance
+    0.5,                     !- Back Side Slat Beam Solar Reflectance
+    0.0,                     !- Slat Diffuse Solar Transmittance
+    0.5,                     !- Front Side Slat Diffuse Solar Reflectance
+    0.5,                     !- Back Side Slat Diffuse Solar Reflectance
+    0.0,                     !- Slat Beam Visible Transmittance
+    0.5,                     !- Front Side Slat Beam Visible Reflectance
+    0.5,                     !- Back Side Slat Beam Visible Reflectance
+    0.0,                     !- Slat Diffuse Visible Transmittance
+    0.5,                     !- Front Side Slat Diffuse Visible Reflectance
+    0.5,                     !- Back Side Slat Diffuse Visible Reflectance
+    0.0,                     !- Slat Infrared Hemispherical Transmittance
+    0.9,                     !- Front Side Slat Infrared Hemispherical Emissivity
+    0.9,                     !- Back Side Slat Infrared Hemispherical Emissivity
+    0.05,                    !- Blind to Glass Distance {m}
+    0.5,                     !- Blind Top Opening Multiplier
+    0.5,                     !- Blind Bottom Opening Multiplier
+    0.5,                     !- Blind Left Side Opening Multiplier
+    0.5,                     !- Blind Right Side Opening Multiplier
+    ,                        !- Minimum Slat Angle {deg}
+    ;                        !- Maximum Slat Angle {deg}
+
+
+!-   ===========  ALL OBJECTS IN CLASS: CONSTRUCTION ===========
+
+Construction,
+    Floor_Attic,             !- Name
+    Drywall_1/2in,           !- Outside Layer
+    ConsolLayer_Ceiling;     !- Layer 2
+
+Construction,
+    Floor_Attic_reverse,     !- Name
+    ConsolLayer_Ceiling,     !- Outside Layer
+    Drywall_1/2in;           !- Layer 2
+
+Construction,
+    Floor_Exterior,          !- Name
+    ConsolLayer_Floor,       !- Outside Layer
+    Plywood_3/4in,           !- Layer 2
+    Carpet_with_Padding;     !- Layer 3
+
+Construction,
+    Floor_Interior,          !- Name
+    Drywall_1/2in,           !- Outside Layer
+    Plywood_3/4in,           !- Layer 2
+    Carpet_with_Padding;     !- Layer 3
+
+Construction,
+    Floor_Interior_reverse,  !- Name
+    Carpet_with_Padding,     !- Outside Layer
+    Plywood_3/4in,           !- Layer 2
+    Drywall_1/2in;           !- Layer 3
+
+Construction,
+    Floor_Slab,              !- Name
+    Concrete_9.6in;          !- Outside Layer
+
+Construction,
+    Furnishings_InteriorWood,!- Name
+    Wood_6in;                !- Outside Layer
+
+Construction,
+    Roof_Exterior,           !- Name
+    Shingle_Asphalt,         !- Outside Layer
+    OSB_1/2in;               !- Layer 2
+
+Construction,
+    Wall_Exterior,           !- Name
+    Stucco_1in,              !- Outside Layer
+    FeltPaper,               !- Layer 2
+    ConsolLayer_Sheathing,   !- Layer 3
+    OSB_5/8in,               !- Layer 4
+    ConsolLayer_Wall,        !- Layer 5
+    Drywall_1/2in;           !- Layer 6
+
+Construction,
+    Wall_ExteriorGableEnd,   !- Name
+    Stucco_1in,              !- Outside Layer
+    FeltPaper,               !- Layer 2
+    OSB_5/8in,               !- Layer 3
+    Air_Vert4in,             !- Layer 4
+    Drywall_1/2in;           !- Layer 5
+
+Construction,
+    Wall_Foundation,         !- Name
+    Insulation_FoundationExterior,  !- Outside Layer
+    Concrete_8in,            !- Layer 2
+    ConsolLayer_BsmtWall;    !- Layer 3
+
+Construction,
+    Wall_Interior,           !- Name
+    Drywall_1/2in,           !- Outside Layer
+    Air_Vert4in,             !- Layer 2
+    Drywall_1/2in;           !- Layer 3
+
+Construction,
+    Window,                  !- Name
+    Glass;                   !- Outside Layer
+
+Construction,
+    Window_WithBlinds,       !- Name
+    Glass,                   !- Outside Layer
+    Blind_Interior;          !- Layer 2
+
+
+!-   ===========  ALL OBJECTS IN CLASS: GLOBALGEOMETRYRULES ===========
+
+GlobalGeometryRules,
+    UpperLeftCorner,         !- Starting Vertex Position
+    Counterclockwise,        !- Vertex Entry Direction
+    Relative,                !- Coordinate System
+    Relative,                !- Daylighting Reference Point Coordinate System
+    Relative;                !- Rectangular Surface Coordinate System
+
+
+!-   ===========  ALL OBJECTS IN CLASS: ZONE ===========
+
+Zone,
+    1_first,                 !- Name
+    0.0,                     !- Direction of Relative North {deg}
+    0.0, 0.0, 0.0,                      !- X,Y,Z  {m}
+    1,                       !- Type
+    1,                       !- Multiplier
+    -9999.0,                 !- Ceiling Height {m}
+    -9999.0,                 !- Volume {m3}
+    -9999.0,                 !- Floor Area {m2}
+    ,                        !- Zone Inside Convection Algorithm
+    ,                        !- Zone Outside Convection Algorithm
+    Yes;                     !- Part of Total Floor Area
+
+Zone,
+    2_second,                !- Name
+    0.0,                     !- Direction of Relative North {deg}
+    0.0, 0.0, 0.0,                      !- X,Y,Z  {m}
+    1,                       !- Type
+    1,                       !- Multiplier
+    -9999.0,                 !- Ceiling Height {m}
+    -9999.0,                 !- Volume {m3}
+    -9999.0,                 !- Floor Area {m2}
+    ,                        !- Zone Inside Convection Algorithm
+    ,                        !- Zone Outside Convection Algorithm
+    Yes;                     !- Part of Total Floor Area
+
+Zone,
+    3_attic,                 !- Name
+    0.0,                     !- Direction of Relative North {deg}
+    0.0, 0.0, 0.0,                      !- X,Y,Z  {m}
+    1,                       !- Type
+    1,                       !- Multiplier
+    -9999.0,                 !- Ceiling Height {m}
+    -9999.0,                 !- Volume {m3}
+    -9999.0,                 !- Floor Area {m2}
+    ,                        !- Zone Inside Convection Algorithm
+    ,                        !- Zone Outside Convection Algorithm
+    Yes;                     !- Part of Total Floor Area
+
+
+!-   ===========  ALL OBJECTS IN CLASS: ZONELIST ===========
+
+ZoneList,
+    ahs_zone_list,           !- Name
+    2_second,                !- Zone 1 Name
+    1_first;                 !- Zone 2 Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: BUILDINGSURFACE:DETAILED ===========
+
+BuildingSurface:Detailed,
+    1,                       !- Name
+    Wall,                    !- Surface Type
+    Wall_Exterior,           !- Construction Name
+    1_first,                 !- Zone Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    4,                       !- Number of Vertices
+    0.0, 9.144, 2.59100031852723,       !- X,Y,Z  1 {m}
+    0.0, 9.144, 0.0,                    !- X,Y,Z  2 {m}
+    0.0, 0.0, 0.0,                      !- X,Y,Z  3 {m}
+    0.0, 0.0, 2.59100031852723;         !- X,Y,Z  4 {m}
+
+BuildingSurface:Detailed,
+    3,                       !- Name
+    Wall,                    !- Surface Type
+    Wall_Exterior,           !- Construction Name
+    1_first,                 !- Zone Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    4,                       !- Number of Vertices
+    12.192, 9.144, 2.59100031852723,    !- X,Y,Z  1 {m}
+    12.192, 9.144, 0.0,                 !- X,Y,Z  2 {m}
+    0.0, 9.144, 0.0,                    !- X,Y,Z  3 {m}
+    0.0, 9.144, 2.59100031852723;       !- X,Y,Z  4 {m}
+
+BuildingSurface:Detailed,
+    5,                       !- Name
+    Wall,                    !- Surface Type
+    Wall_Exterior,           !- Construction Name
+    1_first,                 !- Zone Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    4,                       !- Number of Vertices
+    12.192, 0.0, 2.59100031852723,      !- X,Y,Z  1 {m}
+    12.192, 0.0, 0.0,                   !- X,Y,Z  2 {m}
+    12.192, 9.144, 0.0,                 !- X,Y,Z  3 {m}
+    12.192, 9.144, 2.59100031852723;    !- X,Y,Z  4 {m}
+
+BuildingSurface:Detailed,
+    7,                       !- Name
+    Wall,                    !- Surface Type
+    Wall_Exterior,           !- Construction Name
+    1_first,                 !- Zone Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    4,                       !- Number of Vertices
+    0.0, 0.0, 2.59100031852723,         !- X,Y,Z  1 {m}
+    0.0, 0.0, 0.0,                      !- X,Y,Z  2 {m}
+    12.192, 0.0, 0.0,                   !- X,Y,Z  3 {m}
+    12.192, 0.0, 2.59100031852723;      !- X,Y,Z  4 {m}
+
+BuildingSurface:Detailed,
+    9,                       !- Name
+    Wall,                    !- Surface Type
+    Wall_Exterior,           !- Construction Name
+    2_second,                !- Zone Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    4,                       !- Number of Vertices
+    0.0, 9.144, 5.18199992179871,       !- X,Y,Z  1 {m}
+    0.0, 9.144, 2.59100031852723,       !- X,Y,Z  2 {m}
+    0.0, 0.0, 2.59100031852723,         !- X,Y,Z  3 {m}
+    0.0, 0.0, 5.18199992179871;         !- X,Y,Z  4 {m}
+
+BuildingSurface:Detailed,
+    11,                      !- Name
+    Wall,                    !- Surface Type
+    Wall_Exterior,           !- Construction Name
+    2_second,                !- Zone Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    4,                       !- Number of Vertices
+    12.192, 9.144, 5.18199992179871,    !- X,Y,Z  1 {m}
+    12.192, 9.144, 2.59100031852723,    !- X,Y,Z  2 {m}
+    0.0, 9.144, 2.59100031852723,       !- X,Y,Z  3 {m}
+    0.0, 9.144, 5.18199992179871;       !- X,Y,Z  4 {m}
+
+BuildingSurface:Detailed,
+    13,                      !- Name
+    Wall,                    !- Surface Type
+    Wall_Exterior,           !- Construction Name
+    2_second,                !- Zone Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    4,                       !- Number of Vertices
+    12.192, 0.0, 5.18199992179871,      !- X,Y,Z  1 {m}
+    12.192, 0.0, 2.59100031852723,      !- X,Y,Z  2 {m}
+    12.192, 9.144, 2.59100031852723,    !- X,Y,Z  3 {m}
+    12.192, 9.144, 5.18199992179871;    !- X,Y,Z  4 {m}
+
+BuildingSurface:Detailed,
+    15,                      !- Name
+    Wall,                    !- Surface Type
+    Wall_Exterior,           !- Construction Name
+    2_second,                !- Zone Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    4,                       !- Number of Vertices
+    0.0, 0.0, 5.18199992179871,         !- X,Y,Z  1 {m}
+    0.0, 0.0, 2.59100031852723,         !- X,Y,Z  2 {m}
+    12.192, 0.0, 2.59100031852723,      !- X,Y,Z  3 {m}
+    12.192, 0.0, 5.18199992179871;      !- X,Y,Z  4 {m}
+
+BuildingSurface:Detailed,
+    17,                      !- Name
+    Wall,                    !- Surface Type
+    Wall_ExteriorGableEnd,   !- Construction Name
+    3_attic,                 !- Zone Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    3,                       !- Number of Vertices
+    0.0, 4.572, 6.70600008964539,       !- X,Y,Z  1 {m}
+    0.0, 9.144, 5.18199992179871,       !- X,Y,Z  2 {m}
+    0.0, 0.0, 5.18199992179871;         !- X,Y,Z  3 {m}
+
+BuildingSurface:Detailed,
+    18,                      !- Name
+    Roof,                    !- Surface Type
+    Roof_Exterior,           !- Construction Name
+    3_attic,                 !- Zone Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    4,                       !- Number of Vertices
+    12.192, 4.572, 6.70600008964539,    !- X,Y,Z  1 {m}
+    12.192, 9.144, 5.18199992179871,    !- X,Y,Z  2 {m}
+    0.0, 9.144, 5.18199992179871,       !- X,Y,Z  3 {m}
+    0.0, 4.572, 6.70600008964539;       !- X,Y,Z  4 {m}
+
+BuildingSurface:Detailed,
+    19,                      !- Name
+    Wall,                    !- Surface Type
+    Wall_ExteriorGableEnd,   !- Construction Name
+    3_attic,                 !- Zone Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    3,                       !- Number of Vertices
+    12.192, 0.0, 5.18199992179871,      !- X,Y,Z  1 {m}
+    12.192, 9.144, 5.18199992179871,    !- X,Y,Z  2 {m}
+    12.192, 4.572, 6.70600008964539;    !- X,Y,Z  3 {m}
+
+BuildingSurface:Detailed,
+    20,                      !- Name
+    Roof,                    !- Surface Type
+    Roof_Exterior,           !- Construction Name
+    3_attic,                 !- Zone Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    ,                        !- View Factor to Ground
+    4,                       !- Number of Vertices
+    0.0, 4.572, 6.70600008964539,       !- X,Y,Z  1 {m}
+    0.0, 0.0, 5.18199992179871,         !- X,Y,Z  2 {m}
+    12.192, 0.0, 5.18199992179871,      !- X,Y,Z  3 {m}
+    12.192, 4.572, 6.70600008964539;    !- X,Y,Z  4 {m}
+
+BuildingSurface:Detailed,
+    21,                      !- Name
+    Floor,                   !- Surface Type
+    Floor_Slab,              !- Construction Name
+    1_first,                 !- Zone Name
+    Foundation,              !- Outside Boundary Condition
+    kiva_Foundation,         !- Outside Boundary Condition Object
+    NoSun,                   !- Sun Exposure
+    NoWind,                  !- Wind Exposure
+    ,                        !- View Factor to Ground
+    4,                       !- Number of Vertices
+    0.0, 9.144, 0.0,                    !- X,Y,Z  1 {m}
+    12.192, 9.144, 0.0,                 !- X,Y,Z  2 {m}
+    12.192, 0.0, 0.0,                   !- X,Y,Z  3 {m}
+    0.0, 0.0, 0.0;                      !- X,Y,Z  4 {m}
+
+BuildingSurface:Detailed,
+    22,                      !- Name
+    Ceiling,                 !- Surface Type
+    Floor_Interior_reverse,  !- Construction Name
+    1_first,                 !- Zone Name
+    Surface,                 !- Outside Boundary Condition
+    23,                      !- Outside Boundary Condition Object
+    NoSun,                   !- Sun Exposure
+    NoWind,                  !- Wind Exposure
+    ,                        !- View Factor to Ground
+    4,                       !- Number of Vertices
+    0.0, 0.0, 2.59100031852723,         !- X,Y,Z  1 {m}
+    12.192, 0.0, 2.59100031852723,      !- X,Y,Z  2 {m}
+    12.192, 9.144, 2.59100031852723,    !- X,Y,Z  3 {m}
+    0.0, 9.144, 2.59100031852723;       !- X,Y,Z  4 {m}
+
+BuildingSurface:Detailed,
+    23,                      !- Name
+    Floor,                   !- Surface Type
+    Floor_Interior,          !- Construction Name
+    2_second,                !- Zone Name
+    Surface,                 !- Outside Boundary Condition
+    22,                      !- Outside Boundary Condition Object
+    NoSun,                   !- Sun Exposure
+    NoWind,                  !- Wind Exposure
+    ,                        !- View Factor to Ground
+    4,                       !- Number of Vertices
+    0.0, 9.144, 2.59100031852723,       !- X,Y,Z  1 {m}
+    12.192, 9.144, 2.59100031852723,    !- X,Y,Z  2 {m}
+    12.192, 0.0, 2.59100031852723,      !- X,Y,Z  3 {m}
+    0.0, 0.0, 2.59100031852723;         !- X,Y,Z  4 {m}
+
+BuildingSurface:Detailed,
+    24,                      !- Name
+    Ceiling,                 !- Surface Type
+    Floor_Attic_reverse,     !- Construction Name
+    2_second,                !- Zone Name
+    Surface,                 !- Outside Boundary Condition
+    25,                      !- Outside Boundary Condition Object
+    NoSun,                   !- Sun Exposure
+    NoWind,                  !- Wind Exposure
+    ,                        !- View Factor to Ground
+    4,                       !- Number of Vertices
+    0.0, 0.0, 5.18199992179871,         !- X,Y,Z  1 {m}
+    12.192, 0.0, 5.18199992179871,      !- X,Y,Z  2 {m}
+    12.192, 9.144, 5.18199992179871,    !- X,Y,Z  3 {m}
+    0.0, 9.144, 5.18199992179871;       !- X,Y,Z  4 {m}
+
+BuildingSurface:Detailed,
+    25,                      !- Name
+    Floor,                   !- Surface Type
+    Floor_Attic,             !- Construction Name
+    3_attic,                 !- Zone Name
+    Surface,                 !- Outside Boundary Condition
+    24,                      !- Outside Boundary Condition Object
+    NoSun,                   !- Sun Exposure
+    NoWind,                  !- Wind Exposure
+    ,                        !- View Factor to Ground
+    4,                       !- Number of Vertices
+    0.0, 9.144, 5.18199992179871,       !- X,Y,Z  1 {m}
+    12.192, 9.144, 5.18199992179871,    !- X,Y,Z  2 {m}
+    12.192, 0.0, 5.18199992179871,      !- X,Y,Z  3 {m}
+    0.0, 0.0, 5.18199992179871;         !- X,Y,Z  4 {m}
+
+
+!-   ===========  ALL OBJECTS IN CLASS: FENESTRATIONSURFACE:DETAILED ===========
+
+FenestrationSurface:Detailed,
+    2,                       !- Name
+    Window,                  !- Surface Type
+    Window,                  !- Construction Name
+    1,                       !- Building Surface Name
+    ,                        !- Outside Boundary Condition Object
+    ,                        !- View Factor to Ground
+    ,                        !- Frame and Divider Name
+    ,                        !- Multiplier
+    4,                       !- Number of Vertices
+    0, 8.07720003185272, 1.98099970817565,
+                                        !- X,Y,Z  1 {m}
+    0, 8.07720003185272, 0.45699977874755,
+                                        !- X,Y,Z  2 {m}
+    0, 5.33399996814728, 0.45699977874755,
+                                        !- X,Y,Z  3 {m}
+    0, 5.33399996814728, 1.98099970817565;
+                                        !- X,Y,Z  4 {m}
+
+FenestrationSurface:Detailed,
+    4,                       !- Name
+    Window,                  !- Surface Type
+    Window,                  !- Construction Name
+    3,                       !- Building Surface Name
+    ,                        !- Outside Boundary Condition Object
+    ,                        !- View Factor to Ground
+    ,                        !- Frame and Divider Name
+    ,                        !- Multiplier
+    4,                       !- Number of Vertices
+    10.2108000318527, 9.144, 1.98099970817565,
+                                        !- X,Y,Z  1 {m}
+    10.2108000318527, 9.144, 0.45699977874755,
+                                        !- X,Y,Z  2 {m}
+    7.46759996814728, 9.144, 0.45699977874755,
+                                        !- X,Y,Z  3 {m}
+    7.46759996814728, 9.144, 1.98099970817565;
+                                        !- X,Y,Z  4 {m}
+
+FenestrationSurface:Detailed,
+    6,                       !- Name
+    Window,                  !- Surface Type
+    Window,                  !- Construction Name
+    5,                       !- Building Surface Name
+    ,                        !- Outside Boundary Condition Object
+    ,                        !- View Factor to Ground
+    ,                        !- Frame and Divider Name
+    ,                        !- Multiplier
+    4,                       !- Number of Vertices
+    12.192, 1.06679996814728, 1.98099970817565,
+                                        !- X,Y,Z  1 {m}
+    12.192, 1.06679996814728, 0.45699977874755,
+                                        !- X,Y,Z  2 {m}
+    12.192, 3.81000003185272, 0.45699977874755,
+                                        !- X,Y,Z  3 {m}
+    12.192, 3.81000003185272, 1.98099970817565;
+                                        !- X,Y,Z  4 {m}
+
+FenestrationSurface:Detailed,
+    8,                       !- Name
+    Window,                  !- Surface Type
+    Window,                  !- Construction Name
+    7,                       !- Building Surface Name
+    ,                        !- Outside Boundary Condition Object
+    ,                        !- View Factor to Ground
+    ,                        !- Frame and Divider Name
+    ,                        !- Multiplier
+    4,                       !- Number of Vertices
+    1.98119996814728, 0, 1.98099970817565,
+                                        !- X,Y,Z  1 {m}
+    1.98119996814728, 0, 0.45699977874755,
+                                        !- X,Y,Z  2 {m}
+    4.72440003185272, 0, 0.45699977874755,
+                                        !- X,Y,Z  3 {m}
+    4.72440003185272, 0, 1.98099970817565;
+                                        !- X,Y,Z  4 {m}
+
+FenestrationSurface:Detailed,
+    10,                      !- Name
+    Window,                  !- Surface Type
+    Window,                  !- Construction Name
+    9,                       !- Building Surface Name
+    ,                        !- Outside Boundary Condition Object
+    ,                        !- View Factor to Ground
+    ,                        !- Frame and Divider Name
+    ,                        !- Multiplier
+    4,                       !- Number of Vertices
+    0, 8.07720003185272, 4.57199978828429,
+                                        !- X,Y,Z  1 {m}
+    0, 8.07720003185272, 3.04799962043761,
+                                        !- X,Y,Z  2 {m}
+    0, 5.33399996814728, 3.04799962043761,
+                                        !- X,Y,Z  3 {m}
+    0, 5.33399996814728, 4.57199978828429;
+                                        !- X,Y,Z  4 {m}
+
+FenestrationSurface:Detailed,
+    12,                      !- Name
+    Window,                  !- Surface Type
+    Window,                  !- Construction Name
+    11,                      !- Building Surface Name
+    ,                        !- Outside Boundary Condition Object
+    ,                        !- View Factor to Ground
+    ,                        !- Frame and Divider Name
+    ,                        !- Multiplier
+    4,                       !- Number of Vertices
+    10.2108000318527, 9.144, 4.57199978828429,
+                                        !- X,Y,Z  1 {m}
+    10.2108000318527, 9.144, 3.04799962043761,
+                                        !- X,Y,Z  2 {m}
+    7.46759996814728, 9.144, 3.04799962043761,
+                                        !- X,Y,Z  3 {m}
+    7.46759996814728, 9.144, 4.57199978828429;
+                                        !- X,Y,Z  4 {m}
+
+FenestrationSurface:Detailed,
+    14,                      !- Name
+    Window,                  !- Surface Type
+    Window,                  !- Construction Name
+    13,                      !- Building Surface Name
+    ,                        !- Outside Boundary Condition Object
+    ,                        !- View Factor to Ground
+    ,                        !- Frame and Divider Name
+    ,                        !- Multiplier
+    4,                       !- Number of Vertices
+    12.192, 1.06679996814728, 4.57199978828429,
+                                        !- X,Y,Z  1 {m}
+    12.192, 1.06679996814728, 3.04799962043761,
+                                        !- X,Y,Z  2 {m}
+    12.192, 3.81000003185272, 3.04799962043761,
+                                        !- X,Y,Z  3 {m}
+    12.192, 3.81000003185272, 4.57199978828429;
+                                        !- X,Y,Z  4 {m}
+
+FenestrationSurface:Detailed,
+    16,                      !- Name
+    Window,                  !- Surface Type
+    Window,                  !- Construction Name
+    15,                      !- Building Surface Name
+    ,                        !- Outside Boundary Condition Object
+    ,                        !- View Factor to Ground
+    ,                        !- Frame and Divider Name
+    ,                        !- Multiplier
+    4,                       !- Number of Vertices
+    1.98119996814728, 0, 4.57199978828429,
+                                        !- X,Y,Z  1 {m}
+    1.98119996814728, 0, 3.04799962043761,
+                                        !- X,Y,Z  2 {m}
+    4.72440003185272, 0, 3.04799962043761,
+                                        !- X,Y,Z  3 {m}
+    4.72440003185272, 0, 4.57199978828429;
+                                        !- X,Y,Z  4 {m}
+
+
+!-   ===========  ALL OBJECTS IN CLASS: WINDOWSHADINGCONTROL ===========
+
+WindowShadingControl,
+    Shades-1_first,          !- Name
+    1_first,                 !- Zone Name
+    1,                       !- Shading Control Sequence Number
+    InteriorBlind,           !- Shading Type
+    Window_WithBlinds,       !- Construction with Shading Name
+    OnIfScheduleAllows,      !- Shading Control Type
+    window_shades,           !- Schedule Name
+    ,                        !- Setpoint {W/m2, W or deg C}
+    Yes,                     !- Shading Control Is Scheduled
+    No,                      !- Glare Control Is Active
+    ,                        !- Shading Device Material Name
+    ,                        !- Type of Slat Angle Control for Blinds
+    ,                        !- Slat Angle Schedule Name
+    ,                        !- Setpoint 2 {W/m2 or deg C}
+    ,                        !- Daylighting Control Object Name
+    Sequential,              !- Multiple Surface Control Type
+    2,                       !- Fenestration Surface 1 Name
+    4,                       !- Fenestration Surface 2 Name
+    6,                       !- Fenestration Surface 3 Name
+    8;                       !- Fenestration Surface 4 Name
+
+WindowShadingControl,
+    Shades-2_second,         !- Name
+    2_second,                !- Zone Name
+    1,                       !- Shading Control Sequence Number
+    InteriorBlind,           !- Shading Type
+    Window_WithBlinds,       !- Construction with Shading Name
+    OnIfScheduleAllows,      !- Shading Control Type
+    window_shades,           !- Schedule Name
+    ,                        !- Setpoint {W/m2, W or deg C}
+    Yes,                     !- Shading Control Is Scheduled
+    No,                      !- Glare Control Is Active
+    ,                        !- Shading Device Material Name
+    ,                        !- Type of Slat Angle Control for Blinds
+    ,                        !- Slat Angle Schedule Name
+    ,                        !- Setpoint 2 {W/m2 or deg C}
+    ,                        !- Daylighting Control Object Name
+    Sequential,              !- Multiple Surface Control Type
+    10,                      !- Fenestration Surface 1 Name
+    12,                      !- Fenestration Surface 2 Name
+    14,                      !- Fenestration Surface 3 Name
+    16;                      !- Fenestration Surface 4 Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: INTERNALMASS ===========
+
+InternalMass,
+    Internalmass_unit1,      !- Name
+    Furnishings_InteriorWood,!- Construction Name
+    1_first,                 !- Zone Name
+    5;                       !- Surface Area {m2}
+
+InternalMass,
+    Internalmass_unit1_second,  !- Name
+    Furnishings_InteriorWood,!- Construction Name
+    2_second,                !- Zone Name
+    5;                       !- Surface Area {m2}
+
+
+!-   ===========  ALL OBJECTS IN CLASS: SHADING:OVERHANG ===========
+
+Shading:Overhang,
+    Overhang_East_Lower,     !- Name
+    10,                      !- Window or Door Name
+    0,                       !- Height above Window or Door {m}
+    90,                      !- Tilt Angle from Window/Door {deg}
+    0,                       !- Left extension from Window/Door Width {m}
+    0,                       !- Right extension from Window/Door Width {m}
+    0.01524;                 !- Depth {m}
+
+Shading:Overhang,
+    Overhang_East_Upper,     !- Name
+    18,                      !- Window or Door Name
+    0,                       !- Height above Window or Door {m}
+    90,                      !- Tilt Angle from Window/Door {deg}
+    0,                       !- Left extension from Window/Door Width {m}
+    0,                       !- Right extension from Window/Door Width {m}
+    0.01524;                 !- Depth {m}
+
+
+!-   ===========  ALL OBJECTS IN CLASS: FOUNDATION:KIVA ===========
+
+Foundation:Kiva,
+    kiva_Foundation,         !- Name
+    Insulation_SlabUnder,    !- Interior Horizontal Insulation Material Name
+    0,                       !- Interior Horizontal Insulation Depth {m}
+    1.2192,                  !- Interior Horizontal Insulation Width {m}
+    ,                        !- Interior Vertical Insulation Material Name
+    ,                        !- Interior Vertical Insulation Depth {m}
+    ,                        !- Exterior Horizontal Insulation Material Name
+    ,                        !- Exterior Horizontal Insulation Depth {m}
+    ,                        !- Exterior Horizontal Insulation Width {m}
+    ,                        !- Exterior Vertical Insulation Material Name
+    ,                        !- Exterior Vertical Insulation Depth {m}
+    0.101598984,             !- Wall Height Above Grade {m}
+    0.609600000000001;       !- Wall Depth Below Slab {m}
+
+
+!-   ===========  ALL OBJECTS IN CLASS: FOUNDATION:KIVA:SETTINGS ===========
+
+Foundation:Kiva:Settings,
+    1,                       !- Soil Conductivity {W/m-K}
+    1200,                    !- Soil Density {kg/m3}
+    1200,                    !- Soil Specific Heat {J/kg-K}
+    0.9,                     !- Ground Solar Absorptivity {dimensionless}
+    0.9,                     !- Ground Thermal Absorptivity {dimensionless}
+    0.03,                    !- Ground Surface Roughness {m}
+    40,                      !- Far-Field Width {m}
+    Autoselect,              !- Deep-Ground Boundary Condition
+    autocalculate,           !- Deep-Ground Depth {m}
+    0.02,                    !- Minimum Cell Dimension {m}
+    1.5,                     !- Maximum Cell Growth Coefficient {dimensionless}
+    Timestep;                !- Simulation Timestep
+
+
+!-   ===========  ALL OBJECTS IN CLASS: SURFACEPROPERTY:EXPOSEDFOUNDATIONPERIMETER ===========
+
+SurfaceProperty:ExposedFoundationPerimeter,
+    21,                      !- Surface Name
+    BySegment,               !- Exposed Perimeter Calculation Method
+    ,                        !- Total Exposed Perimeter {m}
+    ,                        !- Exposed Perimeter Fraction {dimensionless}
+    Yes,                     !- Surface Segment 1 Exposed
+    Yes,                     !- Surface Segment 2 Exposed
+    Yes,                     !- Surface Segment 3 Exposed
+    Yes;                     !- Surface Segment 4 Exposed
+
+
+!-   ===========  ALL OBJECTS IN CLASS: PEOPLE ===========
+
+People,
+    people_first,            !- Name
+    1_first,                 !- Zone or ZoneList Name
+    Occupancy_sch,           !- Number of People Schedule Name
+    People,                  !- Number of People Calculation Method
+    3.0,                     !- Number of People
+    ,                        !- People per Zone Floor Area {person/m2}
+    ,                        !- Zone Floor Area per Person {m2/person}
+    0.0,                     !- Fraction Radiant
+    autocalculate,           !- Sensible Heat Fraction
+    activity_sch,            !- Activity Level Schedule Name
+    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
+    No,                      !- Enable ASHRAE 55 Comfort Warnings
+    ZoneAveraged;            !- Mean Radiant Temperature Calculation Type
+
+People,
+    people_second,           !- Name
+    2_second,                !- Zone or ZoneList Name
+    Occupancy_sch,           !- Number of People Schedule Name
+    People,                  !- Number of People Calculation Method
+    3.0,                     !- Number of People
+    ,                        !- People per Zone Floor Area {person/m2}
+    ,                        !- Zone Floor Area per Person {m2/person}
+    0.0,                     !- Fraction Radiant
+    autocalculate,           !- Sensible Heat Fraction
+    activity_sch,            !- Activity Level Schedule Name
+    ,                        !- Carbon Dioxide Generation Rate {m3/s-W}
+    No,                      !- Enable ASHRAE 55 Comfort Warnings
+    ZoneAveraged;            !- Mean Radiant Temperature Calculation Type
+
+
+!-   ===========  ALL OBJECTS IN CLASS: LIGHTS ===========
+
+Lights,
+    Living Hardwired Lighting1,  !- Name
+    1_first,                 !- Zone or ZoneList Name
+    LightingProfile,         !- Schedule Name
+    Watts/Area,              !- Design Level Calculation Method
+    ,                        !- Lighting Level {W}
+    2.0565,                  !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.0,                     !- Return Air Fraction
+    0.6,                     !- Fraction Radiant
+    0.2,                     !- Fraction Visible
+    0.0;                     !- Fraction Replaceable
+
+Lights,
+    Living Plug-in Lighting1,!- Name
+    1_first,                 !- Zone or ZoneList Name
+    LightingProfile,         !- Schedule Name
+    Watts/Area,              !- Design Level Calculation Method
+    ,                        !- Lighting Level {W}
+    0.5141,                  !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.0,                     !- Return Air Fraction
+    0.6,                     !- Fraction Radiant
+    0.2,                     !- Fraction Visible
+    0.0;                     !- Fraction Replaceable
+
+Lights,
+    Living Hardwired Lighting2,  !- Name
+    2_second,                !- Zone or ZoneList Name
+    LightingProfile,         !- Schedule Name
+    Watts/Area,              !- Design Level Calculation Method
+    ,                        !- Lighting Level {W}
+    2.0565,                  !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.0,                     !- Return Air Fraction
+    0.6,                     !- Fraction Radiant
+    0.2,                     !- Fraction Visible
+    0.0;                     !- Fraction Replaceable
+
+Lights,
+    Living Plug-in Lighting2,!- Name
+    2_second,                !- Zone or ZoneList Name
+    LightingProfile,         !- Schedule Name
+    Watts/Area,              !- Design Level Calculation Method
+    ,                        !- Lighting Level {W}
+    0.5141,                  !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.0,                     !- Return Air Fraction
+    0.6,                     !- Fraction Radiant
+    0.2,                     !- Fraction Visible
+    0.0;                     !- Fraction Replaceable
+
+
+!-   ===========  ALL OBJECTS IN CLASS: ELECTRICEQUIPMENT ===========
+
+ElectricEquipment,
+    Clothes Dryer1,          !- Name
+    1_first,                 !- Zone or ZoneList Name
+    ClothesDryer,            !- Schedule Name
+    EquipmentLevel,          !- Design Level Calculation Method
+    222.112928219178,        !- Design Level {W}
+    ,                        !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.05,                    !- Fraction Latent
+    0.09,                    !- Fraction Radiant
+    0.8,                     !- Fraction Lost
+    Appl;                    !- End-Use Subcategory
+
+ElectricEquipment,
+    Clothes Washer1,         !- Name
+    1_first,                 !- Zone or ZoneList Name
+    ClothesWasher,           !- Schedule Name
+    EquipmentLevel,          !- Design Level Calculation Method
+    29.5818312328767,        !- Design Level {W}
+    ,                        !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.0,                     !- Fraction Latent
+    0.48,                    !- Fraction Radiant
+    0.2,                     !- Fraction Lost
+    Appl;                    !- End-Use Subcategory
+
+ElectricEquipment,
+    Dishwasher1,             !- Name
+    1_first,                 !- Zone or ZoneList Name
+    Dishwasher,              !- Schedule Name
+    EquipmentLevel,          !- Design Level Calculation Method
+    68.3275708931507,        !- Design Level {W}
+    ,                        !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.15,                    !- Fraction Latent
+    0.36,                    !- Fraction Radiant
+    0.25,                    !- Fraction Lost
+    Appl;                    !- End-Use Subcategory
+
+ElectricEquipment,
+    Misc Elec Load1,         !- Name
+    1_first,                 !- Zone or ZoneList Name
+    MiscPlugLoad,            !- Schedule Name
+    Watts/Area,              !- Design Level Calculation Method
+    ,                        !- Design Level {W}
+    2.46,                    !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.0624390461422629,      !- Fraction Latent
+    0.41190936353998,        !- Fraction Radiant
+    0.251045347957769,       !- Fraction Lost
+    Misc;                    !- End-Use Subcategory
+
+ElectricEquipment,
+    Misc Elec Load1_second,  !- Name
+    2_second,                !- Zone or ZoneList Name
+    MiscPlugLoad,            !- Schedule Name
+    Watts/Area,              !- Design Level Calculation Method
+    ,                        !- Design Level {W}
+    2.46,                    !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.0624390461422629,      !- Fraction Latent
+    0.41190936353998,        !- Fraction Radiant
+    0.251045347957769,       !- Fraction Lost
+    Misc;                    !- End-Use Subcategory
+
+ElectricEquipment,
+    Misc Elec Load21,        !- Name
+    1_first,                 !- Zone or ZoneList Name
+    always_avail,            !- Schedule Name
+    EquipmentLevel,          !- Design Level Calculation Method
+    91.26077,                !- Design Level {W}
+    ,                        !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.0624390461422629,      !- Fraction Latent
+    0.41190936353998,        !- Fraction Radiant
+    0.251045347957769,       !- Fraction Lost
+    Misc;                    !- End-Use Subcategory
+
+ElectricEquipment,
+    Misc Elec Load21_second, !- Name
+    2_second,                !- Zone or ZoneList Name
+    always_avail,            !- Schedule Name
+    EquipmentLevel,          !- Design Level Calculation Method
+    91.26077,                !- Design Level {W}
+    ,                        !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.0624390461422629,      !- Fraction Latent
+    0.41190936353998,        !- Fraction Radiant
+    0.251045347957769,       !- Fraction Lost
+    Misc;                    !- End-Use Subcategory
+
+ElectricEquipment,
+    Refrigerator1,           !- Name
+    1_first,                 !- Zone or ZoneList Name
+    Refrigerator,            !- Schedule Name
+    EquipmentLevel,          !- Design Level Calculation Method
+    91.0939726027399,        !- Design Level {W}
+    ,                        !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.0,                     !- Fraction Latent
+    0.0,                     !- Fraction Radiant
+    0.0,                     !- Fraction Lost
+    Appl;                    !- End-Use Subcategory
+
+ElectricEquipment,
+    Cooking Range1,          !- Name
+    1_first,                 !- Zone or ZoneList Name
+    CookingRange,            !- Schedule Name
+    EquipmentLevel,          !- Design Level Calculation Method
+    248.497534246575,        !- Design Level {W}
+    ,                        !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.3,                     !- Fraction Latent
+    0.24,                    !- Fraction Radiant
+    0.3,                     !- Fraction Lost
+    Appl;                    !- End-Use Subcategory
+
+ElectricEquipment,
+    Misc Gas Load1,          !- Name
+    1_first,                 !- Zone or ZoneList Name
+    MiscPlugLoad,            !- Schedule Name
+    Watts/Area,              !- Design Level Calculation Method
+    ,                        !- Design Level {W}
+    0.297,                   !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.0624390461422629,      !- Fraction Latent
+    0.41190936353998,        !- Fraction Radiant
+    0.251045347957769,       !- Fraction Lost
+    Misc;                    !- End-Use Subcategory
+
+ElectricEquipment,
+    Misc Gas Load2,          !- Name
+    2_second,                !- Zone or ZoneList Name
+    MiscPlugLoad,            !- Schedule Name
+    Watts/Area,              !- Design Level Calculation Method
+    ,                        !- Design Level {W}
+    0.297,                   !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Person {W/person}
+    0.0624390461422629,      !- Fraction Latent
+    0.41190936353998,        !- Fraction Radiant
+    0.251045347957769,       !- Fraction Lost
+    Misc;                    !- End-Use Subcategory
+
+
+!-   ===========  ALL OBJECTS IN CLASS: ZONEINFILTRATION:DESIGNFLOWRATE ===========
+
+ZoneInfiltration:DesignFlowRate,
+    INFIL_1_first,           !- Name
+    1_first,                 !- Zone or ZoneList Name
+    Compact_Always_1,        !- Schedule Name
+    Flow/Zone,               !- Design Flow Rate Calculation Method
+    0.0,                     !- Design Flow Rate {m3/s}
+    ,                        !- Flow per Zone Floor Area {m3/s-m2}
+    ,                        !- Flow per Exterior Surface Area {m3/s-m2}
+    ,                        !- Air Changes per Hour {1/hr}
+    1.0,                     !- Constant Term Coefficient
+    0.0,                     !- Temperature Term Coefficient
+    0.0,                     !- Velocity Term Coefficient
+    0.0;                     !- Velocity Squared Term Coefficient
+
+ZoneInfiltration:DesignFlowRate,
+    INFIL_2_second,          !- Name
+    2_second,                !- Zone or ZoneList Name
+    Compact_Always_1,        !- Schedule Name
+    Flow/Zone,               !- Design Flow Rate Calculation Method
+    0.0,                     !- Design Flow Rate {m3/s}
+    ,                        !- Flow per Zone Floor Area {m3/s-m2}
+    ,                        !- Flow per Exterior Surface Area {m3/s-m2}
+    ,                        !- Air Changes per Hour {1/hr}
+    1.0,                     !- Constant Term Coefficient
+    0.0,                     !- Temperature Term Coefficient
+    0.0,                     !- Velocity Term Coefficient
+    0.0;                     !- Velocity Squared Term Coefficient
+
+ZoneInfiltration:DesignFlowRate,
+    INFIL_3_attic,           !- Name
+    3_attic,                 !- Zone or ZoneList Name
+    Compact_Always_1,        !- Schedule Name
+    Flow/Zone,               !- Design Flow Rate Calculation Method
+    0.0,                     !- Design Flow Rate {m3/s}
+    ,                        !- Flow per Zone Floor Area {m3/s-m2}
+    ,                        !- Flow per Exterior Surface Area {m3/s-m2}
+    ,                        !- Air Changes per Hour {1/hr}
+    1.0,                     !- Constant Term Coefficient
+    0.0,                     !- Temperature Term Coefficient
+    0.0,                     !- Velocity Term Coefficient
+    0.0;                     !- Velocity Squared Term Coefficient
+
+
+!-   ===========  ALL OBJECTS IN CLASS: ZONEINFILTRATION:EFFECTIVELEAKAGEAREA ===========
+
+ZoneInfiltration:EffectiveLeakageArea,
+    AtticVent_unit1,         !- Name
+    3_attic,                 !- Zone Name
+    schedYear_OnlyDesignDays,!- Schedule Name
+    370.0,                   !- Effective Air Leakage Area {cm2}
+    0.00029,                 !- Stack Coefficient
+    0.000231;                !- Wind Coefficient
+
+ZoneInfiltration:EffectiveLeakageArea,
+    Living_ShermanGrimsrud_unit1,  !- Name
+    1_first,                 !- Zone Name
+    schedYear_OnlyDesignDays,!- Schedule Name
+    481.35,                  !- Effective Air Leakage Area {cm2}
+    0.00029,                 !- Stack Coefficient
+    0.000231;                !- Wind Coefficient
+
+ZoneInfiltration:EffectiveLeakageArea,
+    Living_ShermanGrimsrud_unit1_second,  !- Name
+    2_second,                !- Zone Name
+    schedYear_OnlyDesignDays,!- Schedule Name
+    481.35,                  !- Effective Air Leakage Area {cm2}
+    0.00029,                 !- Stack Coefficient
+    0.000231;                !- Wind Coefficient
+
+
+!-   ===========  ALL OBJECTS IN CLASS: ZONEVENTILATION:DESIGNFLOWRATE ===========
+
+ZoneVentilation:DesignFlowRate,
+    Ventilation_1_first,     !- Name
+    1_first,                 !- Zone or ZoneList Name
+    schedYear_OnlyDesignDays,!- Schedule Name
+    Flow/Zone,               !- Design Flow Rate Calculation Method
+    0.014158423296,          !- Design Flow Rate {m3/s}
+    ,                        !- Flow Rate per Zone Floor Area {m3/s-m2}
+    ,                        !- Flow Rate per Person {m3/s-person}
+    ,                        !- Air Changes per Hour {1/hr}
+    Exhaust,                 !- Ventilation Type
+    0.0,                     !- Fan Pressure Rise {Pa}
+    1.0,                     !- Fan Total Efficiency
+    1.0,                     !- Constant Term Coefficient
+    0.0,                     !- Temperature Term Coefficient
+    0.0,                     !- Velocity Term Coefficient
+    0.0,                     !- Velocity Squared Term Coefficient
+    -100.0,                  !- Minimum Indoor Temperature {C}
+    ,                        !- Minimum Indoor Temperature Schedule Name
+    100.0,                   !- Maximum Indoor Temperature {C}
+    ,                        !- Maximum Indoor Temperature Schedule Name
+    -100.0,                  !- Delta Temperature {deltaC}
+    ,                        !- Delta Temperature Schedule Name
+    -100.0,                  !- Minimum Outdoor Temperature {C}
+    ,                        !- Minimum Outdoor Temperature Schedule Name
+    100.0,                   !- Maximum Outdoor Temperature {C}
+    ,                        !- Maximum Outdoor Temperature Schedule Name
+    40.0;                    !- Maximum Wind Speed {m/s}
+
+ZoneVentilation:DesignFlowRate,
+    Ventilation_2_second,    !- Name
+    2_second,                !- Zone or ZoneList Name
+    schedYear_OnlyDesignDays,!- Schedule Name
+    Flow/Zone,               !- Design Flow Rate Calculation Method
+    0.014158423296,          !- Design Flow Rate {m3/s}
+    ,                        !- Flow Rate per Zone Floor Area {m3/s-m2}
+    ,                        !- Flow Rate per Person {m3/s-person}
+    ,                        !- Air Changes per Hour {1/hr}
+    Exhaust,                 !- Ventilation Type
+    0.0,                     !- Fan Pressure Rise {Pa}
+    1.0,                     !- Fan Total Efficiency
+    1.0,                     !- Constant Term Coefficient
+    0.0,                     !- Temperature Term Coefficient
+    0.0,                     !- Velocity Term Coefficient
+    0.0,                     !- Velocity Squared Term Coefficient
+    -100.0,                  !- Minimum Indoor Temperature {C}
+    ,                        !- Minimum Indoor Temperature Schedule Name
+    100.0,                   !- Maximum Indoor Temperature {C}
+    ,                        !- Maximum Indoor Temperature Schedule Name
+    -100.0,                  !- Delta Temperature {deltaC}
+    ,                        !- Delta Temperature Schedule Name
+    -100.0,                  !- Minimum Outdoor Temperature {C}
+    ,                        !- Minimum Outdoor Temperature Schedule Name
+    100.0,                   !- Maximum Outdoor Temperature {C}
+    ,                        !- Maximum Outdoor Temperature Schedule Name
+    40.0;                    !- Maximum Wind Speed {m/s}
+
+
+!-   ===========  ALL OBJECTS IN CLASS: ZONEMIXING ===========
+
+ZoneMixing,
+    MIX_1_first_to_2_second, !- Name
+    2_second,                !- Zone Name
+    Compact_Always_1,        !- Schedule Name
+    Flow/Zone,               !- Design Flow Rate Calculation Method
+    0.0,                     !- Design Flow Rate {m3/s}
+    ,                        !- Flow Rate per Zone Floor Area {m3/s-m2}
+    ,                        !- Flow Rate per Person {m3/s-person}
+    ,                        !- Air Changes per Hour {1/hr}
+    1_first;                 !- Source Zone Name
+
+ZoneMixing,
+    MIX_2_second_to_1_first, !- Name
+    1_first,                 !- Zone Name
+    Compact_Always_1,        !- Schedule Name
+    Flow/Zone,               !- Design Flow Rate Calculation Method
+    0.0,                     !- Design Flow Rate {m3/s}
+    ,                        !- Flow Rate per Zone Floor Area {m3/s-m2}
+    ,                        !- Flow Rate per Person {m3/s-person}
+    ,                        !- Air Changes per Hour {1/hr}
+    2_second;                !- Source Zone Name
+
+ZoneMixing,
+    MIX_2_second_to_3_attic, !- Name
+    3_attic,                 !- Zone Name
+    Compact_Always_1,        !- Schedule Name
+    Flow/Zone,               !- Design Flow Rate Calculation Method
+    0.0,                     !- Design Flow Rate {m3/s}
+    ,                        !- Flow Rate per Zone Floor Area {m3/s-m2}
+    ,                        !- Flow Rate per Person {m3/s-person}
+    ,                        !- Air Changes per Hour {1/hr}
+    2_second;                !- Source Zone Name
+
+ZoneMixing,
+    MIX_3_attic_to_2_second, !- Name
+    2_second,                !- Zone Name
+    Compact_Always_1,        !- Schedule Name
+    Flow/Zone,               !- Design Flow Rate Calculation Method
+    0.0,                     !- Design Flow Rate {m3/s}
+    ,                        !- Flow Rate per Zone Floor Area {m3/s-m2}
+    ,                        !- Flow Rate per Person {m3/s-person}
+    ,                        !- Air Changes per Hour {1/hr}
+    3_attic;                 !- Source Zone Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: EXTERIOR:LIGHTS ===========
+
+Exterior:Lights,
+    Exterior-Lights,         !- Name
+    ExteriorLightingProfile, !- Schedule Name
+    79.5,                    !- Design Level {W}
+    ,                        !- Control Option
+    Exterior-Lights;         !- End-Use Subcategory
+
+Exterior:Lights,
+    Garage-Lights,           !- Name
+    LightingProfile,         !- Schedule Name
+    14.02,                   !- Design Level {W}
+    ,                        !- Control Option
+    Exterior-Lights;         !- End-Use Subcategory
+
+
+!-   ===========  ALL OBJECTS IN CLASS: DESIGNSPECIFICATION:OUTDOORAIR ===========
+
+DesignSpecification:OutdoorAir,
+    ZoneDesignOA,            !- Name
+    Flow/Zone,               !- Outdoor Air Method
+    0.0,                     !- Outdoor Air Flow per Person {m3/s-person}
+    ,                        !- Outdoor Air Flow per Zone Floor Area {m3/s-m2}
+    0;                       !- Outdoor Air Flow per Zone {m3/s}
+
+
+!-   ===========  ALL OBJECTS IN CLASS: SIZING:ZONE ===========
+
+Sizing:Zone,
+    1_first,                 !- Zone or ZoneList Name
+    SupplyAirTemperature,    !- Zone Cooling Design Supply Air Temperature Input Method
+    12.0,                    !- Zone Cooling Design Supply Air Temperature {C}
+    ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+    SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
+    50.0,                    !- Zone Heating Design Supply Air Temperature {C}
+    ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+    0.008,                   !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
+    0.008,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
+    ZoneDesignOA,            !- Design Specification Outdoor Air Object Name
+    ,                        !- Zone Heating Sizing Factor
+    ,                        !- Zone Cooling Sizing Factor
+    DesignDay,               !- Cooling Design Air Flow Method
+    ,                        !- Cooling Design Air Flow Rate {m3/s}
+    0.000762,                !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+    ,                        !- Cooling Minimum Air Flow {m3/s}
+    ,                        !- Cooling Minimum Air Flow Fraction
+    DesignDay,               !- Heating Design Air Flow Method
+    ,                        !- Heating Design Air Flow Rate {m3/s}
+    0.002032,                !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+    0.1415762,               !- Heating Maximum Air Flow {m3/s}
+    0.3;                     !- Heating Maximum Air Flow Fraction
+
+Sizing:Zone,
+    2_second,                !- Zone or ZoneList Name
+    SupplyAirTemperature,    !- Zone Cooling Design Supply Air Temperature Input Method
+    12.0,                    !- Zone Cooling Design Supply Air Temperature {C}
+    ,                        !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+    SupplyAirTemperature,    !- Zone Heating Design Supply Air Temperature Input Method
+    50.0,                    !- Zone Heating Design Supply Air Temperature {C}
+    ,                        !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+    0.008,                   !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
+    0.008,                   !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
+    ZoneDesignOA,            !- Design Specification Outdoor Air Object Name
+    ,                        !- Zone Heating Sizing Factor
+    ,                        !- Zone Cooling Sizing Factor
+    DesignDay,               !- Cooling Design Air Flow Method
+    ,                        !- Cooling Design Air Flow Rate {m3/s}
+    0.000762,                !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+    ,                        !- Cooling Minimum Air Flow {m3/s}
+    ,                        !- Cooling Minimum Air Flow Fraction
+    DesignDay,               !- Heating Design Air Flow Method
+    ,                        !- Heating Design Air Flow Rate {m3/s}
+    0.002032,                !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+    0.1415762,               !- Heating Maximum Air Flow {m3/s}
+    0.3;                     !- Heating Maximum Air Flow Fraction
+
+
+!-   ===========  ALL OBJECTS IN CLASS: SIZING:SYSTEM ===========
+
+Sizing:System,
+    ahs_air_loop,            !- AirLoop Name
+    Sensible,                !- Type of Load to Size On
+    autosize,                !- Design Outdoor Air Flow Rate {m3/s}
+    1.0,                     !- Central Heating Maximum System Air Flow Ratio
+    7.0,                     !- Preheat Design Temperature {C}
+    0.008,                   !- Preheat Design Humidity Ratio {kgWater/kgDryAir}
+    11.0,                    !- Precool Design Temperature {C}
+    0.008,                   !- Precool Design Humidity Ratio {kgWater/kgDryAir}
+    12.0,                    !- Central Cooling Design Supply Air Temperature {C}
+    50.0,                    !- Central Heating Design Supply Air Temperature {C}
+    NonCoincident,           !- Type of Zone Sum to Use
+    No,                      !- 100% Outdoor Air in Cooling
+    No,                      !- 100% Outdoor Air in Heating
+    0.008,                   !- Central Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
+    0.008,                   !- Central Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
+    DesignDay,               !- Cooling Supply Air Flow Rate Method
+    ,                        !- Cooling Supply Air Flow Rate {m3/s}
+    ,                        !- Cooling Supply Air Flow Rate Per Floor Area {m3/s-m2}
+    ,                        !- Cooling Fraction of Autosized Cooling Supply Air Flow Rate
+    ,                        !- Cooling Supply Air Flow Rate Per Unit Cooling Capacity {m3/s-W}
+    DesignDay,               !- Heating Supply Air Flow Rate Method
+    ,                        !- Heating Supply Air Flow Rate {m3/s}
+    ,                        !- Heating Supply Air Flow Rate Per Floor Area {m3/s-m2}
+    ,                        !- Heating Fraction of Autosized Heating Supply Air Flow Rate
+    ,                        !- Heating Fraction of Autosized Cooling Supply Air Flow Rate
+    ,                        !- Heating Supply Air Flow Rate Per Unit Heating Capacity {m3/s-W}
+    ZoneSum,                 !- System Outdoor Air Method
+    1.0,                     !- Zone Maximum Outdoor Air Fraction {dimensionless}
+    CoolingDesignCapacity,   !- Cooling Design Capacity Method
+    autosize,                !- Cooling Design Capacity {W}
+    ,                        !- Cooling Design Capacity Per Floor Area {W/m2}
+    ,                        !- Fraction of Autosized Cooling Design Capacity
+    HeatingDesignCapacity,   !- Heating Design Capacity Method
+    autosize,                !- Heating Design Capacity {W}
+    ,                        !- Heating Design Capacity Per Floor Area {W/m2}
+    ,                        !- Fraction of Autosized Heating Design Capacity
+    OnOff;                   !- Central Cooling Capacity Control Method
+
+
+!-   ===========  ALL OBJECTS IN CLASS: SIZING:PLANT ===========
+
+Sizing:Plant,
+    DHW Loop_unit1,          !- Plant or Condenser Loop Name
+    Heating,                 !- Loop Type
+    48.8889,                 !- Design Loop Exit Temperature {C}
+    5.5556;                  !- Loop Design Temperature Difference {deltaC}
+
+
+!-   ===========  ALL OBJECTS IN CLASS: ZONECONTROL:THERMOSTAT ===========
+
+ZoneControl:Thermostat,
+    ZoneThermostat_1_first,  !- Name
+    1_first,                 !- Zone or ZoneList Name
+    zone_control_type,       !- Control Type Schedule Name
+    ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
+    ThermostatDualSP_1_first;!- Control 1 Name
+
+ZoneControl:Thermostat,
+    ZoneThermostat_2_second, !- Name
+    2_second,                !- Zone or ZoneList Name
+    zone_control_type,       !- Control Type Schedule Name
+    ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
+    ThermostatDualSP_1_first;!- Control 1 Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: THERMOSTATSETPOINT:DUALSETPOINT ===========
+
+ThermostatSetpoint:DualSetpoint,
+    ThermostatDualSP_1_first,!- Name
+    heating_sch,             !- Heating Setpoint Temperature Schedule Name
+    cooling_sch;             !- Cooling Setpoint Temperature Schedule Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: AIRTERMINAL:SINGLEDUCT:UNCONTROLLED ===========
+
+AirTerminal:SingleDuct:Uncontrolled,
+    1_first_air_terminal,    !- Name
+    ,                        !- Availability Schedule Name
+    1_first_ahs_hvac_inlet_node,  !- Zone Supply Air Node Name
+    autosize;                !- Maximum Air Flow Rate {m3/s}
+
+AirTerminal:SingleDuct:Uncontrolled,
+    2_second_air_terminal,   !- Name
+    ,                        !- Availability Schedule Name
+    2_second_ahs_hvac_inlet_node,  !- Zone Supply Air Node Name
+    autosize;                !- Maximum Air Flow Rate {m3/s}
+
+
+!-   ===========  ALL OBJECTS IN CLASS: ZONEHVAC:EQUIPMENTLIST ===========
+
+ZoneHVAC:EquipmentList,
+    1_first_zone_hvac_equipment_list,  !- Name
+    SequentialLoad,          !- Load Distribution Scheme
+    AirTerminal:SingleDuct:Uncontrolled,  !- Zone Equipment 1 Object Type
+    1_first_air_terminal,    !- Zone Equipment 1 Name
+    1,                       !- Zone Equipment 1 Cooling Sequence
+    1,                       !- Zone Equipment 1 Heating or No-Load Sequence
+    ,                        !- Zone Equipment 1 Sequential Cooling Fraction
+    ,                        !- Zone Equipment 1 Sequential Heating Fraction
+    Fan:ZoneExhaust,         !- Zone Equipment 2 Object Type
+    1_first_air_loop_exhaust_fan,  !- Zone Equipment 2 Name
+    2,                       !- Zone Equipment 2 Cooling Sequence
+    2,                       !- Zone Equipment 2 Heating or No-Load Sequence
+    ,                        !- Zone Equipment 2 Sequential Cooling Fraction
+    ,                        !- Zone Equipment 2 Sequential Heating Fraction
+    Fan:ZoneExhaust,         !- Zone Equipment 3 Object Type
+    exh_1_first_exhaust_fan, !- Zone Equipment 3 Name
+    3,                       !- Zone Equipment 3 Cooling Sequence
+    3;                       !- Zone Equipment 3 Heating or No-Load Sequence
+
+ZoneHVAC:EquipmentList,
+    2_second_zone_hvac_equipment_list,  !- Name
+    SequentialLoad,          !- Load Distribution Scheme
+    AirTerminal:SingleDuct:Uncontrolled,  !- Zone Equipment 1 Object Type
+    2_second_air_terminal,   !- Zone Equipment 1 Name
+    1,                       !- Zone Equipment 1 Cooling Sequence
+    1,                       !- Zone Equipment 1 Heating or No-Load Sequence
+    ,                        !- Zone Equipment 1 Sequential Cooling Fraction
+    ,                        !- Zone Equipment 1 Sequential Heating Fraction
+    Fan:ZoneExhaust,         !- Zone Equipment 2 Object Type
+    2_second_air_loop_exhaust_fan,  !- Zone Equipment 2 Name
+    2,                       !- Zone Equipment 2 Cooling Sequence
+    2,                       !- Zone Equipment 2 Heating or No-Load Sequence
+    ,                        !- Zone Equipment 2 Sequential Cooling Fraction
+    ,                        !- Zone Equipment 2 Sequential Heating Fraction
+    Fan:ZoneExhaust,         !- Zone Equipment 3 Object Type
+    exh_2_second_exhaust_fan,!- Zone Equipment 3 Name
+    3,                       !- Zone Equipment 3 Cooling Sequence
+    3;                       !- Zone Equipment 3 Heating or No-Load Sequence
+
+
+!-   ===========  ALL OBJECTS IN CLASS: ZONEHVAC:EQUIPMENTCONNECTIONS ===========
+
+ZoneHVAC:EquipmentConnections,
+    1_first,                 !- Zone Name
+    1_first_zone_hvac_equipment_list,  !- Zone Conditioning Equipment List Name
+    1_first_inlet_node_list, !- Zone Air Inlet Node or NodeList Name
+    1_first_exhaust_node_list,  !- Zone Air Exhaust Node or NodeList Name
+    1_first_zone_air_node,   !- Zone Air Node Name
+    1_first_zone_return_air_node;  !- Zone Return Air Node or NodeList Name
+
+ZoneHVAC:EquipmentConnections,
+    2_second,                !- Zone Name
+    2_second_zone_hvac_equipment_list,  !- Zone Conditioning Equipment List Name
+    2_second_inlet_node_list,!- Zone Air Inlet Node or NodeList Name
+    2_second_exhaust_node_list,  !- Zone Air Exhaust Node or NodeList Name
+    2_second_zone_air_node,  !- Zone Air Node Name
+    2_second_zone_return_air_node;  !- Zone Return Air Node or NodeList Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: FAN:ONOFF ===========
+
+Fan:OnOff,
+    ahs_SupplyFan,           !- Name
+    always_avail,            !- Availability Schedule Name
+    0.377,                   !- Fan Total Efficiency
+    400,                     !- Pressure Rise {Pa}
+    autosize,                !- Maximum Flow Rate {m3/s}
+    0.65,                    !- Motor Efficiency
+    1.0,                     !- Motor In Airstream Fraction
+    ahs_oamixer_mixed_node,  !- Air Inlet Node Name
+    ahs_CoolingCoilAirInletNode,  !- Air Outlet Node Name
+    ,                        !- Fan Power Ratio Function of Speed Ratio Curve Name
+    ,                        !- Fan Efficiency Ratio Function of Speed Ratio Curve Name
+    General;                 !- End-Use Subcategory
+
+
+!-   ===========  ALL OBJECTS IN CLASS: FAN:ZONEEXHAUST ===========
+
+Fan:ZoneExhaust,
+    1_first_air_loop_exhaust_fan,  !- Name
+    ,                        !- Availability Schedule Name
+    0.6,                     !- Fan Total Efficiency
+    0.0,                     !- Pressure Rise {Pa}
+    0.0,                     !- Maximum Flow Rate {m3/s}
+    1_first_zone_air_loop_exhaust_node,  !- Air Inlet Node Name
+    1_first_air_loop_exhaust_node,  !- Air Outlet Node Name
+    General,                 !- End-Use Subcategory
+    ,                        !- Flow Fraction Schedule Name
+    Coupled;                 !- System Availability Manager Coupling Mode
+
+Fan:ZoneExhaust,
+    2_second_air_loop_exhaust_fan,  !- Name
+    ,                        !- Availability Schedule Name
+    0.6,                     !- Fan Total Efficiency
+    0.0,                     !- Pressure Rise {Pa}
+    0.0,                     !- Maximum Flow Rate {m3/s}
+    2_second_zone_air_loop_exhaust_node,  !- Air Inlet Node Name
+    2_second_air_loop_exhaust_node,  !- Air Outlet Node Name
+    General,                 !- End-Use Subcategory
+    ,                        !- Flow Fraction Schedule Name
+    Coupled;                 !- System Availability Manager Coupling Mode
+
+Fan:ZoneExhaust,
+    exh_1_first_exhaust_fan, !- Name
+    ,                        !- Availability Schedule Name
+    0.6,                     !- Fan Total Efficiency
+    0.0,                     !- Pressure Rise {Pa}
+    0.014158423296,          !- Maximum Flow Rate {m3/s}
+    exh_1_first_zone_exhaust_air_node,  !- Air Inlet Node Name
+    exh_1_first_exhaust_fan_outlet_air_node,  !- Air Outlet Node Name
+    ZoneExhaust,             !- End-Use Subcategory
+    ,                        !- Flow Fraction Schedule Name
+    Coupled,                 !- System Availability Manager Coupling Mode
+    ,                        !- Minimum Zone Temperature Limit Schedule Name
+    Compact_Always_1;        !- Balanced Exhaust Fraction Schedule Name
+
+Fan:ZoneExhaust,
+    exh_2_second_exhaust_fan,!- Name
+    ,                        !- Availability Schedule Name
+    0.6,                     !- Fan Total Efficiency
+    0.0,                     !- Pressure Rise {Pa}
+    0.014158423296,          !- Maximum Flow Rate {m3/s}
+    exh_2_second_zone_exhaust_air_node,  !- Air Inlet Node Name
+    exh_2_second_exhaust_fan_outlet_air_node,  !- Air Outlet Node Name
+    ZoneExhaust,             !- End-Use Subcategory
+    ,                        !- Flow Fraction Schedule Name
+    Coupled,                 !- System Availability Manager Coupling Mode
+    ,                        !- Minimum Zone Temperature Limit Schedule Name
+    Compact_Always_1;        !- Balanced Exhaust Fraction Schedule Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: COIL:COOLING:DX:SINGLESPEED ===========
+
+Coil:Cooling:DX:SingleSpeed,
+    ahs_CoolingCoil,         !- Name
+    always_avail,            !- Availability Schedule Name
+    autosize,                !- Gross Rated Total Cooling Capacity {W}
+    autosize,                !- Gross Rated Sensible Heat Ratio
+    3.97008850025305,        !- Gross Rated Cooling COP {W/W}
+    autosize,                !- Rated Air Flow Rate {m3/s}
+    ,                        !- Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
+    ahs_CoolingCoilAirInletNode,  !- Air Inlet Node Name
+    ahs_HeatingCoilAirInletNode,  !- Air Outlet Node Name
+    Cool-Cap-fT,             !- Total Cooling Capacity Function of Temperature Curve Name
+    ConstantCubic,           !- Total Cooling Capacity Function of Flow Fraction Curve Name
+    Cool-EIR-fT,             !- Energy Input Ratio Function of Temperature Curve Name
+    ConstantCubic,           !- Energy Input Ratio Function of Flow Fraction Curve Name
+    Cool-PLF-fPLR;           !- Part Load Fraction Correlation Curve Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: COIL:HEATING:ELECTRIC ===========
+
+Coil:Heating:Electric,
+    ahs_HeatingCoil,         !- Name
+    always_avail,            !- Availability Schedule Name
+    1,                       !- Efficiency
+    autosize,                !- Nominal Capacity {W}
+    ahs_HeatingCoilAirInletNode,  !- Air Inlet Node Name
+    ahs_supply_side_outlet_node;  !- Air Outlet Node Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: AIRLOOPHVAC:UNITARYHEATCOOL ===========
+
+AirLoopHVAC:UnitaryHeatCool,
+    ahs_HvacUnitarySystem,   !- Name
+    always_avail,            !- Availability Schedule Name
+    ahs_oamixer_mixed_node,  !- Unitary System Air Inlet Node Name
+    ahs_supply_side_outlet_node,  !- Unitary System Air Outlet Node Name
+    fan_cycle,               !- Supply Air Fan Operating Mode Schedule Name
+    80.0,                    !- Maximum Supply Air Temperature {C}
+    autosize,                !- Cooling Supply Air Flow Rate {m3/s}
+    autosize,                !- Heating Supply Air Flow Rate {m3/s}
+    0.0,                     !- No Load Supply Air Flow Rate {m3/s}
+    1_first,                 !- Controlling Zone or Thermostat Location
+    Fan:OnOff,               !- Supply Fan Object Type
+    ahs_SupplyFan,           !- Supply Fan Name
+    BlowThrough,             !- Fan Placement
+    Coil:Heating:Electric,   !- Heating Coil Object Type
+    ahs_HeatingCoil,         !- Heating Coil Name
+    Coil:Cooling:DX:SingleSpeed,  !- Cooling Coil Object Type
+    ahs_CoolingCoil,         !- Cooling Coil Name
+    None;                    !- Dehumidification Control Type
+
+
+!-   ===========  ALL OBJECTS IN CLASS: CONTROLLER:OUTDOORAIR ===========
+
+Controller:OutdoorAir,
+    ahs_oa_controller,       !- Name
+    ahs_oamixer_relief_node, !- Relief Air Outlet Node Name
+    ahs_supply_side_inlet_node,  !- Return Air Node Name
+    ahs_oamixer_mixed_node,  !- Mixed Air Node Name
+    ahs_oamixer_outdoor_node,!- Actuator Node Name
+    autosize,                !- Minimum Outdoor Air Flow Rate {m3/s}
+    autosize,                !- Maximum Outdoor Air Flow Rate {m3/s}
+    NoEconomizer,            !- Economizer Control Type
+    ModulateFlow,            !- Economizer Control Action Type
+    0.0,                     !- Economizer Maximum Limit Dry-Bulb Temperature {C}
+    0.0,                     !- Economizer Maximum Limit Enthalpy {J/kg}
+    0.0,                     !- Economizer Maximum Limit Dewpoint Temperature {C}
+    ,                        !- Electronic Enthalpy Limit Curve Name
+    0.0,                     !- Economizer Minimum Limit Dry-Bulb Temperature {C}
+    NoLockout,               !- Lockout Type
+    ProportionalMinimum,     !- Minimum Limit Type
+    ,                        !- Minimum Outdoor Air Schedule Name
+    ,                        !- Minimum Fraction of Outdoor Air Schedule Name
+    ,                        !- Maximum Fraction of Outdoor Air Schedule Name
+    ,                        !- Mechanical Ventilation Controller Name
+    ,                        !- Time of Day Economizer Control Schedule Name
+    No,                      !- High Humidity Control
+    ,                        !- Humidistat Control Zone Name
+    1.0,                     !- High Humidity Outdoor Air Flow Ratio
+    Yes,                     !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
+    BypassWhenWithinEconomizerLimits;  !- Heat Recovery Bypass Control Type
+
+
+!-   ===========  ALL OBJECTS IN CLASS: AIRLOOPHVAC:CONTROLLERLIST ===========
+
+AirLoopHVAC:ControllerList,
+    ahs_air_loop_controller_list,  !- Name
+    Controller:OutdoorAir,   !- Controller 1 Object Type
+    ahs_oa_controller;       !- Controller 1 Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: AIRLOOPHVAC ===========
+
+AirLoopHVAC,
+    ahs_air_loop,            !- Name
+    ,                        !- Controller List Name
+    ahs_availability_manager_list,  !- Availability Manager List Name
+    autosize,                !- Design Supply Air Flow Rate {m3/s}
+    ahs_branch_list,         !- Branch List Name
+    ,                        !- Connector List Name
+    ahs_supply_side_inlet_node,  !- Supply Side Inlet Node Name
+    ahs_demand_side_outlet_node,  !- Demand Side Outlet Node Name
+    ahs_demand_side_inlet_node,  !- Demand Side Inlet Node Names
+    ahs_supply_side_outlet_node;  !- Supply Side Outlet Node Names
+
+
+!-   ===========  ALL OBJECTS IN CLASS: AIRLOOPHVAC:OUTDOORAIRSYSTEM:EQUIPMENTLIST ===========
+
+AirLoopHVAC:OutdoorAirSystem:EquipmentList,
+    ahs_air_loop_oa_system_equipment_list,  !- Name
+    OutdoorAir:Mixer,        !- Component 1 Object Type
+    ahs_oa_mixer;            !- Component 1 Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: AIRLOOPHVAC:OUTDOORAIRSYSTEM ===========
+
+AirLoopHVAC:OutdoorAirSystem,
+    ahs_air_loop_oa_system,  !- Name
+    ahs_air_loop_controller_list,  !- Controller List Name
+    ahs_air_loop_oa_system_equipment_list,  !- Outdoor Air Equipment List Name
+    ahs_availability_manager_list;  !- Availability Manager List Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: OUTDOORAIR:MIXER ===========
+
+OutdoorAir:Mixer,
+    ahs_oa_mixer,            !- Name
+    ahs_oamixer_mixed_node,  !- Mixed Air Node Name
+    ahs_oamixer_outdoor_node,!- Outdoor Air Stream Node Name
+    ahs_oamixer_relief_node, !- Relief Air Stream Node Name
+    ahs_supply_side_inlet_node;  !- Return Air Stream Node Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: AIRLOOPHVAC:ZONESPLITTER ===========
+
+AirLoopHVAC:ZoneSplitter,
+    ahs_air_loop_zone_splitter,  !- Name
+    ahs_demand_side_inlet_node,  !- Inlet Node Name
+    2_second_ahs_hvac_inlet_node,  !- Outlet 1 Node Name
+    1_first_ahs_hvac_inlet_node;  !- Outlet 2 Node Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: AIRLOOPHVAC:SUPPLYPATH ===========
+
+AirLoopHVAC:SupplyPath,
+    ahs_air_loop_supply_path,!- Name
+    ahs_demand_side_inlet_node,  !- Supply Air Path Inlet Node Name
+    AirLoopHVAC:ZoneSplitter,!- Component 1 Object Type
+    ahs_air_loop_zone_splitter;  !- Component 1 Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: AIRLOOPHVAC:ZONEMIXER ===========
+
+AirLoopHVAC:ZoneMixer,
+    ahs_air_loop_zone_mixer, !- Name
+    ahs_demand_side_outlet_node,  !- Outlet Node Name
+    2_second_zone_return_air_node,  !- Inlet 1 Node Name
+    1_first_zone_return_air_node;  !- Inlet 2 Node Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: AIRLOOPHVAC:RETURNPATH ===========
+
+AirLoopHVAC:ReturnPath,
+    ahs_air_loop_return_path,!- Name
+    ahs_demand_side_outlet_node,  !- Return Air Path Outlet Node Name
+    AirLoopHVAC:ZoneMixer,   !- Component 1 Object Type
+    ahs_air_loop_zone_mixer; !- Component 1 Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: BRANCH ===========
+
+Branch,
+    ahs_branch1,             !- Name
+    ,                        !- Pressure Drop Curve Name
+    AirLoopHVAC:OutdoorAirSystem,  !- Component 1 Object Type
+    ahs_air_loop_oa_system,  !- Component 1 Name
+    ahs_supply_side_inlet_node,  !- Component 1 Inlet Node Name
+    ahs_oamixer_mixed_node,  !- Component 1 Outlet Node Name
+    AirLoopHVAC:UnitaryHeatCool,  !- Component 2 Object Type
+    ahs_HvacUnitarySystem,   !- Component 2 Name
+    ahs_oamixer_mixed_node,  !- Component 2 Inlet Node Name
+    ahs_supply_side_outlet_node;  !- Component 2 Outlet Node Name
+
+Branch,
+    DHW Demand Inlet Branch_unit1,  !- Name
+    ,                        !- Pressure Drop Curve Name
+    Pipe:Adiabatic,          !- Component 1 Object Type
+    DHW Demand Inlet Pipe_unit1,  !- Component 1 Name
+    DHW Demand Inlet Node_unit1,  !- Component 1 Inlet Node Name
+    DHW Demand Inlet Pipe Outlet Node_unit1;  !- Component 1 Outlet Node Name
+
+Branch,
+    DHW Supply Outlet Branch_unit1,  !- Name
+    ,                        !- Pressure Drop Curve Name
+    Pipe:Adiabatic,          !- Component 1 Object Type
+    DHW Supply Outlet Pipe_unit1,  !- Component 1 Name
+    DHW Supply Outlet Pipe Inlet Node_unit1,  !- Component 1 Inlet Node Name
+    DHW Supply Outlet Node_unit1;  !- Component 1 Outlet Node Name
+
+Branch,
+    Mains Inlet Branch_unit1,!- Name
+    ,                        !- Pressure Drop Curve Name
+    Pump:VariableSpeed,      !- Component 1 Object Type
+    Mains Pressure_unit1,    !- Component 1 Name
+    Mains Inlet Node_unit1,  !- Component 1 Inlet Node Name
+    Mains Pressure Outlet Node_unit1;  !- Component 1 Outlet Node Name
+
+Branch,
+    Mains Makeup Branch_unit1,  !- Name
+    ,                        !- Pressure Drop Curve Name
+    Pipe:Adiabatic,          !- Component 1 Object Type
+    Mains Makeup Pipe_unit1, !- Component 1 Name
+    Mains Makeup Pipe Inlet Node_unit1,  !- Component 1 Inlet Node Name
+    Mains Makeup Node_unit1; !- Component 1 Outlet Node Name
+
+Branch,
+    Water Bath Branch_unit1, !- Name
+    ,                        !- Pressure Drop Curve Name
+    WaterUse:Connections,    !- Component 1 Object Type
+    DHW Baths_unit1,         !- Component 1 Name
+    Water Bath Inlet Node_unit1,  !- Component 1 Inlet Node Name
+    Water bath Outlet Node_unit1;  !- Component 1 Outlet Node Name
+
+Branch,
+    Water ClothesWasher Branch_unit1,  !- Name
+    ,                        !- Pressure Drop Curve Name
+    WaterUse:Connections,    !- Component 1 Object Type
+    DHW ClothesWasher_unit1, !- Component 1 Name
+    Water ClothesWasher Inlet Node_unit1,  !- Component 1 Inlet Node Name
+    Water ClothesWasher Outlet Node_unit1;  !- Component 1 Outlet Node Name
+
+Branch,
+    Water Dishwasher Branch_unit1,  !- Name
+    ,                        !- Pressure Drop Curve Name
+    WaterUse:Connections,    !- Component 1 Object Type
+    DHW DishWasher_unit1,    !- Component 1 Name
+    Water DishWasher Inlet Node_unit1,  !- Component 1 Inlet Node Name
+    Water DishWasher outlet Node_unit1;  !- Component 1 Outlet Node Name
+
+Branch,
+    Water Heater Branch_unit1,  !- Name
+    ,                        !- Pressure Drop Curve Name
+    WaterHeater:Mixed,       !- Component 1 Object Type
+    Water Heater_unit1,      !- Component 1 Name
+    Water Heater Use Inlet Node_unit1,  !- Component 1 Inlet Node Name
+    Water Heater Use Outlet Node_unit1;  !- Component 1 Outlet Node Name
+
+Branch,
+    Water Shower Branch_unit1,  !- Name
+    ,                        !- Pressure Drop Curve Name
+    WaterUse:Connections,    !- Component 1 Object Type
+    DHW Showers_unit1,       !- Component 1 Name
+    Water Shower Inlet Node_unit1,  !- Component 1 Inlet Node Name
+    Water Shower Outlet Node_unit1;  !- Component 1 Outlet Node Name
+
+Branch,
+    Water Sink Branch_unit1, !- Name
+    ,                        !- Pressure Drop Curve Name
+    WaterUse:Connections,    !- Component 1 Object Type
+    DHW Sinks_unit1,         !- Component 1 Name
+    Water Sink Inlet Node_unit1,  !- Component 1 Inlet Node Name
+    Water Sink outlet Node_unit1;  !- Component 1 Outlet Node Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: BRANCHLIST ===========
+
+BranchList,
+    ahs_branch_list,         !- Name
+    ahs_branch1;             !- Branch 1 Name
+
+BranchList,
+    DHW Demand Branches_unit1,  !- Name
+    DHW Demand Inlet Branch_unit1,  !- Branch 1 Name
+    Water Sink Branch_unit1, !- Branch 2 Name
+    Water Shower Branch_unit1,  !- Branch 3 Name
+    Water ClothesWasher Branch_unit1,  !- Branch 4 Name
+    Water Dishwasher Branch_unit1,  !- Branch 5 Name
+    Water Bath Branch_unit1, !- Branch 6 Name
+    Mains Makeup Branch_unit1;  !- Branch 7 Name
+
+BranchList,
+    DHW Supply Branches_unit1,  !- Name
+    Mains Inlet Branch_unit1,!- Branch 1 Name
+    Water Heater Branch_unit1,  !- Branch 2 Name
+    DHW Supply Outlet Branch_unit1;  !- Branch 3 Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: CONNECTOR:SPLITTER ===========
+
+Connector:Splitter,
+    DHW Demand Splitter_unit1,  !- Name
+    DHW Demand Inlet Branch_unit1,  !- Inlet Branch Name
+    Water Sink Branch_unit1, !- Outlet Branch 1 Name
+    Water Shower Branch_unit1,  !- Outlet Branch 2 Name
+    Water ClothesWasher Branch_unit1,  !- Outlet Branch 3 Name
+    Water Dishwasher Branch_unit1,  !- Outlet Branch 4 Name
+    Water Bath Branch_unit1; !- Outlet Branch 5 Name
+
+Connector:Splitter,
+    DHW Supply Splitter_unit1,  !- Name
+    Mains Inlet Branch_unit1,!- Inlet Branch Name
+    Water Heater Branch_unit1;  !- Outlet Branch 1 Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: CONNECTOR:MIXER ===========
+
+Connector:Mixer,
+    DHW Demand Mixer_unit1,  !- Name
+    Mains Makeup Branch_unit1,  !- Outlet Branch Name
+    Water Sink Branch_unit1, !- Inlet Branch 1 Name
+    Water Shower Branch_unit1,  !- Inlet Branch 2 Name
+    Water ClothesWasher Branch_unit1,  !- Inlet Branch 3 Name
+    Water Dishwasher Branch_unit1,  !- Inlet Branch 4 Name
+    Water Bath Branch_unit1; !- Inlet Branch 5 Name
+
+Connector:Mixer,
+    DHW Supply Mixer_unit1,  !- Name
+    DHW Supply Outlet Branch_unit1,  !- Outlet Branch Name
+    Water Heater Branch_unit1;  !- Inlet Branch 1 Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: CONNECTORLIST ===========
+
+ConnectorList,
+    DHW Demand Connectors_unit1,  !- Name
+    Connector:Splitter,      !- Connector 1 Object Type
+    DHW Demand Splitter_unit1,  !- Connector 1 Name
+    Connector:Mixer,         !- Connector 2 Object Type
+    DHW Demand Mixer_unit1;  !- Connector 2 Name
+
+ConnectorList,
+    DHW Supply Connectors_unit1,  !- Name
+    Connector:Splitter,      !- Connector 1 Object Type
+    DHW Supply Splitter_unit1,  !- Connector 1 Name
+    Connector:Mixer,         !- Connector 2 Object Type
+    DHW Supply Mixer_unit1;  !- Connector 2 Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: NODELIST ===========
+
+NodeList,
+    1_first_exhaust_node_list,  !- Name
+    1_first_zone_air_loop_exhaust_node,  !- Node 1 Name
+    exh_1_first_zone_exhaust_air_node;  !- Node 2 Name
+
+NodeList,
+    1_first_inlet_node_list, !- Name
+    1_first_ahs_hvac_inlet_node;  !- Node 1 Name
+
+NodeList,
+    2_second_exhaust_node_list,  !- Name
+    2_second_zone_air_loop_exhaust_node,  !- Node 1 Name
+    exh_2_second_zone_exhaust_air_node;  !- Node 2 Name
+
+NodeList,
+    2_second_inlet_node_list,!- Name
+    2_second_ahs_hvac_inlet_node;  !- Node 1 Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: OUTDOORAIR:NODELIST ===========
+
+OutdoorAir:NodeList,
+    ahs_oamixer_outdoor_node;!- Node or NodeList Name 1
+
+
+!-   ===========  ALL OBJECTS IN CLASS: PIPE:ADIABATIC ===========
+
+Pipe:Adiabatic,
+    DHW Supply Outlet Pipe_unit1,  !- Name
+    DHW Supply Outlet Pipe Inlet Node_unit1,  !- Inlet Node Name
+    DHW Supply Outlet Node_unit1;  !- Outlet Node Name
+
+Pipe:Adiabatic,
+    Mains Makeup Pipe_unit1, !- Name
+    Mains Makeup Pipe Inlet Node_unit1,  !- Inlet Node Name
+    Mains Makeup Node_unit1; !- Outlet Node Name
+
+Pipe:Adiabatic,
+    DHW Demand Inlet Pipe_unit1,  !- Name
+    DHW Demand Inlet Node_unit1,  !- Inlet Node Name
+    DHW Demand Inlet Pipe Outlet Node_unit1;  !- Outlet Node Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: PUMP:VARIABLESPEED ===========
+
+Pump:VariableSpeed,
+    Mains Pressure_unit1,    !- Name
+    Mains Inlet Node_unit1,  !- Inlet Node Name
+    Mains Pressure Outlet Node_unit1,  !- Outlet Node Name
+    autosize,                !- Design Maximum Flow Rate {m3/s}
+    1,                       !- Design Pump Head {Pa}
+    0,                       !- Design Power Consumption {W}
+    1.0,                     !- Motor Efficiency
+    0,                       !- Fraction of Motor Inefficiencies to Fluid Stream
+    0,                       !- Coefficient 1 of the Part Load Performance Curve
+    1,                       !- Coefficient 2 of the Part Load Performance Curve
+    0,                       !- Coefficient 3 of the Part Load Performance Curve
+    0,                       !- Coefficient 4 of the Part Load Performance Curve
+    0,                       !- Design Minimum Flow Rate {m3/s}
+    Intermittent;            !- Pump Control Type
+
+
+!-   ===========  ALL OBJECTS IN CLASS: WATERHEATER:MIXED ===========
+
+WaterHeater:Mixed,
+    Water Heater_unit1,      !- Name
+    0.196841372,             !- Tank Volume {m3}
+    dhw_setpt,               !- Setpoint Temperature Schedule Name
+    2.0,                     !- Deadband Temperature Difference {deltaC}
+    50.0,                    !- Maximum Temperature Limit {C}
+    Cycle,                   !- Heater Control Type
+    autosize,                !- Heater Maximum Capacity {W}
+    0.0,                     !- Heater Minimum Capacity {W}
+    0.0,                     !- Heater Ignition Minimum Flow Rate {m3/s}
+    ,                        !- Heater Ignition Delay {s}
+    electricity,             !- Heater Fuel Type
+    1.0,                     !- Heater Thermal Efficiency
+    ,                        !- Part Load Factor Curve Name
+    ,                        !- Off Cycle Parasitic Fuel Consumption Rate {W}
+    ,                        !- Off Cycle Parasitic Fuel Type
+    ,                        !- Off Cycle Parasitic Heat Fraction to Tank
+    ,                        !- On Cycle Parasitic Fuel Consumption Rate {W}
+    ,                        !- On Cycle Parasitic Fuel Type
+    ,                        !- On Cycle Parasitic Heat Fraction to Tank
+    Zone,                    !- Ambient Temperature Indicator
+    ,                        !- Ambient Temperature Schedule Name
+    1_first,                 !- Ambient Temperature Zone Name
+    ,                        !- Ambient Temperature Outdoor Air Node Name
+    1.33066161209134,        !- Off Cycle Loss Coefficient to Ambient Temperature {W/K}
+    1,                       !- Off Cycle Loss Fraction to Zone
+    1.33066161209134,        !- On Cycle Loss Coefficient to Ambient Temperature {W/K}
+    1.0,                     !- On Cycle Loss Fraction to Zone
+    0.0,                     !- Peak Use Flow Rate {m3/s}
+    ,                        !- Use Flow Rate Fraction Schedule Name
+    ,                        !- Cold Water Supply Temperature Schedule Name
+    Water Heater use inlet node_unit1,  !- Use Side Inlet Node Name
+    Water Heater use outlet node_unit1,  !- Use Side Outlet Node Name
+    1.0,                     !- Use Side Effectiveness
+    ,                        !- Source Side Inlet Node Name
+    ,                        !- Source Side Outlet Node Name
+    1.0,                     !- Source Side Effectiveness
+    autosize,                !- Use Side Design Flow Rate {m3/s}
+    0.0,                     !- Source Side Design Flow Rate {m3/s}
+    1.5;                     !- Indirect Water Heating Recovery Time {hr}
+
+
+!-   ===========  ALL OBJECTS IN CLASS: WATERHEATER:SIZING ===========
+
+WaterHeater:Sizing,
+    Water Heater_unit1,      !- WaterHeater Name
+    ResidentialHUD-FHAMinimum,  !- Design Mode
+    ,                        !- Time Storage Can Meet Peak Draw {hr}
+    ,                        !- Time for Tank Recovery {hr}
+    ,                        !- Nominal Tank Volume for Autosizing Plant Connections {m3}
+    3,                       !- Number of Bedrooms
+    3;                       !- Number of Bathrooms
+
+
+!-   ===========  ALL OBJECTS IN CLASS: PLANTLOOP ===========
+
+PlantLoop,
+    DHW Loop_unit1,          !- Name
+    Water,                   !- Fluid Type
+    ,                        !- User Defined Fluid Type
+    DHW Loop Operation_unit1,!- Plant Equipment Operation Scheme Name
+    DHW Supply Outlet Node_unit1,  !- Loop Temperature Setpoint Node Name
+    100,                     !- Maximum Loop Temperature {C}
+    0,                       !- Minimum Loop Temperature {C}
+    autosize,                !- Maximum Loop Flow Rate {m3/s}
+    0.0,                     !- Minimum Loop Flow Rate {m3/s}
+    autocalculate,           !- Plant Loop Volume {m3}
+    Mains Inlet Node_unit1,  !- Plant Side Inlet Node Name
+    DHW Supply Outlet Node_unit1,  !- Plant Side Outlet Node Name
+    DHW Supply Branches_unit1,  !- Plant Side Branch List Name
+    DHW Supply Connectors_unit1,  !- Plant Side Connector List Name
+    DHW Demand Inlet Node_unit1,  !- Demand Side Inlet Node Name
+    Mains Makeup Node_unit1, !- Demand Side Outlet Node Name
+    DHW Demand Branches_unit1,  !- Demand Side Branch List Name
+    DHW Demand Connectors_unit1,  !- Demand Side Connector List Name
+    Optimal;                 !- Load Distribution Scheme
+
+
+!-   ===========  ALL OBJECTS IN CLASS: PLANTEQUIPMENTLIST ===========
+
+PlantEquipmentList,
+    DHW Plant Equipment_unit1,  !- Name
+    WaterHeater:Mixed,       !- Equipment 1 Object Type
+    Water Heater_unit1;      !- Equipment 1 Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: PLANTEQUIPMENTOPERATION:HEATINGLOAD ===========
+
+PlantEquipmentOperation:HeatingLoad,
+    DHW Control Scheme_unit1,!- Name
+    0.0,                     !- Load Range 1 Lower Limit {W}
+    1000000000000000.0,      !- Load Range 1 Upper Limit {W}
+    DHW Plant Equipment_unit1;  !- Range 1 Equipment List Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: PLANTEQUIPMENTOPERATIONSCHEMES ===========
+
+PlantEquipmentOperationSchemes,
+    DHW Loop Operation_unit1,!- Name
+    PlantEquipmentOperation:HeatingLoad,  !- Control Scheme 1 Object Type
+    DHW Control Scheme_unit1,!- Control Scheme 1 Name
+    always_avail;            !- Control Scheme 1 Schedule Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: EXTERNALINTERFACE ===========
+
+ExternalInterface,
+    FunctionalMockupUnitImport;  !- Name of External Interface
+
+
+!-   ===========  ALL OBJECTS IN CLASS: EXTERNALINTERFACE:FUNCTIONALMOCKUPUNITIMPORT ===========
+
+ExternalInterface:FunctionalMockupUnitImport,
+    ContamFMU.fmu,           !- FMU File Name
+    0.0,                     !- FMU Timeout {ms}
+    0;                       !- FMU LoggingOn
+
+
+!-   ===========  ALL OBJECTS IN CLASS: EXTERNALINTERFACE:FUNCTIONALMOCKUPUNITIMPORT:FROM:VARIABLE ===========
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    1_first,                 !- Output:Variable Index Key Name
+    Zone Mean Air Temperature,  !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    TAIR_1_first;            !- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    1_first,                 !- Output:Variable Index Key Name
+    Zone Mean Air Humidity Ratio,  !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    HRAIR_1_first;           !- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    1_first_ahs_hvac_inlet_node,  !- Output:Variable Index Key Name
+    System Node Mass Flow Rate,  !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    AHS_Supply_1_first;      !- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    1_first_zone_return_air_node,  !- Output:Variable Index Key Name
+    System Node Mass Flow Rate,  !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    AHS_Return_1_first;      !- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    2_second,                !- Output:Variable Index Key Name
+    Zone Mean Air Humidity Ratio,  !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    HRAIR_2_second;          !- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    2_second,                !- Output:Variable Index Key Name
+    Zone Mean Air Temperature,  !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    TAIR_2_second;           !- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    2_second_ahs_hvac_inlet_node,  !- Output:Variable Index Key Name
+    System Node Mass Flow Rate,  !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    AHS_Supply_2_second;     !- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    2_second_zone_return_air_node,  !- Output:Variable Index Key Name
+    System Node Mass Flow Rate,  !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    AHS_Return_2_second;     !- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    3_attic,                 !- Output:Variable Index Key Name
+    Zone Mean Air Humidity Ratio,  !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    HRAIR_3_attic;           !- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    3_attic,                 !- Output:Variable Index Key Name
+    Zone Mean Air Temperature,  !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    TAIR_3_attic;            !- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    Environment,             !- Output:Variable Index Key Name
+    Site Outdoor Air Drybulb Temperature,  !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    WTH_AmbientTemp;         !- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    Environment,             !- Output:Variable Index Key Name
+    Site Wind Direction,     !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    WTH_WindDirection;       !- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    Environment,             !- Output:Variable Index Key Name
+    Site Wind Speed,         !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    WTH_WindSpeed;           !- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    Environment,             !- Output:Variable Index Key Name
+    Site Outdoor Air Barometric Pressure,  !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    WTH_BarometricPressure;  !- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    Environment,             !- Output:Variable Index Key Name
+    Site Outdoor Air Humidity Ratio,  !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    WTH_HumidityRatio;       !- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    ahs_air_loop,            !- Output:Variable Index Key Name
+    Air System Outdoor Air Flow Fraction,  !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    PCTOA_ahs;               !- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    ahs_demand_side_inlet_node,  !- Output:Variable Index Key Name
+    System Node Temperature, !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    TAIR_1_ahs(Sup);         !- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    ahs_demand_side_outlet_node,  !- Output:Variable Index Key Name
+    System Node Temperature, !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    TAIR_1_ahs(Ret);         !- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    exh_1_first_exhaust_fan, !- Output:Variable Index Key Name
+    Fan Balanced Air Mass Flow Rate,  !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    AHS_Exhaust_exh_1_first; !- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    exh_2_second_exhaust_fan,!- Output:Variable Index Key Name
+    Fan Balanced Air Mass Flow Rate,  !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    AHS_Exhaust_exh_2_second;!- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    exh_2_second_exhaust_fan_outlet_air_node,  !- Output:Variable Index Key Name
+    System Node Temperature, !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    TAIR_1_exh(Sup);         !- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitImport:From:Variable,
+    exh_2_second_exhaust_fan_outlet_air_node,  !- Output:Variable Index Key Name
+    System Node Temperature, !- Output:Variable Name
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    TAIR_1_exh(Ret);         !- FMU Variable Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: EXTERNALINTERFACE:FUNCTIONALMOCKUPUNITIMPORT:TO:ACTUATOR ===========
+
+ExternalInterface:FunctionalMockupUnitImport:To:Actuator,
+    Infiltration1,           !- Name
+    INFIL_3_attic,           !- Actuated Component Unique Name
+    Zone Infiltration,       !- Actuated Component Type
+    Air Exchange Flow Rate,  !- Actuated Component Control Type
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    INFIL_3_attic,           !- FMU Variable Name
+    0.0;                     !- Initial Value
+
+ExternalInterface:FunctionalMockupUnitImport:To:Actuator,
+    Infiltration2,           !- Name
+    INFIL_2_second,          !- Actuated Component Unique Name
+    Zone Infiltration,       !- Actuated Component Type
+    Air Exchange Flow Rate,  !- Actuated Component Control Type
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    INFIL_2_second,          !- FMU Variable Name
+    0.0;                     !- Initial Value
+
+ExternalInterface:FunctionalMockupUnitImport:To:Actuator,
+    Infiltration3,           !- Name
+    INFIL_1_first,           !- Actuated Component Unique Name
+    Zone Infiltration,       !- Actuated Component Type
+    Air Exchange Flow Rate,  !- Actuated Component Control Type
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    INFIL_1_first,           !- FMU Variable Name
+    0.0;                     !- Initial Value
+
+ExternalInterface:FunctionalMockupUnitImport:To:Actuator,
+    ZoneMixing1,             !- Name
+    MIX_2_second_to_3_attic, !- Actuated Component Unique Name
+    ZoneMixing,              !- Actuated Component Type
+    Air Exchange Flow Rate,  !- Actuated Component Control Type
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    MIX_2_second_to_3_attic, !- FMU Variable Name
+    0.0;                     !- Initial Value
+
+ExternalInterface:FunctionalMockupUnitImport:To:Actuator,
+    ZoneMixing2,             !- Name
+    MIX_3_attic_to_2_second, !- Actuated Component Unique Name
+    ZoneMixing,              !- Actuated Component Type
+    Air Exchange Flow Rate,  !- Actuated Component Control Type
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    MIX_3_attic_to_2_second, !- FMU Variable Name
+    0.0;                     !- Initial Value
+
+ExternalInterface:FunctionalMockupUnitImport:To:Actuator,
+    ZoneMixing3,             !- Name
+    MIX_1_first_to_2_second, !- Actuated Component Unique Name
+    ZoneMixing,              !- Actuated Component Type
+    Air Exchange Flow Rate,  !- Actuated Component Control Type
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    MIX_1_first_to_2_second, !- FMU Variable Name
+    0.0;                     !- Initial Value
+
+ExternalInterface:FunctionalMockupUnitImport:To:Actuator,
+    ZoneMixing4,             !- Name
+    MIX_2_second_to_1_first, !- Actuated Component Unique Name
+    ZoneMixing,              !- Actuated Component Type
+    Air Exchange Flow Rate,  !- Actuated Component Control Type
+    ContamFMU.fmu,           !- FMU File Name
+    ContamFMU,               !- FMU Instance Name
+    MIX_2_second_to_1_first, !- FMU Variable Name
+    0.0;                     !- Initial Value
+
+
+!-   ===========  ALL OBJECTS IN CLASS: AVAILABILITYMANAGER:SCHEDULED ===========
+
+AvailabilityManager:Scheduled,
+    ahs_availability_manager,!- Name
+    Compact_Always_1;        !- Schedule Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: AVAILABILITYMANAGERASSIGNMENTLIST ===========
+
+AvailabilityManagerAssignmentList,
+    ahs_availability_manager_list,  !- Name
+    AvailabilityManager:Scheduled,  !- Availability Manager 1 Object Type
+    ahs_availability_manager;!- Availability Manager 1 Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: SETPOINTMANAGER:SCHEDULED ===========
+
+SetpointManager:Scheduled,
+    DHW Loop Setpoint Manager_unit1,  !- Name
+    Temperature,             !- Control Variable
+    DHWSupplySetpoint,       !- Schedule Name
+    DHW Supply Outlet Node_unit1;  !- Setpoint Node or NodeList Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: WATERUSE:EQUIPMENT ===========
+
+WaterUse:Equipment,
+    Baths_unit1,             !- Name
+    Domestic Hot Water,      !- End-Use Subcategory
+    9.695682173e-07,         !- Peak Flow Rate {m3/s}
+    Baths,                   !- Flow Rate Fraction Schedule Name
+    SSBWaterTempSchedule;    !- Target Temperature Schedule Name
+
+WaterUse:Equipment,
+    Clothes Washer_unit1,    !- Name
+    Domestic Hot Water,      !- End-Use Subcategory
+    1.6219189818e-06,        !- Peak Flow Rate {m3/s}
+    ClothesWasher,           !- Flow Rate Fraction Schedule Name
+    CWWaterTempSchedule;     !- Target Temperature Schedule Name
+
+WaterUse:Equipment,
+    Dishwasher_unit1,        !- Name
+    Domestic Hot Water,      !- End-Use Subcategory
+    6.36685353e-07,          !- Peak Flow Rate {m3/s}
+    Dishwasher,              !- Flow Rate Fraction Schedule Name
+    DWWaterTempSchedule;     !- Target Temperature Schedule Name
+
+WaterUse:Equipment,
+    Showers_unit1,           !- Name
+    Domestic Hot Water,      !- End-Use Subcategory
+    3.7816251714e-06,        !- Peak Flow Rate {m3/s}
+    Showers,                 !- Flow Rate Fraction Schedule Name
+    SSBWaterTempSchedule;    !- Target Temperature Schedule Name
+
+WaterUse:Equipment,
+    Sinks_unit1,             !- Name
+    Domestic Hot Water,      !- End-Use Subcategory
+    2.1244858873e-06,        !- Peak Flow Rate {m3/s}
+    Sinks,                   !- Flow Rate Fraction Schedule Name
+    SSBWaterTempSchedule;    !- Target Temperature Schedule Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: WATERUSE:CONNECTIONS ===========
+
+WaterUse:Connections,
+    DHW Baths_unit1,         !- Name
+    Water Bath Inlet Node_unit1,  !- Inlet Node Name
+    Water Bath Outlet Node_unit1,  !- Outlet Node Name
+    ,                        !- Supply Water Storage Tank Name
+    ,                        !- Reclamation Water Storage Tank Name
+    ,                        !- Hot Water Supply Temperature Schedule Name
+    ,                        !- Cold Water Supply Temperature Schedule Name
+    None,                    !- Drain Water Heat Exchanger Type
+    ,                        !- Drain Water Heat Exchanger Destination
+    ,                        !- Drain Water Heat Exchanger U-Factor Times Area {W/K}
+    Baths_unit1;             !- Water Use Equipment 1 Name
+
+WaterUse:Connections,
+    DHW ClothesWasher_unit1, !- Name
+    Water ClothesWasher Inlet Node_unit1,  !- Inlet Node Name
+    Water ClothesWasher Outlet Node_unit1,  !- Outlet Node Name
+    ,                        !- Supply Water Storage Tank Name
+    ,                        !- Reclamation Water Storage Tank Name
+    ,                        !- Hot Water Supply Temperature Schedule Name
+    ,                        !- Cold Water Supply Temperature Schedule Name
+    None,                    !- Drain Water Heat Exchanger Type
+    ,                        !- Drain Water Heat Exchanger Destination
+    ,                        !- Drain Water Heat Exchanger U-Factor Times Area {W/K}
+    Clothes Washer_unit1;    !- Water Use Equipment 1 Name
+
+WaterUse:Connections,
+    DHW DishWasher_unit1,    !- Name
+    Water DishWasher Inlet Node_unit1,  !- Inlet Node Name
+    Water DishWasher Outlet Node_unit1,  !- Outlet Node Name
+    ,                        !- Supply Water Storage Tank Name
+    ,                        !- Reclamation Water Storage Tank Name
+    ,                        !- Hot Water Supply Temperature Schedule Name
+    ,                        !- Cold Water Supply Temperature Schedule Name
+    None,                    !- Drain Water Heat Exchanger Type
+    ,                        !- Drain Water Heat Exchanger Destination
+    ,                        !- Drain Water Heat Exchanger U-Factor Times Area {W/K}
+    Dishwasher_unit1;        !- Water Use Equipment 1 Name
+
+WaterUse:Connections,
+    DHW Showers_unit1,       !- Name
+    Water Shower Inlet Node_unit1,  !- Inlet Node Name
+    Water Shower Outlet Node_unit1,  !- Outlet Node Name
+    ,                        !- Supply Water Storage Tank Name
+    ,                        !- Reclamation Water Storage Tank Name
+    ,                        !- Hot Water Supply Temperature Schedule Name
+    ,                        !- Cold Water Supply Temperature Schedule Name
+    None,                    !- Drain Water Heat Exchanger Type
+    ,                        !- Drain Water Heat Exchanger Destination
+    ,                        !- Drain Water Heat Exchanger U-Factor Times Area {W/K}
+    Showers_unit1;           !- Water Use Equipment 1 Name
+
+WaterUse:Connections,
+    DHW Sinks_unit1,         !- Name
+    Water Sink Inlet Node_unit1,  !- Inlet Node Name
+    Water Sink Outlet Node_unit1,  !- Outlet Node Name
+    ,                        !- Supply Water Storage Tank Name
+    ,                        !- Reclamation Water Storage Tank Name
+    ,                        !- Hot Water Supply Temperature Schedule Name
+    ,                        !- Cold Water Supply Temperature Schedule Name
+    None,                    !- Drain Water Heat Exchanger Type
+    ,                        !- Drain Water Heat Exchanger Destination
+    ,                        !- Drain Water Heat Exchanger U-Factor Times Area {W/K}
+    Sinks_unit1;             !- Water Use Equipment 1 Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: CURVE:QUADRATIC ===========
+
+Curve:Quadratic,
+    Cool-PLF-fPLR,           !- Name
+    0.80141423,              !- Coefficient1 Constant
+    0.23744685,              !- Coefficient2 x
+    -0.0393773,              !- Coefficient3 x**2
+    0.0,                     !- Minimum Value of x
+    1.0,                     !- Maximum Value of x
+    0.7,                     !- Minimum Curve Output
+    1.0;                     !- Maximum Curve Output
+
+Curve:Quadratic,
+    HPACCoolCapFFF,          !- Name
+    0.8,                     !- Coefficient1 Constant
+    0.2,                     !- Coefficient2 x
+    0.0,                     !- Coefficient3 x**2
+    0.5,                     !- Minimum Value of x
+    1.5;                     !- Maximum Value of x
+
+Curve:Quadratic,
+    HPACCoolEIRFFF,          !- Name
+    1.156,                   !- Coefficient1 Constant
+    -0.1816,                 !- Coefficient2 x
+    0.0256,                  !- Coefficient3 x**2
+    0.5,                     !- Minimum Value of x
+    1.5;                     !- Maximum Value of x
+
+Curve:Quadratic,
+    HPACCoolPLFFPLR,         !- Name
+    0.85,                    !- Coefficient1 Constant
+    0.15,                    !- Coefficient2 x
+    0.0,                     !- Coefficient3 x**2
+    0.0,                     !- Minimum Value of x
+    1.0;                     !- Maximum Value of x
+
+Curve:Quadratic,
+    HPACHeatEIRFFF,          !- Name
+    1.3824,                  !- Coefficient1 Constant
+    -0.4336,                 !- Coefficient2 x
+    0.0512,                  !- Coefficient3 x**2
+    0.0,                     !- Minimum Value of x
+    1.0;                     !- Maximum Value of x
+
+
+!-   ===========  ALL OBJECTS IN CLASS: CURVE:CUBIC ===========
+
+Curve:Cubic,
+    ConstantCubic,           !- Name
+    1.0,                     !- Coefficient1 Constant
+    0.0,                     !- Coefficient2 x
+    0.0,                     !- Coefficient3 x**2
+    0.0,                     !- Coefficient4 x**3
+    -100.0,                  !- Minimum Value of x
+    100.0;                   !- Maximum Value of x
+
+Curve:Cubic,
+    Fan-EIR-fPLR,            !- Name
+    0.0,                     !- Coefficient1 Constant
+    1.0,                     !- Coefficient2 x
+    0.0,                     !- Coefficient3 x**2
+    0.0,                     !- Coefficient4 x**3
+    0.0,                     !- Minimum Value of x
+    1.0,                     !- Maximum Value of x
+    0.0,                     !- Minimum Curve Output
+    1.0;                     !- Maximum Curve Output
+
+Curve:Cubic,
+    HPACHeatCapFFF,          !- Name
+    0.84,                    !- Coefficient1 Constant
+    0.16,                    !- Coefficient2 x
+    0.0,                     !- Coefficient3 x**2
+    0.0,                     !- Coefficient4 x**3
+    0.5,                     !- Minimum Value of x
+    1.5;                     !- Maximum Value of x
+
+Curve:Cubic,
+    HPACHeatCapFT,           !- Name
+    0.758746,                !- Coefficient1 Constant
+    0.027626,                !- Coefficient2 x
+    0.000148716,             !- Coefficient3 x**2
+    3.4992e-06,              !- Coefficient4 x**3
+    -20.0,                   !- Minimum Value of x
+    20.0;                    !- Maximum Value of x
+
+Curve:Cubic,
+    HPACHeatEIRFT,           !- Name
+    1.19248,                 !- Coefficient1 Constant
+    -0.0300438,              !- Coefficient2 x
+    0.00103745,              !- Coefficient3 x**2
+    -2.3328e-05,             !- Coefficient4 x**3
+    -20.0,                   !- Minimum Value of x
+    20.0;                    !- Maximum Value of x
+
+
+!-   ===========  ALL OBJECTS IN CLASS: CURVE:BIQUADRATIC ===========
+
+Curve:Biquadratic,
+    Cool-Cap-fT,             !- Name
+    1.26489391,              !- Coefficient1 Constant
+    -0.035054982,            !- Coefficient2 x
+    0.00211086,              !- Coefficient3 x**2
+    -0.001526886,            !- Coefficient4 y
+    -7.0308e-06,             !- Coefficient5 y**2
+    -0.0004691844,           !- Coefficient6 x*y
+    -100.0,                  !- Minimum Value of x
+    100.0,                   !- Maximum Value of x
+    -100.0,                  !- Minimum Value of y
+    100.0;                   !- Maximum Value of y
+
+Curve:Biquadratic,
+    Cool-EIR-fT,             !- Name
+    0.38402403,              !- Coefficient1 Constant
+    0.029696724,             !- Coefficient2 x
+    -0.0011329308,           !- Coefficient3 x**2
+    0.006490674,             !- Coefficient4 y
+    0.0002626992,            !- Coefficient5 y**2
+    -0.0001207224,           !- Coefficient6 x*y
+    -100.0,                  !- Minimum Value of x
+    100.0,                   !- Maximum Value of x
+    -100.0,                  !- Minimum Value of y
+    100.0;                   !- Maximum Value of y
+
+Curve:Biquadratic,
+    Defrost_EIR_FT,          !- Name
+    1.0,                     !- Coefficient1 Constant
+    0.0,                     !- Coefficient2 x
+    0.0,                     !- Coefficient3 x**2
+    0.0,                     !- Coefficient4 y
+    0.0,                     !- Coefficient5 y**2
+    0.0,                     !- Coefficient6 x*y
+    0.0,                     !- Minimum Value of x
+    100.0,                   !- Maximum Value of x
+    0.0,                     !- Minimum Value of y
+    100.0;                   !- Maximum Value of y
+
+Curve:Biquadratic,
+    HPACCoolCapFT,           !- Name
+    0.766956,                !- Coefficient1 Constant
+    0.0107756,               !- Coefficient2 x
+    -4.14703e-05,            !- Coefficient3 x**2
+    0.00134961,              !- Coefficient4 y
+    -0.000261144,            !- Coefficient5 y**2
+    0.000457488,             !- Coefficient6 x*y
+    12.77778,                !- Minimum Value of x
+    23.88889,                !- Maximum Value of x
+    21.11111,                !- Minimum Value of y
+    46.11111;                !- Maximum Value of y
+
+Curve:Biquadratic,
+    HPACCoolEIRFT,           !- Name
+    0.297145,                !- Coefficient1 Constant
+    0.0430933,               !- Coefficient2 x
+    -0.000748766,            !- Coefficient3 x**2
+    0.00597727,              !- Coefficient4 y
+    0.000482112,             !- Coefficient5 y**2
+    -0.000956448,            !- Coefficient6 x*y
+    12.77778,                !- Minimum Value of x
+    23.88889,                !- Maximum Value of x
+    21.11111,                !- Minimum Value of y
+    46.11111;                !- Maximum Value of y
+
+
+!-   ===========  ALL OBJECTS IN CLASS: OUTPUT:VARIABLEDICTIONARY ===========
+
+Output:VariableDictionary,Regular,Name;
+
+!-   ===========  ALL OBJECTS IN CLASS: OUTPUT:TABLE:SUMMARYREPORTS ===========
+
+
+Output:Table:SummaryReports,
+    InputVerificationandResultsSummary,  !- Report 1 Name
+    EquipmentSummary,        !- Report 2 Name
+    ClimaticDataSummary,     !- Report 3 Name
+    EnvelopeSummary,         !- Report 4 Name
+    AllSummary;              !- Report 5 Name
+
+
+!-   ===========  ALL OBJECTS IN CLASS: OUTPUT:TABLE:MONTHLY ===========
+
+Output:Table:Monthly,
+    FanSplit,                !- Name
+    3,                       !- Digits After Decimal
+    Air System Cooling Coil Total Cooling Energy,  !- Variable or Meter 1 Name
+    HoursNonZero,            !- Aggregation Type for Variable or Meter 1
+    Air System Fan Electric Energy,  !- Variable or Meter 2 Name
+    SumOrAverageDuringHoursShown,  !- Aggregation Type for Variable or Meter 2
+    Air System Heating Coil Total Heating Energy,  !- Variable or Meter 3 Name
+    HoursNonZero,            !- Aggregation Type for Variable or Meter 3
+    Air System Fan Electric Energy,  !- Variable or Meter 4 Name
+    SumOrAverageDuringHoursShown,  !- Aggregation Type for Variable or Meter 4
+    Air System Fan Electric Energy,  !- Variable or Meter 5 Name
+    SumOrAverage;            !- Aggregation Type for Variable or Meter 5
+
+Output:Table:Monthly,
+    CoilLoads,               !- Name
+    2,                       !- Digits After Decimal
+    Heating Coil Heating Rate,  !- Variable or Meter 1 Name
+    SumOrAverage,            !- Aggregation Type for Variable or Meter 1
+    Heating Coil Heating Rate,  !- Variable or Meter 2 Name
+    SumOrAverage,            !- Aggregation Type for Variable or Meter 2
+    Cooling Coil Total Cooling Rate,  !- Variable or Meter 3 Name
+    SumOrAverage;            !- Aggregation Type for Variable or Meter 3
+
+
+!-   ===========  ALL OBJECTS IN CLASS: OUTPUTCONTROL:TABLE:STYLE ===========
+
+OutputControl:Table:Style,
+    CommaAndHTML,            !- Column Separator
+    InchPound;               !- Unit Conversion
+
+
+!-   ===========  ALL OBJECTS IN CLASS: OUTPUT:VARIABLE ===========
+
+Output:Variable,1_first,Zone Mean Air Temperature,Timestep;
+Output:Variable,1_first,Zone Mean Air Humidity Ratio,Timestep;
+Output:Variable,1_first_ahs_hvac_inlet_node,System Node Mass Flow Rate,Timestep;
+Output:Variable,1_first_zone_return_air_node,System Node Mass Flow Rate,Timestep;
+Output:Variable,2_second,Zone Mean Air Temperature,Timestep;
+Output:Variable,2_second,Zone Mean Air Humidity Ratio,Timestep;
+Output:Variable,2_second_ahs_hvac_inlet_node,System Node Mass Flow Rate,Timestep;
+Output:Variable,2_second_zone_return_air_node,System Node Mass Flow Rate,Timestep;
+Output:Variable,3_attic,Zone Mean Air Temperature,Timestep;
+Output:Variable,3_attic,Zone Mean Air Humidity Ratio,Timestep;
+Output:Variable,Environment,Site Outdoor Air Drybulb Temperature,Timestep;
+Output:Variable,Environment,Site Outdoor Air Barometric Pressure,Timestep;
+Output:Variable,Environment,Site Wind Speed,Timestep;
+Output:Variable,Environment,Site Wind Direction,Timestep;
+Output:Variable,Environment,Site Outdoor Air Humidity Ratio,Timestep;
+Output:Variable,ahs_air_loop,Air System Outdoor Air Flow Fraction,Timestep;
+Output:Variable,ahs_demand_side_inlet_node,System Node Temperature,Timestep;
+Output:Variable,ahs_demand_side_outlet_node,System Node Temperature,Timestep;
+Output:Variable,exh_1_first_exhaust_fan,Fan Balanced Air Mass Flow Rate,Timestep;
+Output:Variable,exh_2_second_exhaust_fan,Fan Balanced Air Mass Flow Rate,Timestep;
+Output:Variable,exh_2_second_exhaust_fan_outlet_air_node,System Node Temperature,Timestep;
+
+!-   ===========  ALL OBJECTS IN CLASS: OUTPUT:DIAGNOSTICS ===========
+
+
+Output:Diagnostics,
+    DisplayExtraWarnings,    !- Key 1
+    DisplayUnusedSchedules;  !- Key 2
+
+Output:Diagnostics,
+    DisplayUnusedObjects;    !- Key 1
+
