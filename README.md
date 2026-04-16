@@ -240,68 +240,121 @@ Each subdirectory should contain CSV result files with the simulation outputs.
 
 ## Running Your Own Cosimulations
 
-Once the test case works, you can run cosimulations with your own building models. This section explains the input files you need, how to create them, and how to add them to the runner.
+Once the test case works, you can run cosimulations with your own building models. This section explains the typical workflow and how to add your project to the runner.
 
-### Required input files
+### Workflow overview
 
-Each cosimulation needs five input files, plus the shared blank FMU and weather file:
+The standard workflow for developing a CONTAM model into an EnergyPlus cosimulation is:
 
-| File | Format | Created in | Purpose |
-|------|--------|------------|---------|
-| **IDF** | EnergyPlus Input Data File | EnergyPlus IDF Editor or text editor | Building geometry, materials, HVAC, schedules, and `ExternalInterface:FunctionalMockupUnitImport` objects that define how EnergyPlus exchanges data with CONTAM |
-| **PRJ** | CONTAM Project File | CONTAM 3.4 GUI (Windows) | Multizone airflow network: zones, flow paths, air handling systems, contaminant sources |
-| **VEF** | Variable Exchange File | CONTAM 3.4 GUI (Export → FMU Variables) | Maps CONTAM's internal variables (zone temps, AHS flows, infiltration rates, etc.) to named FMI variables |
-| **XML** | FMI Model Description | CONTAM 3.4 GUI (exported alongside VEF) | Declares the FMI input/output variables with `valueReference` IDs so EnergyPlus knows what data to send and receive |
-| **EPW** | EnergyPlus Weather | [EnergyPlus weather site](https://energyplus.net/weather) | Hourly weather data for the simulation location |
-| **FMU** | Functional Mock-up Unit | Built in step 4 of this guide | Contains `contamx3.exe` and `ContamFMU.so` — reused across all simulations |
+1. **Build and validate the CONTAM model** — Ensure the geometry is well defined in ContamW, along with zones, flow paths, pollutants, profiles, and air handling systems. Save as `your-building.prj`.
 
-### How the files relate to each other
+2. **Create a base EnergyPlus IDF with constructions** — Prepare an IDF file containing `Material` and `Construction` objects for the surfaces in your building (walls, floors, ceilings, windows). This is used as input to the 3D Exporter in the next step.
 
-The cosimulation works by EnergyPlus and CONTAM running simultaneously and exchanging data at each timestep via the FMI standard. The data flow is:
+3. **Export using CONTAM 3D Exporter** — Run CONTAM3DExport, select the PRJ and the base constructions IDF, assign constructions to surface categories, choose the HVAC air loop option (Fan Only, Unitary Heat Cool, or Air to Air Heat Pump), and select the "Building Coupled with CONTAM" export option. This produces:
+   - A **coupled IDF** with geometry, air loops, exhaust fans, and FMU-related objects
+   - A **ContamFMU.fmu** containing the modelDescription.xml, contam.prj, contam.vef, ContamFMU library, and contamx3 solver
 
-1. **EnergyPlus → CONTAM (inputs):** Zone air temperatures, humidity ratios, AHS supply/return flow rates, outdoor weather. These are defined as `causality="input"` in the XML and as `I` lines in the VEF.
+4. **Edit the exported IDF as required** — Modify HVAC settings, internal gains, schedules, setpoints, or any other EnergyPlus objects. The IDF must remain in EnergyPlus **9.1** format for compatibility with ContamFMU.
 
-2. **CONTAM → EnergyPlus (outputs):** Infiltration rates, inter-zone mixing flow rates. These are defined as `causality="output"` in the XML and as `O` lines in the VEF.
+5. **Parametric preparation** — If running a parametric study, write a preparation script to generate IDF/EPW variants and `list.txt` (see [Parametric analysis](#parametric-analysis) below).
 
-3. The **IDF** must contain `ExternalInterface:FunctionalMockupUnitImport` objects that reference the same variable names as the XML. EnergyPlus uses these to send zone data to CONTAM and receive airflow results back.
+6. **Cosimulation runs and results processing** — Run on Myriad using the batch runner or array jobs, then process the output CSV/ESO files.
 
-4. The **PRJ** must have matching zone names, AHS definitions, and flow paths. The VEF maps between CONTAM's internal identifiers and the FMI variable names.
+### Guidelines for building CONTAM models for cosimulation
 
-### Creating input files for a new building
+When creating a CONTAM project in ContamW that will be coupled with EnergyPlus via the 3D Exporter, follow these rules. Getting these right avoids problems at export and runtime.
 
-**Step 1: Build the CONTAM model (Windows required)**
+#### Geometry
 
-CONTAM 3.4 has a Windows-only GUI. Create your building's airflow network:
+Use ContamW's **pseudo-geometry mode** so that CONTAM3DExport can generate the correct 3D geometry for the EnergyPlus model. Each CONTAM zone maps to one EnergyPlus thermal zone.
 
-- Define zones (matching EnergyPlus thermal zones)
-- Define flow paths (doors, windows, cracks, leakage)
-- Define air handling systems (supply, return, exhaust)
-- Set up any contaminant sources if needed
+#### Airflow paths
 
-Save as `your-building.prj`.
+Airflow paths are grouped by the exporter to form infiltration rates (external paths) and inter-zone mixing rates (internal paths) in EnergyPlus. Multiple paths between the same pair of zones are combined into a single connection.
 
-**Step 2: Export the FMU variable files from CONTAM**
+#### Windows
 
-In the CONTAM GUI, use the FMU export feature to generate the VEF and XML files. These define which variables are exchanged between EnergyPlus and CONTAM:
+To create a window for thermal modelling, define an airflow path using a **two-way flow element whose name contains "wind"** (not case-sensitive). Place the path icon on the wall where you want the window centre. Set the bottom elevation via the path's Reference Elevation, and the height and width via the flow element properties. Make sure windows are fully contained within their wall and do not overlap. If you don't want airflow through the window during cosimulation, set the path multiplier to zero.
 
-- The VEF file maps CONTAM internal variables to FMI names
-- The XML file declares those same FMI names with value references
+#### Air handling systems
 
-Save as `your-building-contam.vef` and `your-building-modelDescription.xml`.
+An EnergyPlus air loop is created for each "normal" simple AHS in the CONTAM model. Each zone served by an air loop must have both supply and return terminals, and a zone can only be served by **one normal AHS** (i.e. one air loop). However, a zone can additionally be served by one exhaust-only and one HRV system.
 
-**Step 3: Configure the EnergyPlus model**
+AHS naming conventions control what the exporter creates:
 
-Your IDF must be EnergyPlus **9.1** format and include:
+| AHS name contains | System created in EnergyPlus |
+|---|---|
+| *(normal name)* | Full `AirLoopHVAC` with supply/return |
+| **"exh"** | `Fan:ZoneExhaust` (no air loop) — should have no supply terminals |
+| **"hrv"** | `ZoneHVAC:EnergyRecoveryVentilator` (no air loop) |
 
-- `ExternalInterface` object set to `FunctionalMockupUnitImport`
-- `ExternalInterface:FunctionalMockupUnitImport:From:Variable` objects for each output CONTAM sends to EnergyPlus (infiltration rates, mixing flows)
-- `ExternalInterface:FunctionalMockupUnitImport:To:Schedule` or `ExternalInterface:FunctionalMockupUnitImport:To:Actuator` objects for each input EnergyPlus sends to CONTAM
+The exporter also offers three air loop options for normal AHS: Fan Only (fan with no heating/cooling), Unitary Heat Cool (`AirLoopHVAC:UnitaryHeatCool`), or Air to Air Heat Pump (`UnitaryHeatPump:AirToAir`).
 
-The variable names in the IDF must exactly match the names in the XML `modelDescription.xml`. Refer to the test case IDF files (`sf-slab-gas.idf`, etc.) for working examples of how these objects are configured.
+#### Ducts
 
-**Step 4: Get a weather file**
+Ducts are **not supported** in the EnergyPlus coupling. The exporter does not check for this, so avoid using duct elements in models intended for cosimulation.
 
-Download an EPW file for your location from [EnergyPlus Weather Data](https://energyplus.net/weather).
+#### Controls (advanced)
+
+Named control nodes can pass arbitrary data between CONTAM and EnergyPlus:
+
+- **Constant (or Set) type controls** with a name receive input signals from EnergyPlus → creates `ExternalInterface:FunctionalMockupUnitImport:From:Variable` objects
+- **Split (or Pass) type controls** with a name send output signals to EnergyPlus → creates `ExternalInterface:FunctionalMockupUnitImport:To:Schedule` objects
+
+This enables things like demand-controlled ventilation based on contaminant levels or coordination of control strategies between the two programs. After adding or modifying controls, you must run a building check in CONTAM (Simulation → Run Building Check) to sequence the controls, then save the project.
+
+### Post-export checklist
+
+The IDF generated by CONTAM3DExport will run as exported, but it will not perform realistically without further editing. After export, review and add:
+
+- **Internal gains** — occupancy, lighting, equipment (not created by the exporter)
+- **Ground coupling** — ground temperature profiles and boundary conditions
+- **HVAC sizing and setpoints** — the exporter creates the air loop structure but you will likely need to set the controlling zone/thermostat location, adjust coil and fan sizes, and define thermostat setpoints
+- **Water-related items** — domestic hot water, plant loops if needed
+- **Schedules** — occupancy, lighting, equipment, and thermostat schedules
+
+Additionally, ensure the following before running:
+
+- **Timestep and simulation dates must match** between the PRJ file (inside the FMU) and the IDF. If they differ, the cosimulation will produce incorrect results or fail.
+- **The IDF and FMU must be in the same directory** at runtime. The `run-cosim-pool.py` script handles this automatically.
+- **Restart file (optional)** — you can set the restart flag in the PRJ to use initial airflows and temperatures from a prior CONTAM run. Edit the PRJ's restart line to `1 Jan01 24:00:00` (with the date matching your simulation start). This can help with initial conditions but may be undesirable if you have contaminant sinks or filters that should start unloaded.
+- **VEF/XML variable ordering** — the order of variables in the VEF file must match the `valueReference` numbers in the modelDescription.xml. The variable names do not need to match, but the ordering is critical. The 3D Exporter handles this automatically, but if you manually edit either file, take care to keep them in sync.
+
+### Input files produced by this workflow
+
+| File | Produced by | Purpose |
+|------|-------------|---------|
+| **IDF** | CONTAM 3D Exporter (step 3), then edited (step 4) | Building geometry, materials, HVAC, schedules, and `ExternalInterface:FunctionalMockupUnitImport` objects for data exchange with CONTAM |
+| **FMU** | CONTAM 3D Exporter (step 3) | Contains contamx3 solver, ContamFMU library, PRJ, VEF, and modelDescription.xml — everything needed for the CONTAM side of the cosimulation |
+| **EPW** | [EnergyPlus weather site](https://energyplus.net/weather) | Hourly weather data for the simulation location |
+
+Note that the PRJ, VEF, and modelDescription.xml are all packed inside the FMU by the 3D Exporter. You do not need to manage these separately unless you need to modify them after export.
+
+### How the cosimulation data exchange works
+
+EnergyPlus and CONTAM run simultaneously and exchange data at each timestep via the FMI standard:
+
+1. **EnergyPlus → CONTAM (inputs):** Zone air temperatures, humidity ratios, AHS supply/return flow rates, outdoor weather. Defined as `causality="input"` in the modelDescription.xml and as `I` lines in the VEF.
+
+2. **CONTAM → EnergyPlus (outputs):** Infiltration rates, inter-zone mixing flow rates. Defined as `causality="output"` in the modelDescription.xml and as `O` lines in the VEF.
+
+3. The **IDF** must contain `ExternalInterface:FunctionalMockupUnitImport` objects that reference the same variable names as the XML. The 3D Exporter creates these automatically.
+
+### Rebuilding the FMU for Linux
+
+The FMU produced by CONTAM 3D Exporter contains Windows binaries (ContamFMU.dll and contamx3.exe). To run on Myriad, you need to replace these with Linux equivalents. This is what steps 3–4 of the setup guide accomplish — building a blank FMU with `ContamFMU.so` and the Linux `contamx3.exe`. The `run-cosim-pool.py` script then repacks the PRJ, VEF, and XML from your exported FMU into the Linux blank FMU at runtime.
+
+If you need to extract the VEF and XML from your exported FMU to use with the runner's `list.txt` format:
+
+```bash
+# Unzip the FMU (it's just a zip file)
+unzip ContamFMU.fmu -d fmu_contents/
+
+# Your files are inside:
+# fmu_contents/modelDescription.xml
+# fmu_contents/binaries/win32/contam.vef   (or similar path)
+# fmu_contents/binaries/win32/contam.prj
+```
 
 ### Adding your project to the runner
 
@@ -378,7 +431,7 @@ The CSV file is typically what you want for analysis — it contains the EnergyP
 - You can mix different buildings in the same `list.txt`. Each gets its own numbered subdirectory.
 - The `-w` flag controls how many simulations run in parallel. On Myriad, set it to match your `#$ -pe smp N` value or use `${NSLOTS}` as in the job script.
 - If a simulation fails, check `run_*/<N>/eplusout.err` for EnergyPlus errors and the job's stderr file for CONTAM errors.
-- Variable name mismatches between the IDF and XML are a common source of errors. The names must match exactly (case-sensitive).
+- If you manually edit the IDF or VEF/XML after using the 3D Exporter, variable name mismatches between the IDF and XML are a common source of errors — the names must match exactly (case-sensitive). When using the 3D Exporter without manual edits, these are generated consistently.
 
 ### Parametric analysis
 
