@@ -8,11 +8,11 @@ Uses the [NIST CONTAM Parametric Analysis Utilities](https://www.nist.gov/el/bee
 
 ## Version Requirements
 
-> **Critical:** The ContamFMU shared library does **not** work with EnergyPlus 9.5 or later. You must use these specific versions.
+> **Critical:** The ContamFMU library does **not** work with EnergyPlus 9.5 or later ([NIST source](https://www.nist.gov/el/energy-and-environment-division-73200/nist-multizone-modeling/software/contam-3d-exporter)). EnergyPlus versions **9.1 through 9.4** are compatible. The CONTAM 3D Exporter 3.4 generates IDF files in **9.1 format** — if you want to use a later version (e.g. 9.4), you must convert the IDF using the EnergyPlus transition utilities (each version step requires a separate conversion: 9.1 → 9.2 → 9.3 → 9.4). The IDF format must match the EnergyPlus binary version exactly.
 
 | Software | Version | Notes |
 |----------|---------|-------|
-| EnergyPlus | **9.1.0** | IDF files are v9.1 format |
+| EnergyPlus | **9.4.0** (9.1–9.4 compatible) | ContamFMU does not work with 9.5+. The 3D Exporter outputs 9.1 format IDFs — convert to 9.4 using the EnergyPlus transition tools (9.1→9.2→9.3→9.4). This repo uses **9.4.0**. |
 | CONTAM (contamx3) | **3.4.0.0** | Must use 3.4.0.0 — see note below |
 | ContamFMU | **3.4** | FMI cosimulation interface |
 | Python | 3.7+ | For the parametric runner script |
@@ -21,15 +21,33 @@ Uses the [NIST CONTAM Parametric Analysis Utilities](https://www.nist.gov/el/bee
 
 ## Background
 
-The bundled `ContamFMU-3400.fmu` from NIST only contains **win32** binaries. To run on Linux (Myriad), you need to:
+The bundled `ContamFMU-3400.fmu` from NIST only contains **win32** binaries. To run on Linux (Myriad), you need to extract the Linux `contamx3` solver and `ContamFMU.so` shared library (included in this repo), package them into a new FMU with `linux64` binaries, and install EnergyPlus in user space (no `sudo` on HPC). The setup script handles all of this automatically.
 
-1. Extract the Linux `contamx3` solver and `ContamFMU.so` shared library (included in this repo)
-2. Package them into a new FMU with `linux64` binaries
-3. Extract EnergyPlus 9.1.0 in user space (no `sudo` on HPC)
+## Quick Start (Automated Setup)
 
-Most required tarballs are included in this repo. However, the EnergyPlus 9.1.0 Linux tarball (`EnergyPlus-9.1.0-08d2e308bb-Linux-x86_64.tar.gz`) exceeds GitHub's file size limit and must be downloaded separately. Download it from the [EnergyPlus 9.1.0 release page](https://github.com/NREL/EnergyPlus/releases/tag/v9.1.0) and place it in the `energyplus/` directory before proceeding with setup.
+SSH into Myriad, download and run the setup script. This clones the repo, downloads EnergyPlus 9.4.0, extracts everything, builds the Linux FMU, and prepares a ready-to-use `batchrun/` folder.
 
-## Setup on Myriad
+```bash
+ssh <YOUR_UCL_ID>@myriad.rc.ucl.ac.uk
+cd ~/Scratch
+curl -LO https://raw.githubusercontent.com/cairanvanrooyen/eplus_contam_cosim_hpc/main/setup.sh
+bash setup.sh
+```
+
+After the script finishes, your cosimulation environment is ready:
+
+```bash
+cd ~/Scratch/cosim/batchrun
+# 1. Copy your input files here (IDF, EPW, PRJ, VEF, XML)
+# 2. Edit list.txt with your simulation entries
+# 3. Submit: qsub run_cosim_job.sh
+```
+
+The rest of this README explains the manual steps (for reference or debugging) and how to run your own cosimulations.
+
+## Manual Setup on Myriad (Step by Step)
+
+If you prefer to set things up manually, or need to understand what the setup script does, follow these steps.
 
 ### 1. SSH into Myriad and clone this repo
 
@@ -38,23 +56,27 @@ Log into Myriad and clone this repository into your Scratch directory. Scratch i
 ```bash
 ssh <YOUR_UCL_ID>@myriad.rc.ucl.ac.uk
 cd ~/Scratch
-git clone <your-repo-url> cosim
+git clone https://github.com/cairanvanrooyen/eplus_contam_cosim_hpc.git cosim
 cd cosim
 ```
 
-### 2. Extract EnergyPlus 9.1.0
+### 2. Download and extract EnergyPlus 9.4.0
 
-EnergyPlus is the building energy simulation engine. Extract the Linux tarball included in this repo and make the executables runnable.
+EnergyPlus is the building energy simulation engine. The tarball is too large for git so it must be downloaded directly from the [EnergyPlus 9.4.0 release page](https://github.com/NREL/EnergyPlus/releases/tag/v9.4.0).
 
 ```bash
 cd ~/Scratch/cosim/energyplus
 
-tar -xzf EnergyPlus-9.1.0-08d2e308bb-Linux-x86_64.tar.gz
-mv EnergyPlus-9.1.0-08d2e308bb-Linux-x86_64 EnergyPlus-9.1.0
+curl -LO https://github.com/NREL/EnergyPlus/releases/download/v9.4.0/EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.tar.gz
 
-chmod +x EnergyPlus-9.1.0/energyplus
-chmod +x EnergyPlus-9.1.0/PostProcess/ReadVarsESO
+tar -xzf EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.tar.gz
+mv EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64 EnergyPlus-9.4.0
+
+chmod +x EnergyPlus-9.4.0/energyplus
+chmod +x EnergyPlus-9.4.0/PostProcess/ReadVarsESO
 ```
+
+> The Ubuntu 18.04 build is used because Myriad runs RHEL 7.9. The Ubuntu 20.04 build may require a newer glibc.
 
 ### 3. Extract CONTAM 3.4 Linux binaries
 
@@ -77,7 +99,7 @@ The shared library is what EnergyPlus calls during cosimulation to exchange data
 cd ~/Scratch/cosim/contam_fmu
 
 tar -xzf ContamFMU-3.4.0-Linux.tar.gz
-mv ContamFMU-3.4.0-Linux/libContamFMU.so ./ContamFMU.so
+cp ContamFMU-3.4.0-Linux/libContamFMU.so ./ContamFMU.so
 chmod +x ContamFMU.so
 ```
 
@@ -106,24 +128,15 @@ unzip -l ContamFMU-3400-linux64.fmu
 #   binaries/linux64/contamx3.exe
 ```
 
-### 5. Set up the test case
+### 5. Set up the batchrun folder
 
-Copy all the files needed to run a cosimulation into a single self-contained `test/` folder. This includes the EnergyPlus building models (IDF), CONTAM airflow model (PRJ), the variable exchange file (VEF) that defines what data is passed between the two programs, the FMI model description (XML), a weather file (EPW), the blank FMU from step 4, and the Python runner script.
+Copy the runner script and blank FMU into the `batchrun/` folder, which is the ready-to-use working directory for your cosimulations.
 
 ```bash
 cd ~/Scratch/cosim
 
-COSIM_MP="energyplus_contam_cosimulation_multiprocessing/run-cosim-pool-ep91-cx34"
-
-mkdir -p test
-
-cp "$COSIM_MP/test-fmu-cx-3400/"*.idf  test/
-cp "$COSIM_MP/test-fmu-cx-3400/"*.prj  test/
-cp "$COSIM_MP/test-fmu-cx-3400/"*.vef  test/
-cp "$COSIM_MP/test-fmu-cx-3400/"*.xml  test/
-cp "$COSIM_MP/epw-files/boston-logan.epw" test/
-cp blank-fmus/ContamFMU-3400-linux64.fmu test/
-cp "$COSIM_MP/run-cosim-pool.py" test/
+cp energyplus_contam_cosimulation_multiprocessing/run-cosim-pool-ep91-cx34/run-cosim-pool.py batchrun/
+cp blank-fmus/ContamFMU-3400-linux64.fmu batchrun/
 ```
 
 ### 6. Create config file
@@ -131,36 +144,16 @@ cp "$COSIM_MP/run-cosim-pool.py" test/
 The config file tells the Python script where to find the EnergyPlus executable, the post-processing tool (ReadVarsESO, which converts EnergyPlus binary output to CSV), and the blank FMU template.
 
 ```bash
-nano ~/Scratch/cosim/test/config.txt
-```
-
-Paste the following (replace `<YOUR_UCL_ID>` with your username, e.g. `ucbqca0`):
-
-```
-ePlus, /home/<YOUR_UCL_ID>/Scratch/cosim/energyplus/EnergyPlus-9.1.0/energyplus
-readVarsESO, /home/<YOUR_UCL_ID>/Scratch/cosim/energyplus/EnergyPlus-9.1.0/PostProcess/ReadVarsESO
+cat > ~/Scratch/cosim/batchrun/config.txt << EOF
+ePlus, ${HOME}/Scratch/cosim/energyplus/EnergyPlus-9.4.0/energyplus
+readVarsESO, ${HOME}/Scratch/cosim/energyplus/EnergyPlus-9.4.0/PostProcess/ReadVarsESO
 fileFmu, ./ContamFMU-3400-linux64.fmu
+EOF
 ```
 
-Save with `Ctrl+O`, `Enter`, `Ctrl+X`.
+### 7. Edit list.txt and job script
 
-### 7. Create list file
-
-The list file defines each cosimulation to run. Each line specifies five input files: the EnergyPlus model (IDF), weather data (EPW), CONTAM project (PRJ), variable exchange file (VEF), and the FMI model description (XML). The test case includes three variants of the same single-family house with different heating systems.
-
-```bash
-nano ~/Scratch/cosim/test/list.txt
-```
-
-Paste the following:
-
-```
-./sf-slab-gas.idf, ./boston-logan.epw, ./sf-slab.prj, ./sf-slab-contam.vef, ./sf-slab-modelDescription.xml
-./sf-slab-elecres.idf, ./boston-logan.epw, ./sf-slab.prj, ./sf-slab-contam.vef, ./sf-slab-modelDescription.xml
-./sf-slab-hp.idf, ./boston-logan.epw, ./sf-slab.prj, ./sf-slab-contam.vef, ./sf-slab-modelDescription.xml
-```
-
-Save with `Ctrl+O`, `Enter`, `Ctrl+X`.
+Edit `batchrun/list.txt` to add your simulations (one per line, 5 comma-separated paths: IDF, EPW, PRJ, VEF, XML). Edit `batchrun/run_cosim_job.sh` to replace `USERNAME` with your UCL username in the `#$ -wd` line.
 
 ### 8. Test run (login node - quick validation)
 
@@ -171,61 +164,30 @@ module unload gcc-libs
 module load gcc-libs/10.2.0
 module load python3/3.11
 
-cd ~/Scratch/cosim/test
+cd ~/Scratch/cosim/batchrun
 python3 run-cosim-pool.py -t config.txt list.txt
 ```
 
-Check the generated `.log` file. It should show 3 simulations found with no errors.
+Check the generated `.log` file. It should list your simulations with no errors.
 
 ### 9. Submit as a batch job
 
-Create a job script that tells the Myriad scheduler (SGE) how many resources you need and what to run. The script requests 4 cores so the Python multiprocessing pool can run simulations in parallel.
-
 ```bash
-nano ~/Scratch/cosim/test/run_cosim_job.sh
-```
-
-Paste the following (replace `<YOUR_UCL_ID>` with your username, e.g. `ucbqca0`):
-
-```
-#!/bin/bash -l
-
-#$ -N cosim_test
-#$ -l h_rt=2:00:00
-#$ -l mem=4G
-#$ -l tmpfs=15G
-#$ -pe smp 4
-#$ -wd /home/<YOUR_UCL_ID>/Scratch/cosim/test
-
-# Unload default gcc-libs (4.9.2) and load a newer version —
-# EnergyPlus 9.1 needs GLIBCXX_3.4.21+ which gcc-libs/4.9.2 doesn't provide
-module unload gcc-libs
-module load gcc-libs/10.2.0
-module load python3/3.11
-
-export LD_LIBRARY_PATH="${HOME}/Scratch/cosim/energyplus/EnergyPlus-9.1.0:${LD_LIBRARY_PATH:-}"
-
-cd ~/Scratch/cosim/test
-python3 run-cosim-pool.py -w ${NSLOTS:-4} config.txt list.txt
-```
-
-Save with `Ctrl+O`, `Enter`, `Ctrl+X`. Then submit:
-
-```bash
+cd ~/Scratch/cosim/batchrun
 qsub run_cosim_job.sh
 ```
 
-### 10. Monitor and check results
+The job script uses `$TMPDIR` (fast local node storage) for simulation I/O and copies results back to Scratch when complete.
 
-SGE writes stdout and stderr to files in the working directory once the job completes. The cosimulation script also creates a timestamped `run_*/` directory containing numbered subdirectories (one per simulation), each with the EnergyPlus and CONTAM output files.
+### 10. Monitor and check results
 
 ```bash
 # Check job status
 qstat
 
 # Once complete, check stdout/stderr
-cat cosim_test.o*
-cat cosim_test.e*
+cat cosim_batch.o*
+cat cosim_batch.e*
 
 # Check the cosimulation log
 cat run_*.log
@@ -233,14 +195,13 @@ cat run_*.log
 # Check output files in each simulation subdirectory
 ls run_*/1/
 ls run_*/2/
-ls run_*/3/
 ```
 
 Each subdirectory should contain CSV result files with the simulation outputs.
 
 ## Running Your Own Cosimulations
 
-Once the test case works, you can run cosimulations with your own building models. This section explains the typical workflow and how to add your project to the runner.
+Once the setup is complete, you can run cosimulations with your own building models. This section explains the typical workflow and how to add your project to the runner.
 
 ### Workflow overview
 
@@ -254,7 +215,7 @@ The standard workflow for developing a CONTAM model into an EnergyPlus cosimulat
    - A **coupled IDF** with geometry, air loops, exhaust fans, and FMU-related objects
    - A **ContamFMU.fmu** containing the modelDescription.xml, contam.prj, contam.vef, ContamFMU library, and contamx3 solver
 
-4. **Edit the exported IDF as required** — Modify HVAC settings, internal gains, schedules, setpoints, or any other EnergyPlus objects. The IDF must remain in EnergyPlus **9.1** format for compatibility with ContamFMU.
+4. **Edit the exported IDF as required** — Modify HVAC settings, internal gains, schedules, setpoints, or any other EnergyPlus objects. If using EnergyPlus 9.4 (recommended), convert the exported IDF from 9.1 format using the EnergyPlus transition tools (9.1→9.2→9.3→9.4). The IDF version must match the EnergyPlus binary version exactly.
 
 5. **Parametric preparation** — If running a parametric study, write a preparation script to generate IDF/EPW variants and `list.txt` (see [Parametric analysis](#parametric-analysis) below).
 
@@ -358,10 +319,10 @@ unzip ContamFMU.fmu -d fmu_contents/
 
 ### Adding your project to the runner
 
-**1. Copy your input files into the test directory:**
+**1. Copy your input files into the batchrun directory:**
 
 ```bash
-cd ~/Scratch/cosim/test
+cd ~/Scratch/cosim/batchrun
 cp /path/to/your-building.idf .
 cp /path/to/your-building.prj .
 cp /path/to/your-building-contam.vef .
@@ -372,7 +333,7 @@ cp /path/to/your-weather.epw .
 **2. Add a line to `list.txt`:**
 
 ```bash
-nano ~/Scratch/cosim/test/list.txt
+nano ~/Scratch/cosim/batchrun/list.txt
 ```
 
 Add a new line for your simulation. Each line has five comma-separated paths (IDF, EPW, PRJ, VEF, XML):
@@ -404,7 +365,7 @@ qsub run_cosim_job.sh
 Or for an interactive test on the login node (single simulation only — be brief):
 
 ```bash
-export LD_LIBRARY_PATH="${HOME}/Scratch/cosim/energyplus/EnergyPlus-9.1.0:${LD_LIBRARY_PATH:-}"
+export LD_LIBRARY_PATH="${HOME}/Scratch/cosim/energyplus/EnergyPlus-9.4.0:${LD_LIBRARY_PATH:-}"
 python3 run-cosim-pool.py -w 1 config.txt list.txt
 ```
 
@@ -497,7 +458,7 @@ print(f"Generated list.txt with {len(epw_files)} simulations")
 Run on Myriad:
 
 ```bash
-cd ~/Scratch/cosim/test
+cd ~/Scratch/cosim/batchrun
 python3 prepare-weather-study.py
 python3 run-cosim-pool.py -t config.txt list.txt   # test
 qsub run_cosim_job.sh                               # run
@@ -615,12 +576,12 @@ For larger studies, a recommended directory structure:
 
 ```
 ~/Scratch/cosim/
-├── test/                          # Validated test case (keep as reference)
+├── batchrun/                      # Base cosim folder (from setup)
 ├── studies/
 │   └── insulation-sweep/          # One folder per study
 │       ├── prepare.py             # Generates variants and list.txt
-│       ├── config.txt             # Same as test/ (copy or symlink)
-│       ├── run-cosim-pool.py      # Same as test/ (copy or symlink)
+│       ├── config.txt             # Same as batchrun/ (copy or symlink)
+│       ├── run-cosim-pool.py      # Same as batchrun/ (copy or symlink)
 │       ├── ContamFMU-3400-linux64.fmu   # Same blank FMU
 │       ├── run_study.sh           # Job script
 │       ├── inputs/                # Base files and variants
@@ -628,7 +589,7 @@ For larger studies, a recommended directory structure:
 │       └── run_*/                 # Output (created at runtime)
 ```
 
-This way each study is self-contained, reproducible, and doesn't interfere with your test case or other studies.
+This way each study is self-contained, reproducible, and doesn't interfere with your base batchrun folder or other studies.
 
 #### Job script for parametric studies
 
@@ -652,7 +613,7 @@ module unload gcc-libs
 module load gcc-libs/10.2.0
 module load python3/3.11
 
-export LD_LIBRARY_PATH="${HOME}/Scratch/cosim/energyplus/EnergyPlus-9.1.0:${LD_LIBRARY_PATH:-}"
+export LD_LIBRARY_PATH="${HOME}/Scratch/cosim/energyplus/EnergyPlus-9.4.0:${LD_LIBRARY_PATH:-}"
 
 python3 prepare.py
 python3 run-cosim-pool.py -w ${NSLOTS:-16} config.txt list.txt
@@ -759,7 +720,7 @@ module unload gcc-libs
 module load gcc-libs/10.2.0
 module load python3/3.11
 
-export LD_LIBRARY_PATH="${HOME}/Scratch/cosim/energyplus/EnergyPlus-9.1.0:${LD_LIBRARY_PATH:-}"
+export LD_LIBRARY_PATH="${HOME}/Scratch/cosim/energyplus/EnergyPlus-9.4.0:${LD_LIBRARY_PATH:-}"
 
 # SGE_TASK_ID is set automatically by the scheduler (1, 2, 3, ...)
 ./run-one-sim.sh ${SGE_TASK_ID}
@@ -807,7 +768,7 @@ module unload gcc-libs
 module load gcc-libs/10.2.0
 module load python3/3.11
 
-export LD_LIBRARY_PATH="${HOME}/Scratch/cosim/energyplus/EnergyPlus-9.1.0:${LD_LIBRARY_PATH:-}"
+export LD_LIBRARY_PATH="${HOME}/Scratch/cosim/energyplus/EnergyPlus-9.4.0:${LD_LIBRARY_PATH:-}"
 
 # SGE_TASK_ID is the start of this batch (1, 26, 51, 76, ...)
 # SGE_TASK_STEPSIZE is the stride (25)
@@ -901,10 +862,11 @@ ls -d task_*/run_*/ 2>/dev/null | wc -l
 ## Repository Structure
 
 ```
-energyplus_contam_cosim_linux_hpc/
+eplus_contam_cosim_hpc/
 ├── README.md
-├── energyplus/                                        # EnergyPlus 9.1.0 Linux installer
-│   └── EnergyPlus-9.1.0-08d2e308bb-Linux-x86_64.tar.gz
+├── setup.sh                                           # Automated setup script
+├── energyplus/                                        # EnergyPlus (downloaded by setup.sh)
+│   └── (EnergyPlus-9.4.0-*.tar.gz downloaded at setup time)
 ├── contamx/                                           # CONTAM 3.4.0.0 solver
 │   └── contam-x-3.4.0.0-Linux-64bit.tar.gz
 ├── contam_fmu/                                        # ContamFMU shared library for Linux
@@ -937,9 +899,10 @@ energyplus_contam_cosim_linux_hpc/
 ```
 ~/Scratch/cosim/                                       # This repo, cloned to Scratch
 ├── README.md
+├── setup.sh
 ├── energyplus/
-│   ├── EnergyPlus-9.1.0-08d2e308bb-Linux-x86_64.tar.gz
-│   └── EnergyPlus-9.1.0/                             # Extracted (step 2)
+│   ├── EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.tar.gz
+│   └── EnergyPlus-9.4.0/                             # Extracted (step 2)
 │       ├── energyplus
 │       └── PostProcess/ReadVarsESO
 ├── contamx/
@@ -956,19 +919,12 @@ energyplus_contam_cosim_linux_hpc/
 │   └── MZ320-EPlus-91-CONTAM-34-fmu.zip
 ├── energyplus_contam_cosimulation_multiprocessing/     # NIST source files
 │   └── run-cosim-pool-ep91-cx34/
-└── test/                                              # Self-contained test case (step 5)
-    ├── run-cosim-pool.py
-    ├── config.txt                                     # Created (step 6)
-    ├── list.txt                                       # Created (step 7)
-    ├── run_cosim_job.sh                               # Created (step 9)
-    ├── ContamFMU-3400-linux64.fmu                     # Copied from blank-fmus/
-    ├── boston-logan.epw
-    ├── sf-slab-gas.idf
-    ├── sf-slab-elecres.idf
-    ├── sf-slab-hp.idf
-    ├── sf-slab.prj
-    ├── sf-slab-contam.vef
-    └── sf-slab-modelDescription.xml
+└── batchrun/                                          # Ready-to-use cosim folder (step 5)
+    ├── run-cosim-pool.py                              # Copied by setup.sh
+    ├── config.txt                                     # Auto-configured by setup.sh
+    ├── list.txt                                       # Template — add your simulations here
+    ├── run_cosim_job.sh                               # SGE job script with TMPDIR pattern
+    └── ContamFMU-3400-linux64.fmu                     # Linux blank FMU (built by setup.sh)
 ```
 
 ## Troubleshooting
@@ -979,7 +935,7 @@ The Python script checks `sys.platform`. On Linux it should be `"linux"` or `"li
 
 ### GLIBCXX_3.4.21 not found
 
-EnergyPlus 9.1 needs a newer C++ standard library than Myriad's default `gcc-libs/4.9.2` provides. You'll see an error like `GLIBCXX_3.4.21 not found`. Fix by loading a newer gcc-libs before running:
+EnergyPlus 9.4 needs a newer C++ standard library than Myriad's default `gcc-libs/4.9.2` provides. You'll see an error like `GLIBCXX_3.4.21 not found`. Fix by loading a newer gcc-libs before running:
 
 ```bash
 module unload gcc-libs
@@ -997,7 +953,7 @@ If contamx3 fails with `GLIBC_2.28 not found` or similar, you are using contamx3
 If EnergyPlus reports missing shared libraries at runtime, make sure the EnergyPlus directory is on `LD_LIBRARY_PATH`:
 
 ```bash
-export LD_LIBRARY_PATH=$HOME/Scratch/cosim/energyplus/EnergyPlus-9.1.0:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$HOME/Scratch/cosim/energyplus/EnergyPlus-9.4.0:$LD_LIBRARY_PATH
 ```
 
 ### contamx3.exe not found in FMU
@@ -1022,8 +978,8 @@ If NIST URLs stop working, visit:
 ## References
 
 - [NIST CONTAM Parametric Analysis Utilities](https://www.nist.gov/el/beed/nist-multizone-modeling/contam-parametric-analysis-utilities)
-- [EnergyPlus 9.1.0 Release](https://github.com/NREL/EnergyPlus/releases/tag/v9.1.0)
-- [EnergyPlus 9.1.0 Linux Direct Download](https://github.com/NatLabRockies/EnergyPlus/releases/download/v9.1.0/EnergyPlus-9.1.0-08d2e308bb-Linux-x86_64.tar.gz)
+- [EnergyPlus 9.4.0 Release](https://github.com/NREL/EnergyPlus/releases/tag/v9.4.0)
+- [EnergyPlus 9.4.0 Linux Direct Download](https://github.com/NREL/EnergyPlus/releases/download/v9.4.0/EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.tar.gz)
 - [contamx3 3.4.0.0 Linux 64-bit (RHEL 7 compatible)](https://www.nist.gov/document/contam-x-3400-linux-64bittargz)
 - [CONTAM 3D Exporter / ContamFMU Downloads](https://www.nist.gov/el/energy-and-environment-division-73200/nist-multizone-modeling/software/contam-3d-exporter)
 - [Example: PNNL Single-family (EPlus 9.1 + CONTAM 3.4)](https://www.nist.gov/el/energy-and-environment-division-73200/nist-multizone-modeling/software/contam-3d-exporter) — `pnnl-sf-ep91-cx3400.zip`

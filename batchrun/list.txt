@@ -1,0 +1,9 @@
+# EnergyPlus-CONTAM cosimulation list file
+#
+# Each line defines one cosimulation to run. Format (5 comma-separated paths):
+#   IDF, EPW, PRJ, VEF, modelDescription.xml
+#
+# Paths are relative to this directory. Place your input files here or in subdirectories.
+#
+# Example:
+# ./my-building.idf , ./my-weather.epw , ./contam.prj , ./contam.vef , ./modelDescription.xml

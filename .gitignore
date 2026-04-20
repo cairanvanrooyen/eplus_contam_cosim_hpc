@@ -1,2 +1,15 @@
 /.DS_Store
+.DS_Store
 energyplus/EnergyPlus-9.1.0-08d2e308bb-Linux-x86_64.tar.gz
+energyplus/EnergyPlus-9.4.0-*.tar.gz
+energyplus/EnergyPlus-*/
+contamx/contam-x-*/
+contam_fmu/ContamFMU-3.4.0-Linux/
+contam_fmu/ContamFMU.so
+blank-fmus/
+batchrun/ContamFMU-3400-linux64.fmu
+batchrun/run-cosim-pool.py
+batchrun/run_*/
+batchrun/*.log
+*.o[0-9]*
+*.e[0-9]*

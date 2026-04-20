@@ -1,0 +1,9 @@
+# EnergyPlus-CONTAM cosimulation configuration file
+# These paths are set automatically by setup.sh — do not edit unless you moved the installation.
+#
+# Path to EnergyPlus executable
+ePlus, /home/USERNAME/Scratch/cosim/energyplus/EnergyPlus-9.4.0/energyplus
+# Path to ReadVarsESO post-processor
+readVarsESO, /home/USERNAME/Scratch/cosim/energyplus/EnergyPlus-9.4.0/PostProcess/ReadVarsESO
+# Path to blank Linux FMU (contains ContamFMU.so and contamx3.exe)
+fileFmu, ./ContamFMU-3400-linux64.fmu
