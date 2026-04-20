@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -l
 # =============================================================================
 # EnergyPlus + CONTAM Cosimulation — Automated Setup for UCL Myriad
 # =============================================================================
@@ -8,8 +8,9 @@
 #
 # What it does:
 #   1. Clones the git repository
-#   2. Downloads EnergyPlus 9.4.0 for Linux
-#   3. Extracts EnergyPlus, contamx3, and ContamFMU
+#   2. Builds EnergyPlus 9.4.0 from source (pre-built binaries need glibc 2.27
+#      but Myriad's RHEL 7.9 only has glibc 2.17)
+#   3. Extracts contamx3 and ContamFMU
 #   4. Builds a Linux-compatible blank FMU
 #   5. Prepares the batchrun folder (ready to add your files and submit)
 #
@@ -33,11 +34,7 @@ set -e  # Exit on any error
 REPO_URL="https://github.com/cairanvanrooyen/eplus_contam_cosim_hpc.git"
 INSTALL_DIR="${HOME}/Scratch/cosim"
 EP_VERSION="9.4.0"
-EP_HASH="998c4b761e"
-EP_INSTALLER="EnergyPlus-${EP_VERSION}-${EP_HASH}-Linux-Ubuntu18.04-x86_64.sh"
-EP_URL="https://github.com/NREL/EnergyPlus/releases/download/v${EP_VERSION}/${EP_INSTALLER}"
 
-# --- Helper functions ---
 print_step() {
     echo ""
     echo "======================================================================"
@@ -66,13 +63,13 @@ fi
 print_ok "Running on Linux"
 
 # Check we have the tools we need
-for cmd in git curl tar zip chmod; do
+for cmd in git tar zip chmod; do
     if ! command -v "$cmd" &> /dev/null; then
         print_err "'$cmd' not found. This should be available on Myriad."
         exit 1
     fi
 done
-print_ok "Required tools available (git, curl, tar, zip, chmod)"
+print_ok "Required tools available (git, tar, zip, chmod)"
 
 # Check Scratch directory exists
 if [[ ! -d "${HOME}/Scratch" ]]; then
@@ -103,57 +100,86 @@ print_ok "Repository cloned to ${INSTALL_DIR}"
 cd "${INSTALL_DIR}"
 
 # =============================================================================
-# Step 2: Download EnergyPlus 9.4.0
+# Step 2: Build EnergyPlus 9.4.0 from source
 # =============================================================================
-print_step "Step 2/5: Downloading EnergyPlus ${EP_VERSION}"
-
-mkdir -p energyplus
-cd energyplus
-
-if [[ -f "${EP_INSTALLER}" ]]; then
-    print_ok "EnergyPlus installer already exists, skipping download"
-else
-    echo "  Downloading ${EP_INSTALLER} (~186 MB)..."
-    echo "  URL: ${EP_URL}"
-    curl -L -o "${EP_INSTALLER}" "${EP_URL}"
-
-    if [[ ! -f "${EP_INSTALLER}" ]]; then
-        print_err "Download failed. Check your network connection."
-        exit 1
-    fi
-    print_ok "Downloaded EnergyPlus ${EP_VERSION}"
-fi
-
-cd "${INSTALL_DIR}"
-
+# The pre-built E+ 9.4 binaries (both .tar.gz and .sh) require glibc 2.25/2.27,
+# but Myriad's RHEL 7.9 only has glibc 2.17. Building from source links against
+# the system glibc so it runs natively. This takes ~15 minutes with 4 cores.
 # =============================================================================
-# Step 3: Extract everything
-# =============================================================================
-print_step "Step 3/5: Extracting software"
-
-# --- EnergyPlus (using the .sh installer) ---
-# The .sh installer properly sets up library rpaths, which is needed because
-# Myriad's RHEL 7.9 has glibc 2.17 but the E+ 9.4 Ubuntu build needs 2.27.
-# The installer bundles the required libraries and configures paths correctly.
-echo "  Installing EnergyPlus via .sh installer..."
-cd energyplus
+print_step "Step 2/5: Building EnergyPlus ${EP_VERSION} from source"
 
 EP_INSTALL_PATH="${INSTALL_DIR}/energyplus/EnergyPlus-${EP_VERSION}"
+EP_SRC_DIR="${INSTALL_DIR}/ep-source"
+EP_BUILD_DIR="${INSTALL_DIR}/ep-build"
 
-chmod +x "${EP_INSTALLER}"
+# Source the module system (needed when running via 'bash setup.sh')
+if ! command -v module &> /dev/null; then
+    if [[ -f /etc/profile.d/modules.sh ]]; then
+        source /etc/profile.d/modules.sh
+    elif [[ -f /usr/share/Modules/init/bash ]]; then
+        source /usr/share/Modules/init/bash
+    else
+        print_err "'module' command not found. Are you on Myriad?"
+        exit 1
+    fi
+fi
 
-# Run the installer non-interactively:
-#   - Accept license (yes)
-#   - Install directory (our chosen path)
-#   - Symlink location (n = no symlinks, we don't have /usr/local access)
-printf 'y\n%s\nn\n' "${EP_INSTALL_PATH}" | ./"${EP_INSTALLER}"
+# Load required modules
+module unload gcc-libs 2>/dev/null || true
+module load gcc-libs/10.2.0
+module load compilers/gnu/10.2.0
+module load cmake/3.21.1
+module load python3/3.11
+print_ok "Loaded modules: gcc-libs/10.2.0, compilers/gnu/10.2.0, cmake/3.21.1, python3/3.11"
 
-if [[ -f "${EP_INSTALL_PATH}/energyplus" ]]; then
-    print_ok "EnergyPlus installed to energyplus/EnergyPlus-${EP_VERSION}/"
-else
-    print_err "EnergyPlus installation failed. Expected binary not found."
-    echo "  Contents of energyplus/:"
-    ls -la
+# Ensure CMake uses the correct compilers and Python (not the system defaults)
+export CC=$(which gcc)
+export CXX=$(which g++)
+export FC=$(which gfortran)
+export PYTHONIOENCODING=utf-8
+
+# Clone the E+ source (shallow clone to save time/space)
+echo "  Cloning EnergyPlus ${EP_VERSION} source (~200 MB)..."
+git clone --branch "v${EP_VERSION}" --depth 1 https://github.com/NREL/EnergyPlus.git "${EP_SRC_DIR}"
+print_ok "EnergyPlus source cloned"
+
+# Configure with CMake
+# Note: -fcommon is needed because GCC 10+ defaults to -fno-common, which causes
+# "multiple definition" linker errors in E+ 9.4's BCVTB library. This flag restores
+# the old GCC 9 behaviour of merging duplicate C globals at link time.
+echo "  Configuring CMake build..."
+mkdir -p "${EP_BUILD_DIR}"
+cd "${EP_BUILD_DIR}"
+
+cmake "${EP_SRC_DIR}" \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX="${EP_INSTALL_PATH}" \
+    -DCMAKE_C_COMPILER="${CC}" \
+    -DCMAKE_CXX_COMPILER="${CXX}" \
+    -DCMAKE_Fortran_COMPILER="${FC}" \
+    -DCMAKE_C_FLAGS="-fcommon" \
+    -DPYTHON_EXECUTABLE="$(which python3)" \
+    -DBUILD_FORTRAN=ON \
+    -DBUILD_PACKAGE=OFF \
+    -DBUILD_TESTING=OFF
+print_ok "CMake configuration complete"
+
+# Build (use NSLOTS if running via SGE, otherwise 4 cores)
+NCORES=${NSLOTS:-4}
+echo "  Compiling EnergyPlus with ${NCORES} cores (this takes ~15 minutes)..."
+make -j "${NCORES}"
+print_ok "EnergyPlus compiled successfully"
+
+# Install to the target directory
+echo "  Installing to ${EP_INSTALL_PATH}..."
+make install
+print_ok "EnergyPlus installed to energyplus/EnergyPlus-${EP_VERSION}/"
+
+# Verify the binary exists
+if [[ ! -f "${EP_INSTALL_PATH}/energyplus" ]]; then
+    print_err "EnergyPlus binary not found after install."
+    echo "  Contents of ${EP_INSTALL_PATH}/:"
+    ls -la "${EP_INSTALL_PATH}/" 2>/dev/null || echo "  (directory does not exist)"
     exit 1
 fi
 
@@ -161,7 +187,17 @@ chmod +x "${EP_INSTALL_PATH}/energyplus"
 chmod +x "${EP_INSTALL_PATH}/PostProcess/ReadVarsESO"
 print_ok "EnergyPlus executables marked as executable"
 
+# Clean up source and build directories (~1.5 GB)
+echo "  Cleaning up source and build directories..."
+rm -rf "${EP_SRC_DIR}" "${EP_BUILD_DIR}"
+print_ok "Cleaned up (saved ~1.5 GB)"
+
 cd "${INSTALL_DIR}"
+
+# =============================================================================
+# Step 3: Extract CONTAM software
+# =============================================================================
+print_step "Step 3/5: Extracting CONTAM software"
 
 # --- CONTAM solver (contamx3) ---
 echo "  Extracting contamx3..."

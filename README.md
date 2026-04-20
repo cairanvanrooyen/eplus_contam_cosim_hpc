@@ -25,7 +25,13 @@ The bundled `ContamFMU-3400.fmu` from NIST only contains **win32** binaries. To 
 
 ## Quick Start (Automated Setup)
 
-SSH into Myriad, download and run the setup script. This clones the repo, downloads and installs EnergyPlus 9.4.0 (using the `.sh` installer), extracts the CONTAM binaries, builds the Linux FMU, and prepares a ready-to-use `batchrun/` folder.
+SSH into Myriad, download and run the setup script. This clones the repo, builds EnergyPlus 9.4.0 from source (required because Myriad's RHEL 7.9 has glibc 2.17, but the pre-built binaries need glibc 2.27), extracts the CONTAM binaries, builds the Linux FMU, and prepares a ready-to-use `batchrun/` folder.
+
+> **Note:** The build takes ~15 minutes. Use `nohup` to prevent SSH disconnects from killing the process:
+> ```bash
+> nohup bash setup.sh > ~/Scratch/setup.log 2>&1 &
+> tail -f ~/Scratch/setup.log
+> ```
 
 ```bash
 ssh <YOUR_UCL_ID>@myriad.rc.ucl.ac.uk
@@ -60,32 +66,55 @@ git clone https://github.com/cairanvanrooyen/eplus_contam_cosim_hpc.git cosim
 cd cosim
 ```
 
-### 2. Download and install EnergyPlus 9.4.0
+### 2. Build EnergyPlus 9.4.0 from source
 
-EnergyPlus is the building energy simulation engine. It is too large for git so it must be downloaded directly from the [EnergyPlus 9.4.0 release page](https://github.com/NREL/EnergyPlus/releases/tag/v9.4.0).
+EnergyPlus must be built from source on Myriad. The pre-built binaries (both the `.tar.gz` tarball and the `.sh` installer) require glibc 2.25/2.27, but Myriad's RHEL 7.9 only has glibc 2.17. Building from source links against the system glibc so it runs natively.
 
-> **Important:** Use the `.sh` installer, not the `.tar.gz` tarball. The installer properly configures library rpaths so that the bundled libraries are found at runtime. The raw tarball will fail on Myriad with `GLIBC_2.27 not found` errors because RHEL 7.9 only has glibc 2.17.
-
-```bash
-cd ~/Scratch/cosim/energyplus
-
-# Download the .sh installer
-curl -LO https://github.com/NREL/EnergyPlus/releases/download/v9.4.0/EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.sh
-
-# Run the installer
-chmod +x EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.sh
-./EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.sh
-```
-
-When prompted:
-- Accept the license: `y`
-- Install directory: enter the full path, e.g. `/home/<YOUR_UCL_ID>/Scratch/cosim/energyplus/EnergyPlus-9.4.0`
-- Symbolic link location: `n` (you don't have write access to `/usr/local/bin`)
+> **Note:** This takes ~15 minutes with 4 cores. Use `nohup` if running from a login node to avoid SSH timeouts killing the build.
 
 ```bash
-chmod +x EnergyPlus-9.4.0/energyplus
-chmod +x EnergyPlus-9.4.0/PostProcess/ReadVarsESO
+cd ~/Scratch/cosim
+
+# Load required modules
+module unload gcc-libs 2>/dev/null
+module load gcc-libs/10.2.0
+module load compilers/gnu/10.2.0
+module load cmake/3.21.1
+module load python3/3.11
+
+# Set compilers explicitly (so CMake doesn't pick up system GCC 4.8)
+export CC=$(which gcc)
+export CXX=$(which g++)
+export FC=$(which gfortran)
+
+# Clone the E+ 9.4.0 source (shallow clone, ~200 MB)
+git clone --branch v9.4.0 --depth 1 https://github.com/NREL/EnergyPlus.git ep-source
+
+# Configure and build
+mkdir -p ep-build && cd ep-build
+cmake ../ep-source \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX="${HOME}/Scratch/cosim/energyplus/EnergyPlus-9.4.0" \
+    -DCMAKE_C_COMPILER="${CC}" \
+    -DCMAKE_CXX_COMPILER="${CXX}" \
+    -DCMAKE_Fortran_COMPILER="${FC}" \
+    -DCMAKE_C_FLAGS="-fcommon" \
+    -DPYTHON_EXECUTABLE="$(which python3)" \
+    -DBUILD_FORTRAN=ON \
+    -DBUILD_PACKAGE=OFF \
+    -DBUILD_TESTING=OFF
+
+make -j 4
+make install
+
+# Verify and clean up
+chmod +x ~/Scratch/cosim/energyplus/EnergyPlus-9.4.0/energyplus
+chmod +x ~/Scratch/cosim/energyplus/EnergyPlus-9.4.0/PostProcess/ReadVarsESO
+cd ~/Scratch/cosim
+rm -rf ep-source ep-build    # saves ~1.5 GB
 ```
+
+The `-fcommon` flag is required because GCC 10+ defaults to `-fno-common`, which causes "multiple definition" linker errors in EnergyPlus 9.4's BCVTB library. This flag restores the old GCC 9 behaviour.
 
 ### 3. Extract CONTAM 3.4 Linux binaries
 
@@ -874,8 +903,7 @@ ls -d task_*/run_*/ 2>/dev/null | wc -l
 eplus_contam_cosim_hpc/
 ├── README.md
 ├── setup.sh                                           # Automated setup script
-├── energyplus/                                        # EnergyPlus (downloaded by setup.sh)
-│   └── (EnergyPlus-9.4.0-*.sh installer downloaded at setup time)
+├── energyplus/                                        # EnergyPlus (built from source by setup.sh)
 ├── contamx/                                           # CONTAM 3.4.0.0 solver
 │   └── contam-x-3.4.0.0-Linux-64bit.tar.gz
 ├── contam_fmu/                                        # ContamFMU shared library for Linux
@@ -910,8 +938,7 @@ eplus_contam_cosim_hpc/
 ├── README.md
 ├── setup.sh
 ├── energyplus/
-│   ├── EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.sh
-│   └── EnergyPlus-9.4.0/                             # Installed (step 2)
+│   └── EnergyPlus-9.4.0/                             # Built from source (step 2)
 │       ├── energyplus
 │       └── PostProcess/ReadVarsESO
 ├── contamx/
@@ -959,13 +986,11 @@ If contamx3 fails with `GLIBC_2.28 not found` or similar, you are using contamx3
 
 ### GLIBC_2.27 / GLIBC_2.25 not found (EnergyPlus)
 
-If EnergyPlus fails with `GLIBC_2.27 not found` or `GLIBC_2.25 not found`, you installed from the `.tar.gz` tarball instead of the `.sh` installer. The tarball extracts raw binaries that depend on Ubuntu 18.04's glibc 2.27, which Myriad's RHEL 7.9 (glibc 2.17) doesn't have. The `.sh` installer sets up rpaths so that the bundled libraries are found correctly. Re-download using the `.sh` file:
+If EnergyPlus fails with `GLIBC_2.27 not found` or `GLIBC_2.25 not found`, you are using pre-built binaries (either the `.tar.gz` tarball or the `.sh` installer). Both require glibc 2.25/2.27 which Myriad's RHEL 7.9 (glibc 2.17) does not have. The solution is to **build EnergyPlus from source** — see Step 2 above or use the automated `setup.sh` script which handles this.
 
-```bash
-curl -LO https://github.com/NREL/EnergyPlus/releases/download/v9.4.0/EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.sh
-chmod +x EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.sh
-./EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.sh
-```
+### "multiple definition" linker errors when building EnergyPlus
+
+If the EnergyPlus build compiles 100% but fails at the final linking step with errors like `multiple definition of 'utilSocket_xxx'` between `libbcvtb.a` and `libenergypluslib.a`, you are missing the `-fcommon` flag. GCC 10+ defaults to `-fno-common`, which treats duplicate C global variable definitions as errors instead of silently merging them (the old GCC 9 behaviour). Add `-DCMAKE_C_FLAGS="-fcommon"` to your cmake command.
 
 ### Library not found errors
 
@@ -998,7 +1023,7 @@ If NIST URLs stop working, visit:
 
 - [NIST CONTAM Parametric Analysis Utilities](https://www.nist.gov/el/beed/nist-multizone-modeling/contam-parametric-analysis-utilities)
 - [EnergyPlus 9.4.0 Release](https://github.com/NREL/EnergyPlus/releases/tag/v9.4.0)
-- [EnergyPlus 9.4.0 Linux Installer (.sh)](https://github.com/NREL/EnergyPlus/releases/download/v9.4.0/EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.sh)
+- [EnergyPlus 9.4.0 Source Code](https://github.com/NREL/EnergyPlus/tree/v9.4.0) (must build from source on RHEL 7 — pre-built binaries require glibc 2.27)
 - [contamx3 3.4.0.0 Linux 64-bit (RHEL 7 compatible)](https://www.nist.gov/document/contam-x-3400-linux-64bittargz)
 - [CONTAM 3D Exporter / ContamFMU Downloads](https://www.nist.gov/el/energy-and-environment-division-73200/nist-multizone-modeling/software/contam-3d-exporter)
 - [Example: PNNL Single-family (EPlus 9.1 + CONTAM 3.4)](https://www.nist.gov/el/energy-and-environment-division-73200/nist-multizone-modeling/software/contam-3d-exporter) — `pnnl-sf-ep91-cx3400.zip`
