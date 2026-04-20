@@ -2,6 +2,7 @@
 .DS_Store
 energyplus/EnergyPlus-9.1.0-08d2e308bb-Linux-x86_64.tar.gz
 energyplus/EnergyPlus-9.4.0-*.tar.gz
+energyplus/EnergyPlus-9.4.0-*.sh
 energyplus/EnergyPlus-*/
 contamx/contam-x-*/
 contam_fmu/ContamFMU-3.4.0-Linux/

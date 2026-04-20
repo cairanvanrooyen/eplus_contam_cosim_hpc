@@ -34,9 +34,8 @@ REPO_URL="https://github.com/cairanvanrooyen/eplus_contam_cosim_hpc.git"
 INSTALL_DIR="${HOME}/Scratch/cosim"
 EP_VERSION="9.4.0"
 EP_HASH="998c4b761e"
-EP_TARBALL="EnergyPlus-${EP_VERSION}-${EP_HASH}-Linux-Ubuntu18.04-x86_64.tar.gz"
-EP_URL="https://github.com/NREL/EnergyPlus/releases/download/v${EP_VERSION}/${EP_TARBALL}"
-EP_DIR_NAME="EnergyPlus-${EP_VERSION}-${EP_HASH}-Linux-Ubuntu18.04-x86_64"
+EP_INSTALLER="EnergyPlus-${EP_VERSION}-${EP_HASH}-Linux-Ubuntu18.04-x86_64.sh"
+EP_URL="https://github.com/NREL/EnergyPlus/releases/download/v${EP_VERSION}/${EP_INSTALLER}"
 
 # --- Helper functions ---
 print_step() {
@@ -111,14 +110,14 @@ print_step "Step 2/5: Downloading EnergyPlus ${EP_VERSION}"
 mkdir -p energyplus
 cd energyplus
 
-if [[ -f "${EP_TARBALL}" ]]; then
-    print_ok "EnergyPlus tarball already exists, skipping download"
+if [[ -f "${EP_INSTALLER}" ]]; then
+    print_ok "EnergyPlus installer already exists, skipping download"
 else
-    echo "  Downloading ${EP_TARBALL} (~186 MB)..."
+    echo "  Downloading ${EP_INSTALLER} (~186 MB)..."
     echo "  URL: ${EP_URL}"
-    curl -L -o "${EP_TARBALL}" "${EP_URL}"
+    curl -L -o "${EP_INSTALLER}" "${EP_URL}"
 
-    if [[ ! -f "${EP_TARBALL}" ]]; then
+    if [[ ! -f "${EP_INSTALLER}" ]]; then
         print_err "Download failed. Check your network connection."
         exit 1
     fi
@@ -132,25 +131,34 @@ cd "${INSTALL_DIR}"
 # =============================================================================
 print_step "Step 3/5: Extracting software"
 
-# --- EnergyPlus ---
-echo "  Extracting EnergyPlus..."
+# --- EnergyPlus (using the .sh installer) ---
+# The .sh installer properly sets up library rpaths, which is needed because
+# Myriad's RHEL 7.9 has glibc 2.17 but the E+ 9.4 Ubuntu build needs 2.27.
+# The installer bundles the required libraries and configures paths correctly.
+echo "  Installing EnergyPlus via .sh installer..."
 cd energyplus
-tar -xzf "${EP_TARBALL}"
 
-# Rename the extracted directory to a simpler name
-if [[ -d "${EP_DIR_NAME}" ]]; then
-    mv "${EP_DIR_NAME}" "EnergyPlus-${EP_VERSION}"
-    print_ok "EnergyPlus extracted to energyplus/EnergyPlus-${EP_VERSION}/"
+EP_INSTALL_PATH="${INSTALL_DIR}/energyplus/EnergyPlus-${EP_VERSION}"
+
+chmod +x "${EP_INSTALLER}"
+
+# Run the installer non-interactively:
+#   - Accept license (yes)
+#   - Install directory (our chosen path)
+#   - Symlink location (n = no symlinks, we don't have /usr/local access)
+printf 'y\n%s\nn\n' "${EP_INSTALL_PATH}" | ./"${EP_INSTALLER}"
+
+if [[ -f "${EP_INSTALL_PATH}/energyplus" ]]; then
+    print_ok "EnergyPlus installed to energyplus/EnergyPlus-${EP_VERSION}/"
 else
-    print_err "Expected directory ${EP_DIR_NAME} not found after extraction."
+    print_err "EnergyPlus installation failed. Expected binary not found."
     echo "  Contents of energyplus/:"
     ls -la
     exit 1
 fi
 
-# Make executables runnable
-chmod +x "EnergyPlus-${EP_VERSION}/energyplus"
-chmod +x "EnergyPlus-${EP_VERSION}/PostProcess/ReadVarsESO"
+chmod +x "${EP_INSTALL_PATH}/energyplus"
+chmod +x "${EP_INSTALL_PATH}/PostProcess/ReadVarsESO"
 print_ok "EnergyPlus executables marked as executable"
 
 cd "${INSTALL_DIR}"

@@ -25,7 +25,7 @@ The bundled `ContamFMU-3400.fmu` from NIST only contains **win32** binaries. To 
 
 ## Quick Start (Automated Setup)
 
-SSH into Myriad, download and run the setup script. This clones the repo, downloads EnergyPlus 9.4.0, extracts everything, builds the Linux FMU, and prepares a ready-to-use `batchrun/` folder.
+SSH into Myriad, download and run the setup script. This clones the repo, downloads and installs EnergyPlus 9.4.0 (using the `.sh` installer), extracts the CONTAM binaries, builds the Linux FMU, and prepares a ready-to-use `batchrun/` folder.
 
 ```bash
 ssh <YOUR_UCL_ID>@myriad.rc.ucl.ac.uk
@@ -60,23 +60,32 @@ git clone https://github.com/cairanvanrooyen/eplus_contam_cosim_hpc.git cosim
 cd cosim
 ```
 
-### 2. Download and extract EnergyPlus 9.4.0
+### 2. Download and install EnergyPlus 9.4.0
 
-EnergyPlus is the building energy simulation engine. The tarball is too large for git so it must be downloaded directly from the [EnergyPlus 9.4.0 release page](https://github.com/NREL/EnergyPlus/releases/tag/v9.4.0).
+EnergyPlus is the building energy simulation engine. It is too large for git so it must be downloaded directly from the [EnergyPlus 9.4.0 release page](https://github.com/NREL/EnergyPlus/releases/tag/v9.4.0).
+
+> **Important:** Use the `.sh` installer, not the `.tar.gz` tarball. The installer properly configures library rpaths so that the bundled libraries are found at runtime. The raw tarball will fail on Myriad with `GLIBC_2.27 not found` errors because RHEL 7.9 only has glibc 2.17.
 
 ```bash
 cd ~/Scratch/cosim/energyplus
 
-curl -LO https://github.com/NREL/EnergyPlus/releases/download/v9.4.0/EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.tar.gz
+# Download the .sh installer
+curl -LO https://github.com/NREL/EnergyPlus/releases/download/v9.4.0/EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.sh
 
-tar -xzf EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.tar.gz
-mv EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64 EnergyPlus-9.4.0
+# Run the installer
+chmod +x EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.sh
+./EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.sh
+```
 
+When prompted:
+- Accept the license: `y`
+- Install directory: enter the full path, e.g. `/home/<YOUR_UCL_ID>/Scratch/cosim/energyplus/EnergyPlus-9.4.0`
+- Symbolic link location: `n` (you don't have write access to `/usr/local/bin`)
+
+```bash
 chmod +x EnergyPlus-9.4.0/energyplus
 chmod +x EnergyPlus-9.4.0/PostProcess/ReadVarsESO
 ```
-
-> The Ubuntu 18.04 build is used because Myriad runs RHEL 7.9. The Ubuntu 20.04 build may require a newer glibc.
 
 ### 3. Extract CONTAM 3.4 Linux binaries
 
@@ -866,7 +875,7 @@ eplus_contam_cosim_hpc/
 ├── README.md
 ├── setup.sh                                           # Automated setup script
 ├── energyplus/                                        # EnergyPlus (downloaded by setup.sh)
-│   └── (EnergyPlus-9.4.0-*.tar.gz downloaded at setup time)
+│   └── (EnergyPlus-9.4.0-*.sh installer downloaded at setup time)
 ├── contamx/                                           # CONTAM 3.4.0.0 solver
 │   └── contam-x-3.4.0.0-Linux-64bit.tar.gz
 ├── contam_fmu/                                        # ContamFMU shared library for Linux
@@ -901,8 +910,8 @@ eplus_contam_cosim_hpc/
 ├── README.md
 ├── setup.sh
 ├── energyplus/
-│   ├── EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.tar.gz
-│   └── EnergyPlus-9.4.0/                             # Extracted (step 2)
+│   ├── EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.sh
+│   └── EnergyPlus-9.4.0/                             # Installed (step 2)
 │       ├── energyplus
 │       └── PostProcess/ReadVarsESO
 ├── contamx/
@@ -948,6 +957,16 @@ Note: you must `unload` first because the default `gcc-libs/4.9.2` is auto-loade
 
 If contamx3 fails with `GLIBC_2.28 not found` or similar, you are using contamx3 3.4.0.3 which requires glibc 2.34+. Myriad's RHEL 7.9 only has glibc 2.17. Download contamx3 **3.4.0.0** instead from https://www.nist.gov/document/contam-x-3400-linux-64bittargz — this older build is compatible with glibc 2.17.
 
+### GLIBC_2.27 / GLIBC_2.25 not found (EnergyPlus)
+
+If EnergyPlus fails with `GLIBC_2.27 not found` or `GLIBC_2.25 not found`, you installed from the `.tar.gz` tarball instead of the `.sh` installer. The tarball extracts raw binaries that depend on Ubuntu 18.04's glibc 2.27, which Myriad's RHEL 7.9 (glibc 2.17) doesn't have. The `.sh` installer sets up rpaths so that the bundled libraries are found correctly. Re-download using the `.sh` file:
+
+```bash
+curl -LO https://github.com/NREL/EnergyPlus/releases/download/v9.4.0/EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.sh
+chmod +x EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.sh
+./EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.sh
+```
+
 ### Library not found errors
 
 If EnergyPlus reports missing shared libraries at runtime, make sure the EnergyPlus directory is on `LD_LIBRARY_PATH`:
@@ -979,7 +998,7 @@ If NIST URLs stop working, visit:
 
 - [NIST CONTAM Parametric Analysis Utilities](https://www.nist.gov/el/beed/nist-multizone-modeling/contam-parametric-analysis-utilities)
 - [EnergyPlus 9.4.0 Release](https://github.com/NREL/EnergyPlus/releases/tag/v9.4.0)
-- [EnergyPlus 9.4.0 Linux Direct Download](https://github.com/NREL/EnergyPlus/releases/download/v9.4.0/EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.tar.gz)
+- [EnergyPlus 9.4.0 Linux Installer (.sh)](https://github.com/NREL/EnergyPlus/releases/download/v9.4.0/EnergyPlus-9.4.0-998c4b761e-Linux-Ubuntu18.04-x86_64.sh)
 - [contamx3 3.4.0.0 Linux 64-bit (RHEL 7 compatible)](https://www.nist.gov/document/contam-x-3400-linux-64bittargz)
 - [CONTAM 3D Exporter / ContamFMU Downloads](https://www.nist.gov/el/energy-and-environment-division-73200/nist-multizone-modeling/software/contam-3d-exporter)
 - [Example: PNNL Single-family (EPlus 9.1 + CONTAM 3.4)](https://www.nist.gov/el/energy-and-environment-division-73200/nist-multizone-modeling/software/contam-3d-exporter) — `pnnl-sf-ep91-cx3400.zip`
